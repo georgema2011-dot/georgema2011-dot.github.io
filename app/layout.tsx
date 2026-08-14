@@ -7,23 +7,23 @@ export async function generateMetadata(): Promise<Metadata> {
   const host = requestHeaders.get("x-forwarded-host") ?? requestHeaders.get("host") ?? "localhost:3000";
   const protocol = requestHeaders.get("x-forwarded-proto") ?? (host.startsWith("localhost") ? "http" : "https");
   const origin = `${protocol}://${host}`;
-  const description = "The portfolio of George Ma, a Singapore-based creative technologist working across visual systems, local AI, and thoughtful automation.";
+  const description = "The interior and spatial design portfolio of Ma Shun Ngai George, featuring hospitality, public-space, play and inclusive-design projects.";
 
   return {
     metadataBase: new URL(origin),
-    title: "George Ma — Creative Technologist",
+    title: "Ma Shun Ngai George — Interior & Spatial Designer",
     description,
     openGraph: {
-      title: "George Ma — Creative Technologist",
+      title: "Ma Shun Ngai George — Interior & Spatial Designer",
       description,
       type: "website",
-      images: [{ url: `${origin}/og.png`, width: 1736, height: 909, alt: "George Ma — Creative Technologist" }],
+      images: [{ url: `${origin}/og-portfolio.png`, width: 1736, height: 909, alt: "Ma Shun Ngai George — Interior and Spatial Design Portfolio" }],
     },
     twitter: {
       card: "summary_large_image",
-      title: "George Ma — Creative Technologist",
+      title: "Ma Shun Ngai George — Interior & Spatial Designer",
       description,
-      images: [`${origin}/og.png`],
+      images: [`${origin}/og-portfolio.png`],
     },
   };
 }

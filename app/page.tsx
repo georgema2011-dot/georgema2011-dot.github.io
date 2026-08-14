@@ -28,8 +28,17 @@ const products=[
 function Pic({n,alt,caption,wide=false}:{n:string;alt:string;caption:string;wide?:boolean}){return <figure className={`pic reveal ${wide?"wide":""}`}><img src={`/portfolio/page-${n}.jpg`} alt={alt} loading="lazy"/><figcaption>{caption}</figcaption></figure>}
 function Head({eyebrow,title,lead}:{eyebrow:string;title:string;lead:string}){return <header className="project-head reveal"><p className="eyebrow">{eyebrow}</p><h2>{title}</h2><p className="lead">{lead}</p></header>}
 export default function Home(){
- useEffect(()=>{const o=new IntersectionObserver(es=>es.forEach(e=>e.isIntersecting&&e.target.classList.add("seen")),{threshold:.1});document.querySelectorAll(".reveal").forEach(e=>o.observe(e));return()=>o.disconnect()},[]);
+ useEffect(()=>{
+  const o=new IntersectionObserver(es=>es.forEach(e=>e.isIntersecting&&e.target.classList.add("seen")),{threshold:.1});
+  document.querySelectorAll(".reveal").forEach(e=>o.observe(e));
+  let frame=0;
+  const update=()=>{frame=0;const max=document.documentElement.scrollHeight-innerHeight;const progress=max>0?Math.min(scrollY/max,1):0;document.documentElement.style.setProperty("--scroll-progress",progress.toFixed(4))};
+  const onScroll=()=>{if(!frame)frame=requestAnimationFrame(update)};
+  update();addEventListener("scroll",onScroll,{passive:true});addEventListener("resize",onScroll);
+  return()=>{o.disconnect();removeEventListener("scroll",onScroll);removeEventListener("resize",onScroll);if(frame)cancelAnimationFrame(frame)}
+ },[]);
  return <main id="top">
+  <div className="ambient-blobs" aria-hidden="true"><i className="ambient a1"/><i className="ambient a2"/><i className="ambient a3"/></div>
   <nav className="nav shell"><a className="wordmark" href="#top">MA / GEORGE</a><div><a href="#work">Works</a><a href="#about">About</a><a href="#contact">Contact</a></div></nav>
   <header className="hero shell"><i className="blob b1"/><i className="blob b2"/><i className="blob b3"/><div className="hero-frame"><p>Interior / Spatial Designer · Singapore</p><div><h1>PORT<br/>FOLIO</h1><h2>Ma Shun Ngai George</h2></div><a href="#about">Scroll to explore <b>↓</b></a></div></header>
   <section className="about shell reveal" id="about"><div className="portrait" role="img" aria-label="Portrait placeholder for George Ma, wearing glasses and a black T-shirt"><b>GM</b><span>Portrait</span></div><div><p className="eyebrow">About / 00</p><h2>Designing spaces that connect people, place and possibility.</h2><p>I am Ma Shun Ngai George, an interior and spatial designer interested in how thoughtful planning, material choices and human behaviour can reshape everyday experience. My work moves between quiet interiors, public interventions, inclusive environments and photography.</p><blockquote>“Some people want it to happen, some wish it to happen, while others make it happen.”<cite>— Michael Jordan</cite></blockquote></div></section>

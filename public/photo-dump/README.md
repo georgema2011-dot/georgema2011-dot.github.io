@@ -1,5 +1,8 @@
 # Photography drop folder
 
-Add personal photography here using lowercase, descriptive filenames such as
-`queenstown-shadow-study-01.jpg`. Optimise large images before publishing and
-write meaningful alt text when adding them to the gallery.
+Place web-ready personal photography in this folder using lowercase,
+descriptive filenames. Published selections live in `web/`.
+
+High-resolution uploads are preserved locally in `/photo-dump-originals` and
+ignored by Git so they do not slow down the deployed portfolio. Write meaningful
+alt text whenever a new image is added to the gallery.

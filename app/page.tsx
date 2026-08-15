@@ -31,9 +31,31 @@ export default function Home(){
  useEffect(()=>{
   const o=new IntersectionObserver(es=>es.forEach(e=>e.isIntersecting&&e.target.classList.add("seen")),{threshold:.1});
   document.querySelectorAll(".reveal").forEach(e=>o.observe(e));
-  return()=>o.disconnect()
+  let frame=0;
+  const updateScrollGrowth=()=>{
+   frame=0;
+   const max=document.documentElement.scrollHeight-innerHeight;
+   const progress=max>0?Math.min(Math.max(scrollY/max,0),1):0;
+   document.documentElement.style.setProperty("--page-progress",progress.toFixed(4));
+  };
+  const onScroll=()=>{if(!frame)frame=requestAnimationFrame(updateScrollGrowth)};
+  updateScrollGrowth();
+  addEventListener("scroll",onScroll,{passive:true});
+  addEventListener("resize",onScroll);
+  return()=>{
+   o.disconnect();
+   removeEventListener("scroll",onScroll);
+   removeEventListener("resize",onScroll);
+   if(frame)cancelAnimationFrame(frame);
+  }
  },[]);
  return <main id="top">
+  <div className="jelly-field" aria-hidden="true">
+   <i className="jelly jelly-one"><b/></i>
+   <i className="jelly jelly-two"><b/></i>
+   <i className="jelly jelly-three"><b/></i>
+   <i className="jelly jelly-four"><b/></i>
+  </div>
   <nav className="nav shell"><a className="wordmark" href="#top">MA / GEORGE</a><div><a href="#work">Works</a><a href="#about">About</a><a href="#contact">Contact</a></div></nav>
   <header className="hero shell"><div className="hero-meta"><span>Interior / Spatial Designer</span><span>Singapore · 01°17′N</span><span>Index / 2026</span></div><div className="hero-question"><span>spaces</span><span>are never</span><span>neutral.</span></div><div className="hero-halftone" aria-hidden="true"><i/><i/><i/></div><div className="hero-footer"><h1>PORTFOLIO</h1><h2>Ma Shun Ngai George</h2><a href="#work">View selected works <b>↓</b></a></div></header>
   <section className="about shell reveal" id="about"><div className="portrait" role="img" aria-label="Portrait placeholder for George Ma, wearing glasses and a black T-shirt"><b>GM</b><span>Portrait</span></div><div><p className="eyebrow">About / 00</p><h2>Designing spaces that connect people, place and possibility.</h2><p>I am Ma Shun Ngai George, an interior and spatial designer interested in how thoughtful planning, material choices and human behaviour can reshape everyday experience. My work moves between quiet interiors, public interventions, inclusive environments and photography.</p><blockquote>“Some people want it to happen, some wish it to happen, while others make it happen.”<cite>— Michael Jordan</cite></blockquote></div></section>

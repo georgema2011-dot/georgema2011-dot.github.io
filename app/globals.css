@@ -133,6 +133,8 @@ body{font-family:var(--body)}
 
 /* Tailwind reserves `.table`; keep the journey wrapper a scroll container. */
 .table{display:block;max-width:100%;overflow-x:auto}
+.asda-boards{grid-template-columns:1fr;gap:56px}
+.asda-boards .pic img{width:100%;height:auto;aspect-ratio:auto;object-fit:contain}
 
 /* Cinematic gallery — native, centered and intentionally restrained. */
 :root{--motion-fast:140ms;--motion-ui:280ms;--motion-gallery:480ms;--ease-apple:cubic-bezier(.22,1,.36,1)}

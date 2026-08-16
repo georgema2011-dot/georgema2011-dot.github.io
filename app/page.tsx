@@ -43,21 +43,29 @@ function Pic({n,alt,caption,wide=false}:{n:string;alt:string;caption:string;wide
 function Head({eyebrow,title,lead}:{eyebrow:string;title:string;lead:string}){return <header className="project-head reveal"><p className="eyebrow">{eyebrow}</p><h2>{title}</h2><p className="lead">{lead}</p></header>}
 function PhotoCarousel(){
  const track=useRef<HTMLDivElement>(null);
+ const frame=useRef(0);
  const [active,setActive]=useState(0);
+ useEffect(()=>()=>{if(frame.current)cancelAnimationFrame(frame.current)},[]);
  const move=(direction:number)=>{
   const el=track.current;
   if(!el)return;
   const slides=Array.from(el.querySelectorAll<HTMLElement>(".gallery-shot"));
   const target=Math.min(Math.max(active+direction,0),slides.length-1);
-  slides[target]?.scrollIntoView({behavior:"smooth",block:"nearest",inline:"start"});
+  const reduced=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  slides[target]?.scrollIntoView({behavior:reduced?"auto":"smooth",block:"nearest",inline:"center"});
   setActive(target);
  };
  const syncActive=()=>{
-  const el=track.current;
-  if(!el)return;
-  const slides=Array.from(el.querySelectorAll<HTMLElement>(".gallery-shot"));
-  const index=slides.reduce((closest,slide,i)=>Math.abs(slide.offsetLeft-el.scrollLeft)<Math.abs(slides[closest].offsetLeft-el.scrollLeft)?i:closest,0);
-  setActive(index);
+  if(frame.current)return;
+  frame.current=requestAnimationFrame(()=>{
+   frame.current=0;
+   const el=track.current;
+   if(!el)return;
+   const center=el.scrollLeft+el.clientWidth/2;
+   const slides=Array.from(el.querySelectorAll<HTMLElement>(".gallery-shot"));
+   const index=slides.reduce((closest,slide,i)=>Math.abs(slide.offsetLeft+slide.offsetWidth/2-center)<Math.abs(slides[closest].offsetLeft+slides[closest].offsetWidth/2-center)?i:closest,0);
+   setActive(index);
+  });
  };
  return <div className="carousel reveal" role="region" aria-roledescription="carousel" aria-label="Photography archive">
   <div className="carousel-toolbar">
@@ -65,7 +73,7 @@ function PhotoCarousel(){
    <div><button type="button" onClick={()=>move(-1)} disabled={active===0} aria-label="Previous photograph">←</button><button type="button" onClick={()=>move(1)} disabled={active===photoArchive.length-1} aria-label="Next photograph">→</button></div>
   </div>
   <div className="photo-carousel" ref={track} onScroll={syncActive} tabIndex={0} onKeyDown={event=>{if(event.key==="ArrowLeft")move(-1);if(event.key==="ArrowRight")move(1)}}>
-   {photoArchive.map(([file,meta,title,alt],index)=><figure className="gallery-shot" key={file} role="group" aria-roledescription="slide" aria-label={`${index+1} of ${photoArchive.length}: ${title}`}><img src={`/photo-dump/web/${file}`} alt={alt} loading={index<2?"eager":"lazy"}/><figcaption><b>{String(index+1).padStart(3,"0")}</b><span>{title}</span><small>{meta}</small></figcaption></figure>)}
+   {photoArchive.map(([file,meta,title,alt],index)=><figure className={`gallery-shot ${index===active?"is-active":""}`} key={file} role="group" aria-roledescription="slide" aria-label={`${index+1} of ${photoArchive.length}: ${title}`} aria-current={index===active?"true":undefined}><div className="gallery-frame"><img src={`/photo-dump/web/${file}`} alt={alt} loading={index<2?"eager":"lazy"}/></div><figcaption><b>{String(index+1).padStart(3,"0")}</b><span>{title}</span><small>{meta}</small></figcaption></figure>)}
   </div>
   <div className="carousel-progress" aria-hidden="true"><i style={{width:`${((active+1)/photoArchive.length)*100}%`}}/></div>
   <p className="carousel-hint">Swipe or use arrow keys to explore the archive</p>

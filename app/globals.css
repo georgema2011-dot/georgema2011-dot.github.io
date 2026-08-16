@@ -133,3 +133,56 @@ body{font-family:var(--body)}
 
 /* Tailwind reserves `.table`; keep the journey wrapper a scroll container. */
 .table{display:block;max-width:100%;overflow-x:auto}
+
+/* Cinematic gallery — native, centered and intentionally restrained. */
+:root{--motion-fast:140ms;--motion-ui:280ms;--motion-gallery:480ms;--ease-apple:cubic-bezier(.22,1,.36,1)}
+.photos{background:#101112;padding-bottom:120px}
+.carousel{--cinema-slide:min(88vw,1440px);width:100vw;margin-left:calc(50% - 50vw)}
+.carousel-toolbar{width:min(1520px,calc(100vw - 48px));margin:0 auto 22px}
+.carousel-toolbar p{font-variant-numeric:tabular-nums}
+.carousel-toolbar>div{padding:4px;border:1px solid rgba(255,255,255,.14);border-radius:999px;background:rgba(22,23,24,.68);-webkit-backdrop-filter:blur(18px) saturate(1.2);backdrop-filter:blur(18px) saturate(1.2)}
+.carousel-toolbar button{width:50px;height:50px;border:0;background:transparent;transition:transform var(--motion-fast) ease-out,background var(--motion-fast) ease-out,color var(--motion-fast) ease-out,opacity var(--motion-fast) ease-out}
+.carousel-toolbar button:hover:not(:disabled),.carousel-toolbar button:focus-visible{background:rgba(255,255,255,.94);color:#111}
+.carousel-toolbar button:active:not(:disabled){transform:scale(.92)}
+.photo-carousel{gap:24px;padding:0 max(24px,calc((100vw - var(--cinema-slide))/2)) 28px;scroll-padding-inline:max(24px,calc((100vw - var(--cinema-slide))/2));scroll-snap-type:x mandatory}
+.photo-carousel .gallery-shot,.photo-carousel .gallery-shot:nth-child(n){position:relative;flex:0 0 var(--cinema-slide);margin:0;opacity:.42;transform:scale(.955);transform-origin:center;transition:transform var(--motion-gallery) var(--ease-apple),opacity var(--motion-ui) ease-out;scroll-snap-align:center}
+.photo-carousel .gallery-shot.is-active{opacity:1;transform:scale(1)}
+.gallery-frame{position:relative;height:min(78svh,900px);min-height:620px;overflow:hidden;border-radius:clamp(18px,2vw,30px);background:#1b1c1d;box-shadow:0 32px 90px rgba(0,0,0,.32)}
+.gallery-frame:after{content:"";position:absolute;inset:auto 0 0;height:38%;pointer-events:none;background:linear-gradient(transparent,rgba(0,0,0,.72))}
+.photo-carousel .gallery-shot img,.photo-carousel .gallery-shot:nth-child(n) img{width:100%;height:100%;min-height:0;aspect-ratio:auto;object-fit:cover;filter:saturate(.72) contrast(1.03) brightness(.76);transform:scale(1.035);transition:transform 700ms var(--ease-apple),filter var(--motion-gallery) ease-out}
+.photo-carousel .gallery-shot.is-active img{filter:saturate(.94) contrast(1.02) brightness(1);transform:scale(1)}
+.photo-carousel .gallery-shot figcaption{position:absolute;z-index:2;inset:auto clamp(18px,2.5vw,38px) clamp(18px,2.5vw,38px);display:grid;grid-template-columns:48px 1fr auto;align-items:end;padding:0;border:0;color:#fff;opacity:0;transform:translateY(12px);transition:opacity var(--motion-ui) ease-out,transform var(--motion-gallery) var(--ease-apple)}
+.photo-carousel .gallery-shot.is-active figcaption{opacity:1;transform:none}
+.photo-carousel .gallery-shot figcaption b{color:#fff;font-size:.62rem;font-weight:500;opacity:.65}
+.photo-carousel .gallery-shot figcaption span{font-size:clamp(1.35rem,2.3vw,2.5rem);font-weight:400;letter-spacing:-.04em}
+.photo-carousel .gallery-shot figcaption small{color:#fff;text-align:right;opacity:.65}
+.carousel-progress{width:min(1520px,calc(100vw - 48px));margin-inline:auto;background:rgba(255,255,255,.16)}
+.carousel-progress i{transition:width var(--motion-gallery) var(--ease-apple)}
+.carousel-hint{width:min(1520px,calc(100vw - 48px));margin:12px auto 0}
+
+@media(max-width:900px){
+ .carousel{--cinema-slide:88vw}
+ .carousel-toolbar,.carousel-progress,.carousel-hint{width:calc(100vw - 36px)}
+ .photo-carousel{gap:14px;padding-inline:6vw;scroll-padding-inline:6vw}
+ .gallery-frame{height:70svh;min-height:520px;border-radius:22px}
+}
+
+@media(max-width:620px){
+ .photos{padding-bottom:82px}
+ .carousel{--cinema-slide:88vw}
+ .carousel-toolbar{margin-bottom:16px}
+ .carousel-toolbar>div{padding:3px}
+ .carousel-toolbar button{width:48px;height:48px}
+ .photo-carousel{gap:12px;margin-right:0;padding:0 6vw 22px;scroll-padding-inline:6vw}
+ .gallery-frame{height:68svh;min-height:500px;border-radius:20px}
+ .photo-carousel .gallery-shot figcaption{inset:auto 20px 20px;grid-template-columns:32px 1fr}
+ .photo-carousel .gallery-shot figcaption span{font-size:1.45rem}
+ .photo-carousel .gallery-shot figcaption small{grid-column:2;text-align:left;margin-top:4px}
+ .carousel-hint{margin-top:10px}
+}
+
+@media(prefers-reduced-motion:reduce){
+ .photo-carousel .gallery-shot,.photo-carousel .gallery-shot img,.photo-carousel .gallery-shot figcaption,.carousel-toolbar button,.carousel-progress i{transition:none!important}
+ .photo-carousel .gallery-shot{transform:none}
+ .photo-carousel .gallery-shot img{transform:none}
+}

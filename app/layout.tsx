@@ -13,6 +13,7 @@ export async function generateMetadata(): Promise<Metadata> {
     metadataBase: new URL(origin),
     title: "Ma Shun Ngai George — Interior & Spatial Designer",
     description,
+    icons: { icon: "/favicon.svg" },
     openGraph: {
       title: "Ma Shun Ngai George — Interior & Spatial Designer",
       description,

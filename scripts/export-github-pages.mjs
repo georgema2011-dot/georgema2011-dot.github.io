@@ -1,4 +1,4 @@
-import { copyFile, writeFile } from "node:fs/promises";
+import { copyFile, rm, writeFile } from "node:fs/promises";
 
 const workerUrl = new URL("../dist/server/index.js", import.meta.url);
 workerUrl.searchParams.set("static-export", Date.now().toString());
@@ -30,6 +30,7 @@ if (!html.includes("Ma Shun Ngai George")) {
 
 await writeFile(new URL("../dist/client/index.html", import.meta.url), html);
 await writeFile(new URL("../dist/client/.nojekyll", import.meta.url), "");
+await rm(new URL("../dist/client/.DS_Store", import.meta.url), { force: true });
 await copyFile(
   new URL("../dist/client/index.html", import.meta.url),
   new URL("../dist/client/404.html", import.meta.url),

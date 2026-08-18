@@ -76,13 +76,13 @@ function ProjectDossier({project,index}:{project:Project;index:number}){
 
 export default function Home(){
  return <main id="top">
-  <nav className="site-nav" aria-label="Primary navigation"><a className="brand" href="#top">Ma / George</a><span className="nav-role">Interior + Spatial Designer</span><div className="nav-links"><a href="#work">Projects</a><a href="#photography">Photography</a><a href="#contact">Contact</a></div></nav>
+  <nav className="site-nav" aria-label="Primary navigation"><a className="brand" href="#top">Ma / George</a><span className="nav-role">Spatial + Industrial Designer</span><div className="nav-links"><a href="#work">Projects</a><a href="#photography">Photography</a><a href="#contact">Contact</a></div></nav>
   <header className="hero">
    <div className="hero-intro"><BlobIntro/><Label>Singapore / 01°17′N / Portfolio 2026</Label><blockquote className="hero-quote">“The idea begins as a small form in your head. It becomes real when you draw it, test it and share it.”</blockquote><h1>Spaces are<br/>never neutral.</h1></div>
    <figure className="hero-image"><img src="/portfolio/page-16.jpg" alt="Interior installation with woven bamboo walls"/><figcaption>Selected spatial study / 2024</figcaption></figure>
    <div className="hero-index"><span>01—05</span><p>Interior, public space, play and inclusive design.</p><a href="#work">View projects ↓</a></div>
   </header>
-  <section className="about-grid" id="about"><Label>Profile / 00</Label><h2>Designing spaces that connect people, place and possibility.</h2><p>I am Ma Shun Ngai George, an interior and spatial designer interested in how planning, material choices and human behaviour reshape everyday experience.</p><ul><li>Interior</li><li>Spatial</li><li>Inclusive design</li><li>Photography</li></ul></section>
+  <section className="about-grid" id="about"><Label>Profile / 00</Label><h2>Designing across space, objects and human experience.</h2><p>I am Ma Shun Ngai George, an interdisciplinary spatial and industrial designer interested in how planning, material choices and human behaviour reshape everyday experience.</p><ul><li>Spatial design</li><li>Industrial design</li><li>Inclusive design</li><li>Photography</li></ul></section>
   <section className="experience" aria-labelledby="experience-title"><header><Label>Experience / 02</Label><h2 id="experience-title">Industry<br/>practice.</h2></header><ol><li><span>01</span><strong>SpaceLogic</strong><span>Internship</span></li><li><span>02</span><strong>M Moser Associates</strong><span>Internship</span></li></ol></section>
   <section className="project-index" id="work"><header><Label>Selected projects / 01—05</Label><h2>Work Index</h2></header><div className="index-list">{projects.map(project=><a href={`#${project.id}`} key={project.id}><span>{project.number}</span><strong>{project.title}</strong><span>{project.discipline}</span><span>{project.year}</span><b>↘</b></a>)}</div></section>
   {projects.map((project,index)=><ProjectDossier project={project} index={index} key={project.id}/>)}

@@ -1,0 +1,64 @@
+{
+  "meta": {
+    "name": "Architectural Contact Sheet",
+    "description": "An original monochrome editorial system derived from the structural traits of the Refero mono reference and adapted to George Ma's spatial-design portfolio.",
+    "source_references": ["https://styles.refero.design/style/859f6be7-9d2d-4da6-a9b7-baa658172696", "https://georgema2011-dot.github.io/"],
+    "created_at": "2026-08-18"
+  },
+  "design_system": {
+    "color": {
+      "palette_type": "monochromatic",
+      "primary": {"hex": "#292929", "role": "primary ink, rules and inverse surfaces"},
+      "secondary": {"hex": "#FDFDFB", "role": "paper canvas"},
+      "accent": {"hex": "#292929", "role": "intentional absence of chromatic accent"},
+      "neutral": {"scale": ["#FDFDFB", "#E8E8E5", "#A4A4A0", "#5B5B58", "#292929"], "usage": "paper, subtle separation, secondary copy, structural ink"},
+      "semantic": {"success": "#315F45", "warning": "#745C24", "error": "#7D3030", "info": "#36576A"},
+      "surface": {"background": "#FDFDFB", "card": "#FDFDFB", "elevated": "#292929"},
+      "contrast_strategy": "dark-on-light dominant with one full inverse photography section"
+    },
+    "typography": {
+      "type_scale": {
+        "display": {"size": "clamp(4rem, 10vw, 12rem)", "weight": "200", "line_height": "0.78", "tracking": "-0.08em"},
+        "heading_1": {"size": "clamp(4rem, 9vw, 10rem)", "weight": "200", "line_height": "0.82", "tracking": "-0.075em"},
+        "heading_2": {"size": "clamp(3rem, 6vw, 7.5rem)", "weight": "200", "line_height": "0.85", "tracking": "-0.065em"},
+        "heading_3": {"size": "clamp(1.8rem, 3vw, 3.5rem)", "weight": "300", "line_height": "1", "tracking": "-0.045em"},
+        "body": {"size": "1rem", "weight": "300", "line_height": "1.55", "tracking": "normal"},
+        "body_small": {"size": "0.9rem", "weight": "300", "line_height": "1.45", "tracking": "normal"},
+        "caption": {"size": "0.68rem", "weight": "500", "line_height": "1.2", "tracking": "0.12em"},
+        "overline": {"size": "0.72rem", "weight": "500", "line_height": "1.2", "tracking": "0.15em"}
+      },
+      "font_families": {"heading": "Helvetica Neue, Arial Narrow, Arial, sans-serif", "body": "Helvetica Neue, Arial, sans-serif", "mono": "Arial Narrow, Roboto Condensed, sans-serif"},
+      "font_style_notes": "whisper-weight grotesk display paired with uppercase condensed museum-label metadata"
+    },
+    "spacing": {"base_unit": "4px", "scale": ["4px", "8px", "12px", "20px", "28px", "46px", "64px"], "content_density": "comfortable", "section_rhythm": "continuous ruled grid with generous internal cell padding"},
+    "layout": {"grid_system": "edge-to-edge 12-column modular grid", "max_content_width": "none", "columns": "12 desktop, 2 tablet, 1 mobile", "gutter": "0; shared rules replace gaps", "breakpoints": ["620px", "900px"], "alignment_tendency": "asymmetric strict grid"},
+    "shape": {"border_radius": {"small": "0", "medium": "0", "large": "0", "pill": "0"}, "border_usage": "2px structural rules; 1px secondary dividers", "divider_style": "solid #292929"},
+    "elevation": {"shadow_style": "none", "levels": {"low": "none", "medium": "none", "high": "none"}, "depth_cues": "grid overlap, inverse surfaces and typographic scale"},
+    "iconography": {"style": "textual directional glyphs", "stroke_weight": "1.5px equivalent", "size_scale": ["16px", "20px"], "preferred_set": "native arrows only"},
+    "motion": {"easing": "cubic-bezier(0.455, 0.03, 0.515, 0.955)", "duration_scale": {"micro": "250ms", "normal": "300ms", "macro": "600ms"}, "entrance_pattern": "none", "exit_pattern": "none", "philosophy": "minimal functional geometry and state feedback"},
+    "components": {"button_style": "square outline controls integrated into rules", "input_style": "underline-only if needed", "card_style": "bordered dossier cell with zero radius", "navigation_pattern": "sticky three-cell index bar", "modal_style": "not used", "list_style": "ruled editorial ledger", "component_notes": "project boards remain uncropped and photography uses a square-cornered scroll-snap archive"}
+  },
+  "design_style": {
+    "aesthetic": {"mood": ["precise", "quiet", "architectural", "confident"], "visual_metaphor": "museum contact sheet and architectural dossier", "era_influence": "modernist editorial and contemporary gallery systems", "genre": "brutalist editorial portfolio", "personality_traits": ["meticulous", "direct", "observant"], "adjectives": ["monochrome", "rectilinear", "image-led", "measured"]},
+    "visual_language": {"complexity": "moderate", "ornamentation": "none", "whitespace_usage": "active space contained by rules", "visual_weight_distribution": "alternating large image and thin-type cells", "focal_strategy": "progressive project reveal", "contrast_level": "high", "texture_usage": "photography only"},
+    "composition": {"hierarchy_method": "scale contrast and spatial isolation", "balance_type": "asymmetric modular", "flow_direction": "vertical ledger with horizontal photo archive", "grouping_strategy": "shared borders and numbered dossier cells", "negative_space_role": "separates evidence from interpretation"},
+    "imagery": {"photo_treatment": "raw square-cornered boards; monochrome-to-colour hover only for photographs", "illustration_style": "none", "graphic_elements": "rules, project numbers and directional glyphs", "pattern_usage": "none", "image_shape": "rectangular, full-width and uncropped"},
+    "interaction_feel": {"feedback_style": "flat inversion", "hover_behavior": "cell inversion or photography colour reveal", "transition_personality": "restrained ease-in-out", "loading_style": "native reserved image space", "microinteraction_density": "low"},
+    "brand_voice_in_ui": {"tone": "direct and reflective", "formality": "professional editorial", "cta_style": "short directional label", "empty_state_approach": "plain functional guidance", "error_tone": "clear and neutral"}
+  },
+  "visual_effects": {
+    "overview": {"effect_intensity": "subtle-accent", "performance_tier": "lightweight", "fallback_strategy": "remove transitions and smooth scrolling", "primary_technology": "CSS and native scroll snap"},
+    "background_effects": {"type": "none", "description": "flat paper and ink surfaces", "technology": "CSS", "params": {"color_palette": ["#FDFDFB", "#292929"], "speed": "0", "density": "0", "opacity": "1", "blend_mode": "normal"}},
+    "particle_systems": {"enabled": false, "type": "none", "description": "none", "technology": "none", "params": {"count": 0, "shape": "none", "size_range": "none", "movement_pattern": "none", "color_behavior": "none", "interaction": "none", "spawn_area": "none"}},
+    "3d_elements": {"enabled": false, "type": "none", "description": "none", "technology": "none", "params": {"renderer": "none", "lighting": "none", "camera": "none", "materials": "none", "geometry": "none", "post_processing": [], "interaction_model": "none"}},
+    "shader_effects": {"enabled": false, "type": "none", "description": "none", "technology": "none", "params": {"uniforms": {}, "vertex_manipulation": "none", "fragment_output": "none", "noise_type": "none", "distortion": "none"}},
+    "scroll_effects": {"parallax": {"enabled": false, "layers": 0, "depth_range": "none", "speed_curve": "none"}, "scroll_triggered_animations": {"enabled": false, "trigger_points": [], "animation_type": "none", "scrub_behavior": "none"}, "scroll_morphing": {"enabled": false, "description": "none"}},
+    "text_effects": {"type": "none", "description": "typographic hierarchy is static", "technology": "CSS", "params": {"split_strategy": "none", "animation_per_unit": "none", "stagger": "0", "effect_style": "none"}},
+    "cursor_effects": {"enabled": false, "type": "none", "description": "native cursor", "params": {"shape": "default", "size": "default", "blend_mode": "normal", "trail": false, "interaction_zone": "none"}},
+    "image_effects": {"type": "monochrome-hover", "description": "photographs reveal restrained colour on hover", "technology": "CSS filters", "params": {"filter_pipeline": "grayscale and contrast", "hover_transform": "scale 1.015 on hero only", "reveal_animation": "600ms ease-in-out", "distortion_type": "none"}},
+    "glassmorphism_neumorphism": {"enabled": false, "style": "none", "params": {"blur_radius": "0", "transparency": "0", "border_treatment": "none", "shadow_type": "none", "light_source_angle": "none"}},
+    "canvas_drawings": {"enabled": false, "type": "none", "description": "none", "technology": "none", "params": {"draw_method": "none", "animation_loop": "none", "color_scheme": "none", "responsiveness": "none", "interaction": "none"}},
+    "svg_animations": {"enabled": false, "type": "none", "description": "none", "params": {"animation_method": "none", "path_morphing": false, "stroke_animation": false, "filter_effects": "none"}},
+    "composite_notes": "The system intentionally removes the prior roaming blobs and grain. Visual identity comes from grid pressure, thin typography, user-owned project boards and one inverse photography archive."
+  }
+}

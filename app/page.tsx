@@ -2,125 +2,101 @@
 /* eslint-disable @next/next/no-img-element */
 import { useEffect, useRef, useState } from "react";
 
-const works=[
- ["japandi","01","JAPANDI RETREAT","Home away from home","/portfolio/page-04.jpg","Japandi resort room with two beds on a raised timber platform"],
- ["masks","02","LOOKING THROUGH THE MASKS OF THE CITY","A city of facades","/portfolio/page-16.jpg","Crochet studio with woven bamboo walls and suspended wave structure"],
- ["union","03","THE UNION","Closing the gap between man and nature","/portfolio/page-19.jpg","Undulating canopy and seating designed around a mature tree"],
- ["watergrounds","04","WATERGROUNDS","Water tower on a hill","/portfolio/page-21.jpg","Purple water-tower playground in a green park"],
- ["asda","05","ASDA 2022","Multi-generational toilet","/portfolio/page-22.jpg","Accessible bathroom with warm timber and concrete finishes"],
- ["photography","06","PHOTOGRAPHY JOURNEY","Places, people, passing time","/photo-dump/web/copenhagen-shore.webp","Quiet coastal landscape"]
+type Project = { id:string; number:string; title:string; discipline:string; year:string; statement:string; description:string; boards:Array<{src:string;alt:string;caption:string}> };
+
+const projects:Project[]=[
+ {id:"japandi",number:"01",title:"Japandi Retreat",discipline:"Hospitality",year:"2024",statement:"Home away from home.",description:"An open resort room organised as a quiet sequence of arrival, bathing and rest. Concrete, timber and filtered light protect privacy without closing the interior down.",boards:[
+  {src:"/portfolio/page-04.jpg",alt:"Japandi resort room with two beds on a raised timber platform",caption:"Spatial atmosphere / material study"},
+  {src:"/portfolio/page-05.jpg",alt:"Japandi floor plan and bathroom studies",caption:"Plan, arrival sequence and bathroom studies"}]},
+ {id:"masks",number:"02",title:"Looking Through the Masks of the City",discipline:"Urban intervention",year:"2024",statement:"A city of façades.",description:"A crochet studio at Clarke Quay Central uses layered thresholds, woven bamboo and collective making to study the identities a city reveals throughout the day.",boards:[
+  {src:"/portfolio/page-06.jpg",alt:"Layered city collage with Chinese opera masks",caption:"Urban slice / mask study"},
+  {src:"/portfolio/page-08.jpg",alt:"Wearable sound experiment and audio data",caption:"Sound mapping / social intensity"},
+  {src:"/portfolio/page-16.jpg",alt:"Crochet studio with bamboo walls and suspended wave installation",caption:"Final intervention / collective display"}]},
+ {id:"union",number:"03",title:"The Union",discipline:"Public space",year:"2023",statement:"Protection without separation.",description:"An undulating canopy and concentric seating gather people beneath an existing tree, turning the shaded ground into a shared room without erasing its natural centre.",boards:[
+  {src:"/portfolio/page-19.jpg",alt:"Technical presentation of a white canopy beneath a large tree",caption:"Canopy system / public seating"}]},
+ {id:"watergrounds",number:"04",title:"Watergrounds",discipline:"Play",year:"2023",statement:"A familiar form, reimagined.",description:"The silhouette of a water tower becomes a climbable landmark. Mesh, structure and wet-play elements connect the playground to both park and skyline.",boards:[
+  {src:"/portfolio/page-20.jpg",alt:"Technical drawings of a water-tower playground",caption:"Top view, isometric and elevation"},
+  {src:"/portfolio/page-21.jpg",alt:"Purple climbing structure in a landscaped park",caption:"Water tower playground / final view"}]},
+ {id:"asda",number:"05",title:"ASDA 2022",discipline:"Inclusive interior",year:"2022",statement:"Dignity across generations.",description:"A multi-generational bathroom coordinates reach, assistance, air and privacy. Support elements are integrated into the architecture instead of added as afterthoughts.",boards:[
+  {src:"/portfolio/page-22.jpg",alt:"Accessible multi-generational bathroom with warm timber and concrete finishes",caption:"Interior proposal / accessible vanity"},
+  {src:"/portfolio/page-23.jpg",alt:"Dimensioned bathroom plans and elevations",caption:"Plans and elevations"},
+  {src:"/portfolio/page-24.jpg",alt:"Bathroom details and material mood board",caption:"Details, finishes and material study"}]}
 ];
-const journey=[
- ["Arrival","Approach from Clarke Quay","Read the layered façade","Prepare the studio and access gantry","Wayfinding and maintenance"],
- ["Entry","Pass through the narrow tunnel","Tap in and remove shoes","Welcome users and monitor capacity","Electronic access system"],
- ["Make","Select yarn and join a session","Crochet, learn and exchange","Facilitate and replenish materials","Workshop partners and inventory"],
- ["Display","Lift work into the wave structure","Use the pulley and view the collective piece","Curate and secure contributions","Rigging checks and documentation"],
- ["Leave","Return to the river edge","Pause on the rattan bench","Reset the studio","Cleaning and daily operations"]
+
+const photographs=[
+ ["scandinavia-van.webp","Norway","Roadside pause"],["scandinavia-pass.webp","Norway","Open distance"],["scandinavia-road.webp","Norway","Through the valley"],
+ ["copenhagen-arcade.webp","Copenhagen","After hours"],["copenhagen-street.webp","Copenhagen","Corner study"],["copenhagen-shore.webp","Copenhagen","The quiet edge"],
+ ["hong-kong-motion.webp","Hong Kong","Velocity"],["hong-kong-temple.webp","Hong Kong","Threshold"],["hong-kong-reflection.webp","Hong Kong","Passing image"],
+ ["hong-kong-courtyard.webp","Hong Kong","Gathering"],["hong-kong-market.webp","Hong Kong","Street room"],["hong-kong-density.webp","Hong Kong","Compression"]
 ];
-const products=[
- ["Nobile Joystick Handle Vessel Faucet","WF-0603","Simple lever control improves access for children and users with reduced dexterity."],
- ["EasySET for Body Shower","FFA60927 / FFA89054","Clear push controls support safer, easier bathing across generations."],
- ["Signature Rain Shower System","WF-1772","An adjustable system supports assisted and independent bathing."],
- ["Acacia Evolution Paper Holder","K-1387","A compact fitting keeps essentials reachable from the WC."],
- ["PLAT Shower Toilet Auto SSC","KP-8312","Hands-free functions support hygiene, comfort and ageing-in-place."],
- ["Acacia SupaSleek Gemi Counter Basin 650mm","MP-F418","A broad basin and counter provide a stable landing surface."]
-];
-const photoArchive=[
- ["scandinavia-van.webp","Norway / 001","Roadside pause","A blue expedition van beneath the mountain pass"],
- ["scandinavia-pass.webp","Norway / 002","Open distance","A pale mountain range opening beyond a winding road"],
- ["scandinavia-road.webp","Norway / 003","Through the valley","A road cutting between dark Norwegian cliffs"],
- ["copenhagen-arcade.webp","Copenhagen / 004","After hours","A dim arcade framed by a glowing circular window"],
- ["copenhagen-street.webp","Copenhagen / 005","Corner study","A civic square viewed from beneath a brick arch"],
- ["copenhagen-shore.webp","Copenhagen / 006","The quiet edge","A solitary concrete form on an empty shoreline"],
- ["hong-kong-motion.webp","Hong Kong / 007","Velocity","A motorcyclist dissolving into neon street light"],
- ["hong-kong-temple.webp","Hong Kong / 008","Threshold","A temple entrance held between trees and the street"],
- ["hong-kong-reflection.webp","Hong Kong / 009","Passing image","A city reflection sliding across a car window"],
- ["hong-kong-courtyard.webp","Hong Kong / 010","Gathering","A temple courtyard alive with afternoon activity"],
- ["hong-kong-market.webp","Hong Kong / 011","Street room","Market stalls layered through a dense neighbourhood"],
- ["hong-kong-density.webp","Hong Kong / 012","Compression","A city seen through barrier, tower and mountainside"]
-];
-function Pic({n,alt,caption,wide=false}:{n:string;alt:string;caption:string;wide?:boolean}){return <figure className={`pic reveal ${wide?"wide":""}`}><img src={`/portfolio/page-${n}.jpg`} alt={alt} loading="lazy"/><figcaption>{caption}</figcaption></figure>}
-function Head({eyebrow,title,lead}:{eyebrow:string;title:string;lead:string}){return <header className="project-head reveal"><p className="eyebrow">{eyebrow}</p><h2>{title}</h2><p className="lead">{lead}</p></header>}
-function PhotoCarousel(){
+
+function Label({children}:{children:React.ReactNode}){return <p className="label">{children}</p>}
+
+function ProjectDossier({project,index}:{project:Project;index:number}){
+ return <article className="dossier" id={project.id}>
+  <header className="dossier-head">
+   <div className="dossier-number"><Label>Project</Label><span>{project.number}</span></div>
+   <div className="dossier-title"><Label>{project.discipline} / {project.year}</Label><h2>{project.title}</h2></div>
+   <div className="dossier-copy"><p className="statement">{project.statement}</p><p>{project.description}</p></div>
+  </header>
+  <div className={`board-grid board-grid-${project.boards.length}`}>
+   {project.boards.map((board,boardIndex)=><figure className={`board board-${boardIndex+1}`} key={board.src}>
+    <img src={board.src} alt={board.alt} loading={index===0&&boardIndex===0?"eager":"lazy"}/>
+    <figcaption><span>{project.number}.{String(boardIndex+1).padStart(2,"0")}</span><span>{board.caption}</span></figcaption>
+   </figure>)}
+  </div>
+ </article>
+}
+
+function PhotoArchive(){
  const track=useRef<HTMLDivElement>(null);
- const frame=useRef(0);
+ const raf=useRef(0);
  const [active,setActive]=useState(0);
- useEffect(()=>()=>{if(frame.current)cancelAnimationFrame(frame.current)},[]);
- const move=(direction:number)=>{
-  const el=track.current;
-  if(!el)return;
-  const slides=Array.from(el.querySelectorAll<HTMLElement>(".gallery-shot"));
-  const target=Math.min(Math.max(active+direction,0),slides.length-1);
-  const reduced=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  slides[target]?.scrollIntoView({behavior:reduced?"auto":"smooth",block:"nearest",inline:"center"});
-  setActive(target);
+ useEffect(()=>()=>{if(raf.current)cancelAnimationFrame(raf.current)},[]);
+ const move=(next:number)=>{
+  const index=Math.max(0,Math.min(next,photographs.length-1));
+  const slide=track.current?.querySelectorAll<HTMLElement>(".photo-slide")[index];
+  slide?.scrollIntoView({behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth",inline:"center",block:"nearest"});
+  setActive(index);
  };
- const syncActive=()=>{
-  if(frame.current)return;
-  frame.current=requestAnimationFrame(()=>{
-   frame.current=0;
-   const el=track.current;
-   if(!el)return;
-   const center=el.scrollLeft+el.clientWidth/2;
-   const slides=Array.from(el.querySelectorAll<HTMLElement>(".gallery-shot"));
-   const index=slides.reduce((closest,slide,i)=>Math.abs(slide.offsetLeft+slide.offsetWidth/2-center)<Math.abs(slides[closest].offsetLeft+slides[closest].offsetWidth/2-center)?i:closest,0);
-   setActive(index);
+ const sync=()=>{
+  if(raf.current)return;
+  raf.current=requestAnimationFrame(()=>{
+   raf.current=0;
+   const node=track.current;if(!node)return;
+   const center=node.scrollLeft+node.clientWidth/2;
+   const slides=[...node.querySelectorAll<HTMLElement>(".photo-slide")];
+   const next=slides.reduce((best,slide,index)=>Math.abs(slide.offsetLeft+slide.offsetWidth/2-center)<Math.abs(slides[best].offsetLeft+slides[best].offsetWidth/2-center)?index:best,0);
+   setActive(next);
   });
  };
- return <div className="carousel reveal" role="region" aria-roledescription="carousel" aria-label="Photography archive">
-  <div className="carousel-toolbar">
-   <p><span>{String(active+1).padStart(2,"0")}</span> / {String(photoArchive.length).padStart(2,"0")}</p>
-   <div><button type="button" onClick={()=>move(-1)} disabled={active===0} aria-label="Previous photograph">←</button><button type="button" onClick={()=>move(1)} disabled={active===photoArchive.length-1} aria-label="Next photograph">→</button></div>
+ return <section className="photo-archive" id="photography">
+  <header className="archive-head">
+   <div><Label>Project 06 / Personal study</Label><h2>Photography<br/>Archive</h2></div>
+   <p>Fragments from Scandinavia, Copenhagen and Hong Kong. Quiet edges, crowded light and places carrying evidence of time.</p>
+   <div className="archive-controls"><span>{String(active+1).padStart(2,"0")} / {String(photographs.length).padStart(2,"0")}</span><button onClick={()=>move(active-1)} disabled={active===0} aria-label="Previous photograph">←</button><button onClick={()=>move(active+1)} disabled={active===photographs.length-1} aria-label="Next photograph">→</button></div>
+  </header>
+  {/* The region is intentionally focusable so keyboard users can operate the horizontal archive. */}
+  {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/no-noninteractive-tabindex */}
+  <div className="photo-track" ref={track} onScroll={sync} tabIndex={0} onKeyDown={event=>{if(event.key==="ArrowLeft")move(active-1);if(event.key==="ArrowRight")move(active+1)}} aria-label="Photography archive" role="region" aria-roledescription="carousel">
+   {photographs.map(([file,place,title],index)=><figure className="photo-slide" key={file} aria-label={`${index+1} of ${photographs.length}: ${title}`} role="group" aria-roledescription="slide"><img src={`/photo-dump/web/${file}`} alt={`${title}, ${place}`} loading={index<2?"eager":"lazy"}/><figcaption><span>{String(index+1).padStart(3,"0")}</span><span>{title}</span><span>{place}</span></figcaption></figure>)}
   </div>
-  <div className="photo-carousel" ref={track} onScroll={syncActive} tabIndex={0} onKeyDown={event=>{if(event.key==="ArrowLeft")move(-1);if(event.key==="ArrowRight")move(1)}}>
-   {photoArchive.map(([file,meta,title,alt],index)=><figure className={`gallery-shot ${index===active?"is-active":""}`} key={file} role="group" aria-roledescription="slide" aria-label={`${index+1} of ${photoArchive.length}: ${title}`} aria-current={index===active?"true":undefined}><div className="gallery-frame"><img src={`/photo-dump/web/${file}`} alt={alt} loading={index<2?"eager":"lazy"}/></div><figcaption><b>{String(index+1).padStart(3,"0")}</b><span>{title}</span><small>{meta}</small></figcaption></figure>)}
-  </div>
-  <div className="carousel-progress" aria-hidden="true"><i style={{width:`${((active+1)/photoArchive.length)*100}%`}}/></div>
-  <p className="carousel-hint">Swipe or use arrow keys to explore the archive</p>
- </div>
+ </section>
 }
+
 export default function Home(){
- useEffect(()=>{
-  const o=new IntersectionObserver(es=>es.forEach(e=>e.isIntersecting&&e.target.classList.add("seen")),{threshold:.1});
-  document.querySelectorAll(".reveal").forEach(e=>o.observe(e));
-  let frame=0;
-  const updateScrollGrowth=()=>{
-   frame=0;
-   const max=document.documentElement.scrollHeight-innerHeight;
-   const progress=max>0?Math.min(Math.max(scrollY/max,0),1):0;
-   document.documentElement.style.setProperty("--page-progress",progress.toFixed(4));
-  };
-  const onScroll=()=>{if(!frame)frame=requestAnimationFrame(updateScrollGrowth)};
-  updateScrollGrowth();
-  addEventListener("scroll",onScroll,{passive:true});
-  addEventListener("resize",onScroll);
-  return()=>{
-   o.disconnect();
-   removeEventListener("scroll",onScroll);
-   removeEventListener("resize",onScroll);
-   if(frame)cancelAnimationFrame(frame);
-  }
- },[]);
  return <main id="top">
-  <div className="jelly-field" aria-hidden="true">
-   <i className="jelly jelly-one"><b/></i>
-   <i className="jelly jelly-two"><b/></i>
-   <i className="jelly jelly-three"><b/></i>
-   <i className="jelly jelly-four"><b/></i>
-  </div>
-  <nav className="nav shell"><a className="wordmark" href="#top">MA / GEORGE</a><div><a href="#work">Works</a><a href="#about">About</a><a href="#contact">Contact</a></div></nav>
-  <header className="hero shell"><div className="hero-barcode" aria-hidden="true"><i/><small>9 770131 786005</small></div><div className="hero-meta"><span>Interior / Spatial Designer</span><span>Singapore · 01°17′N</span><span>Index / 2026</span></div><blockquote className="hero-quote"><span>“The idea is like a small blob in your head —</span><span>only when you pull it out into the world,</span><span>sketch it, shape it, share it,</span><span>does it become something real.”</span></blockquote><div className="hero-halftone" aria-hidden="true"><i/><i/><i/></div><span className="figure-tag" aria-hidden="true">[FIG. 01 / FORM STUDY]</span><div className="hero-ruler" aria-hidden="true"><span>−30</span><span>−15</span><span>00</span><span>+15</span><span>+30</span></div><div className="hero-footer"><h1>PORTFOLIO</h1><h2>Ma Shun Ngai George</h2><a href="#work">View selected works <b>↓</b></a></div></header>
-  <section className="about shell reveal" id="about"><p className="eyebrow">About / 00</p><div><h2>Designing spaces that connect people, place and possibility.</h2><div className="about-copy"><p>I am Ma Shun Ngai George, an interior and spatial designer interested in how thoughtful planning, material choices and human behaviour can reshape everyday experience. My work moves between quiet interiors, public interventions, inclusive environments and photography.</p><ul aria-label="Areas of practice"><li>Interior</li><li>Spatial</li><li>Inclusive design</li><li>Photography</li></ul></div></div></section>
-  <section className="index shell" id="work"><header className="section-title reveal"><p className="eyebrow">Chosen works / 01—06</p><h2>SELECTED<br/>PROJECTS</h2></header><div className="work-grid">{works.map(([id,num,title,sub,img,alt])=><a className="work-card reveal" href={`#${id}`} key={id}><img src={img} alt={alt} loading="lazy"/><div><span>{num}</span><h3>{title}</h3><p>{sub}</p></div><b>↘</b></a>)}</div></section>
-  <article className="project" id="japandi"><div className="shell"><Head eyebrow="Project 01 · Hospitality" title="JAPANDI RETREAT" lead="‘Home away from home’ — a resort room concept that redefines a getaway for two."/><Pic n="04" alt="Japandi room with timber screens, two beds and a tea platform" caption="A quiet interior shaped by concrete, timber and filtered light." wide/><div className="text-grid reveal"><h3>Openness as retreat</h3><p>The space becomes a resort room while pushing the boundaries of spatial planning. Openness is associated with relaxation and leisure, changing how we view hotels and resorts.</p><p>The L-shaped plan tucks beds into the corner, away from noise and out of sight from the entrance. The toilet wall is encountered first, then connects to the wardrobe before the sleeping quarters. Concrete and wood absorb noise and protect privacy.</p></div><div className="pair"><Pic n="05" alt="L-shaped floor plan and bathroom views" caption="L-shaped planning, arrival sequence and bathroom studies."/><Materials/></div></div></article>
-  <article className="project masks" id="masks"><div className="shell"><Head eyebrow="Project 02 · Urban intervention" title="LOOKING THROUGH THE MASKS OF THE CITY" lead="Blending the gap between man and nature through a city of facades."/><div className="pair"><Pic n="06" alt="Layered city collage with blue Chinese opera masks" caption="Digital intervention: the city layered with three opera masks."/><Pic n="08" alt="Wearable sound experiment and coloured audio data" caption="Measuring social intensity from Keng Cheow Street to the Padang."/></div><div className="manifesto reveal"><small>MY SLICE IS A CITY OF FACADES.</small><strong>MY CITY IS A SLICE OF MASKS.</strong><p>Spaces put on different masks during the day; beneath the layers, their true identity remains.</p></div><div className="text-grid reveal"><h3>Clarke Quay Central</h3><p>Selected for its proximity to the urban slice, MRT access and role as an entertainment hub. Human and traffic-flow studies reveal centralised circulation through layers separated by gaps.</p><p>The programme is a crochet studio: an accessible, collective craft in which people use similar material but produce different outcomes—much like the city itself.</p></div><Pic n="16" alt="Bamboo crochet studio with suspended wave installation" caption="A woven shelter, translucent yellow skin and collective crochet display." wide/><Features/></div></article>
-  <article className="project dark" id="union"><div className="shell"><Head eyebrow="Project 03 · Public space" title="THE UNION" lead="Closing the gap between man and nature."/><Pic n="19" alt="Technical presentation of a white canopy beneath a large tree" caption="An undulating canopy and concentric benches gather people beneath the existing tree." wide/><div className="text-grid reveal"><h3>Protection without separation</h3><p>The site’s large tree is its natural focal point, but bird droppings made the original benches difficult to use. The circular canopy shelters visitors without flattening the relationship between tree and ground.</p><p>Its undulating surface prevents rainwater build-up and echoes the organic spread of branches. Concentric seating turns the shaded ground into a shared room.</p></div></div></article>
-  <article className="project" id="watergrounds"><div className="shell"><Head eyebrow="Project 04 · Play" title="WATERGROUNDS" lead="Integrating water into playgrounds."/><div className="pair"><Pic n="20" alt="Technical drawings of a water-tower playground" caption="Top view, isometric and elevation: 1577.8 / 3737.0 / 7010.8."/><Pic n="21" alt="Purple climbing structure in a landscaped park" caption="A water tower on a hill, formed for climbing and wet play."/></div><div className="text-grid reveal"><h3>A familiar form, reimagined</h3><p>The site was originally a water-play area. The proposal turns the recognisable silhouette of a water tower into a climbable landmark on a hill.</p><p>Purple supports, a mesh climbing net and wet-environment materials create an elevated play structure that belongs equally to the park and skyline.</p></div></div></article>
-  <article className="project asda" id="asda"><div className="shell"><Head eyebrow="Project 05 · Inclusive interior" title="ASDA 2022" lead="A multi-generational toilet prioritising accessibility, safety, comfort and privacy."/><Pic n="22" alt="Multi-generational toilet with accessible vanity" caption="A warm, dignified room for children, adults and future wheelchair use." wide/><div className="pair asda-boards"><Pic n="23" alt="Dimensioned bathroom plans and elevations" caption="Plans and elevations coordinate access, reach and circulation."/><Pic n="24" alt="Bathroom details and material mood board" caption="Timber, concrete and an acrylic-slat privacy partition."/></div><AsdaFeatures/><section className="specs reveal"><p className="eyebrow">American Standard specification</p><h3>Products and reasons for use</h3>{products.map(([a,b,c])=><div className="spec" key={b}><h4>{a}</h4><span>{b}</span><p>{c}</p></div>)}</section><Materials four/></div></article>
-  <section className="photos" id="photography"><div className="shell"><Head eyebrow="Project 06 · Personal study" title="PHOTOGRAPHY JOURNEY" lead="Observing the hush, bustle and traces of life across changing landscapes."/><div className="gallery-intro reveal"><p>Fragments from Scandinavia, Copenhagen and Hong Kong—quiet edges, crowded light, and places carrying the evidence of time.</p><span>Archive / 001—012</span></div><PhotoCarousel/></div></section>
-  <footer className="footer shell" id="contact"><div><p className="eyebrow">Ma Shun Ngai George</p><h2>LET’S SHAPE<br/>WHAT’S NEXT.</h2></div><a className="mail" href="mailto:georgem2011@gmail.com">georgem2011@gmail.com ↗</a><div className="foot"><span>Interior / Spatial Design · Singapore</span><a href="https://github.com/georgema2011-dot">GitHub</a><a href="#top">Back to top ↑</a></div></footer>
+  <nav className="site-nav" aria-label="Primary navigation"><a className="brand" href="#top">Ma / George</a><span className="nav-role">Interior + Spatial Designer</span><div className="nav-links"><a href="#work">Projects</a><a href="#photography">Photography</a><a href="#contact">Contact</a></div></nav>
+  <header className="hero">
+   <div className="hero-intro"><Label>Singapore / 01°17′N / Portfolio 2026</Label><h1>Spaces are<br/>never neutral.</h1></div>
+   <figure className="hero-image"><img src="/portfolio/page-16.jpg" alt="Interior installation with woven bamboo walls"/><figcaption>Selected spatial study / 2024</figcaption></figure>
+   <blockquote>“The idea begins as a small form in your head. It becomes real when you draw it, test it and share it.”</blockquote>
+   <div className="hero-index"><span>01—05</span><p>Interior, public space, play and inclusive design.</p><a href="#work">View projects ↓</a></div>
+  </header>
+  <section className="about-grid" id="about"><Label>Profile / 00</Label><h2>Designing spaces that connect people, place and possibility.</h2><p>I am Ma Shun Ngai George, an interior and spatial designer interested in how planning, material choices and human behaviour reshape everyday experience.</p><ul><li>Interior</li><li>Spatial</li><li>Inclusive design</li><li>Photography</li></ul></section>
+  <section className="project-index" id="work"><header><Label>Selected projects / 01—05</Label><h2>Work Index</h2></header><div className="index-list">{projects.map(project=><a href={`#${project.id}`} key={project.id}><span>{project.number}</span><strong>{project.title}</strong><span>{project.discipline}</span><span>{project.year}</span><b>↘</b></a>)}</div></section>
+  {projects.map((project,index)=><ProjectDossier project={project} index={index} key={project.id}/>)}
+  <PhotoArchive/>
+  <footer className="site-footer" id="contact"><div><Label>Contact / Singapore</Label><h2>Let’s shape<br/>what’s next.</h2></div><a className="email" href="mailto:georgem2011@gmail.com">georgem2011@gmail.com ↗</a><div className="footer-line"><span>© 2026 Ma Shun Ngai George</span><a href="https://github.com/georgema2011-dot">GitHub</a><a href="#top">Back to top ↑</a></div></footer>
  </main>
 }
-function Materials({four=false}:{four?:boolean}){return <div className="materials reveal"><p className="eyebrow">Materials mood board</p><div className={four?"swatches four":"swatches"}><span className="granite">Motte granite</span><span className="walnut">Walnut wood</span><span className="concrete">Polished concrete</span><span className="charcoal">Dark matte concrete</span></div></div>}
-function Features(){return <><div className="features reveal">{[["01","Permeable shelter","Woven bamboo offers security while remaining open to river light and air."],["02","Layered threshold","Tunnel-like entrances reveal only part of the interior; shoes are removed before stepping onto rattan."],["03","Collective wave","A chain-supported metal structure lets visitors attach crochet pieces by pulley."],["04","Passive cooling","Roof vents use the stack effect to cool the studio with minimal mechanical support."]].map(x=><div key={x[0]}><span>{x[0]}</span><h3>{x[1]}</h3><p>{x[2]}</p></div>)}</div><section className="journey reveal"><p className="eyebrow">Service design</p><h3>Customer journey map</h3><div className="table"><table><thead><tr>{["Time","Customer journey","Front stage","Back stage actions","Support processes"].map(x=><th key={x}>{x}</th>)}</tr></thead><tbody>{journey.map(r=><tr key={r[0]}>{r.map(c=><td key={c}>{c}</td>)}</tr>)}</tbody></table></div></section></>}
-function AsdaFeatures(){return <div className="features reveal">{[["Integrated support","Grip bars and surfaces double as tables, making assistance part of the architecture."],["Tactile guidance","Gripping walls with gaps provide continuous, intuitive support."],["Air and privacy","Acrylic slats screen the bathroom while maintaining ventilation."],["Compact utility","Benches hold clothes and rest points; laundry storage becomes a child’s step stool."]].map(x=><div key={x[0]}><h3>{x[0]}</h3><p>{x[1]}</p></div>)}</div>}

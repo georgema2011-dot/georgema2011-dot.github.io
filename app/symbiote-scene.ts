@@ -73,6 +73,17 @@ export function createSymbioteScene(canvas:HTMLCanvasElement,host:HTMLElement){
  shadow.rotation.x=-Math.PI/2;
  shadow.position.set(-2,groundY-.025,0);
  scene.add(shadow);
+ const trailGeometry=new THREE.CircleGeometry(.34,28);
+ const trailMaterial=new THREE.MeshBasicMaterial({color:0x090b0c,transparent:true,opacity:.12,depthWrite:false});
+ const trail=Array.from({length:7},(_,index)=>{
+  const mark=new THREE.Mesh(trailGeometry,trailMaterial);
+  mark.rotation.x=-Math.PI/2;
+  mark.position.set(-5.05+index*.48,groundY-.018,.04*Math.sin(index));
+  mark.scale.set(1.3-index*.055,.28+index*.025,1);
+  mark.visible=false;
+  scene.add(mark);
+  return mark;
+ });
 
  const mainGeometry=new THREE.SphereGeometry(.68,56,40);
  const dropGeometry=new THREE.SphereGeometry(.18,20,14);
@@ -88,7 +99,8 @@ export function createSymbioteScene(canvas:HTMLCanvasElement,host:HTMLElement){
   new THREE.Mesh(new THREE.SphereGeometry(.2,24,18),mainMaterial)
  ];
  lobes.forEach(lobe=>organism.add(lobe));
- organism.position.set(-2,groundY+.67,0);
+ organism.position.set(reduced?-2:-5.35,groundY+(reduced?.67:.24),0);
+ organism.scale.setScalar(reduced?1:.35);
  scene.add(organism);
 
  const pointer=new THREE.Vector2(-.4,0);
@@ -106,6 +118,8 @@ export function createSymbioteScene(canvas:HTMLCanvasElement,host:HTMLElement){
  let raf=0;
  let last=performance.now();
  let hidden=document.hidden;
+ const introDuration=4.2;
+ let introTime=reduced?introDuration:0;
 
  const setPointer=(event:PointerEvent)=>{
   const rect=host.getBoundingClientRect();
@@ -116,7 +130,7 @@ export function createSymbioteScene(canvas:HTMLCanvasElement,host:HTMLElement){
  };
 
  const spawn=(event:PointerEvent)=>{
-  if(event.button!==0||reduced)return;
+  if(event.button!==0||reduced||introTime<introDuration)return;
   setPointer(event);
   if(droplets.length>=18){
    const old=droplets.shift();
@@ -146,25 +160,42 @@ export function createSymbioteScene(canvas:HTMLCanvasElement,host:HTMLElement){
   const dt=Math.min(.033,(time-last)/1000||.016);
   last=time;
   const elapsed=time/1000;
+  introTime=Math.min(introDuration,introTime+dt);
   mainMaterial.uniforms.uTime.value=elapsed;
   dropMaterial.uniforms.uTime.value=elapsed;
 
+  const entering=introTime<introDuration;
+  const introProgress=THREE.MathUtils.clamp(introTime/introDuration,0,1);
+  const introEase=1-Math.pow(1-introProgress,3);
+  const introScale=.35+.65*THREE.MathUtils.smoothstep(introProgress,.36,1);
+  const crawl=Math.sin(introProgress*Math.PI*10);
+  const contraction=Math.max(0,crawl);
   const dx=target.x-organism.position.x;
-  velocity.x+=dx*5.8*dt;
-  velocity.x*=Math.pow(.15,dt);
-  velocity.z+=(target.z-organism.position.z)*3.2*dt;
-  velocity.z*=Math.pow(.12,dt);
-  jumpClock-=dt;
-  if(grounded&&jumpClock<=0){
-   velocity.y=2.7+Math.min(1.4,Math.abs(dx)*.22);
-   grounded=false;
-   jumpClock=THREE.MathUtils.randFloat(.72,1.2);
+  if(entering){
+   organism.position.x=THREE.MathUtils.lerp(-5.35,-2.05,introEase)+Math.sin(introProgress*Math.PI*6)*.07;
+   organism.position.z=Math.sin(introProgress*Math.PI*4)*.08;
+   organism.position.y=groundY+.67*introScale*(1-contraction*.18);
+   velocity.set(0,0,0);
+   trail.forEach((mark,index)=>mark.visible=introProgress>index/(trail.length+2));
+   trailMaterial.opacity=.06+.1*(1-introProgress*.45);
+  }else{
+   velocity.x+=dx*5.8*dt;
+   velocity.x*=Math.pow(.15,dt);
+   velocity.z+=(target.z-organism.position.z)*3.2*dt;
+   velocity.z*=Math.pow(.12,dt);
+   jumpClock-=dt;
+   if(grounded&&jumpClock<=0){
+    velocity.y=2.7+Math.min(1.4,Math.abs(dx)*.22);
+    grounded=false;
+    jumpClock=THREE.MathUtils.randFloat(.72,1.2);
+   }
+   velocity.y-=7.8*dt;
+   organism.position.addScaledVector(velocity,dt);
+   trailMaterial.opacity=Math.max(0,trailMaterial.opacity-dt*.045);
   }
-  velocity.y-=7.8*dt;
-  organism.position.addScaledVector(velocity,dt);
   const radius=.67*growth;
   const floorLevel=groundY+radius;
-  if(organism.position.y<=floorLevel){
+  if(!entering&&organism.position.y<=floorLevel){
    organism.position.y=floorLevel;
    if(velocity.y<-.6)squash=Math.min(.28,Math.abs(velocity.y)*.045);
    velocity.y=0;
@@ -172,8 +203,13 @@ export function createSymbioteScene(canvas:HTMLCanvasElement,host:HTMLElement){
   }
   squash+=(-squash)*Math.min(1,dt*9);
   growth+=((growthTarget-growth)*Math.min(1,dt*4));
-  organism.scale.set(growth*(1+squash),growth*(1-squash*.72),growth*(1+squash*.35));
-  organism.rotation.z=THREE.MathUtils.lerp(organism.rotation.z,-velocity.x*.045,Math.min(1,dt*5));
+  if(entering){
+   organism.scale.set(introScale*(1+contraction*.42),introScale*(1-contraction*.25),introScale*(1+contraction*.12));
+   organism.rotation.z=Math.sin(introProgress*Math.PI*8)*.055;
+  }else{
+   organism.scale.set(growth*(1+squash),growth*(1-squash*.72),growth*(1+squash*.35));
+   organism.rotation.z=THREE.MathUtils.lerp(organism.rotation.z,-velocity.x*.045,Math.min(1,dt*5));
+  }
   core.rotation.y=elapsed*.16;
   lobes[0].position.set(Math.sin(elapsed*1.7)*.42,-.28,Math.cos(elapsed*1.4)*.2);
   lobes[1].position.set(-.38,Math.sin(elapsed*2.1)*.2,.12);
@@ -182,8 +218,10 @@ export function createSymbioteScene(canvas:HTMLCanvasElement,host:HTMLElement){
 
   shadow.position.x=organism.position.x;
   shadow.position.z=organism.position.z;
-  const altitude=Math.max(0,organism.position.y-floorLevel);
-  const shadowScale=growth*(1.05+altitude*.12);
+  const activeScale=entering?introScale:growth;
+  const activeFloor=groundY+.67*activeScale;
+  const altitude=Math.max(0,organism.position.y-activeFloor);
+  const shadowScale=activeScale*(1.05+altitude*.12);
   shadow.scale.set(shadowScale,shadowScale*.48,1);
   (shadow.material as THREE.MeshBasicMaterial).opacity=.2/(1+altitude*.65);
 

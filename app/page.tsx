@@ -33,12 +33,6 @@ const photographs=[
 function Label({children}:{children:React.ReactNode}){return <p className="label">{children}</p>}
 
 function BlobIntro(){
- const [visible,setVisible]=useState(true);
- useEffect(()=>{
-  const timer=window.setTimeout(()=>setVisible(false),7600);
-  return()=>window.clearTimeout(timer);
- },[]);
- if(!visible)return null;
  return <div className="blob-intro" aria-hidden="true">
   <i className="blob-shadow"/>
   <i className="blob-drop drop-one"/>

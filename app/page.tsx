@@ -1,6 +1,6 @@
 "use client";
 /* eslint-disable @next/next/no-img-element */
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { PhotoOrbit, type OrbitPhoto } from "./photo-orbit";
 
 type Project = { id:string; number:string; title:string; discipline:string; year:string; statement:string; description:string; boards:Array<{src:string;alt:string;caption:string}> };
@@ -37,6 +37,25 @@ const photographs:OrbitPhoto[]=[
 ];
 
 function Label({children}:{children:React.ReactNode}){return <p className="label">{children}</p>}
+
+function HeroSlideshow(){
+ const [active,setActive]=useState(0);
+ const [hovered,setHovered]=useState(false);
+ useEffect(()=>{
+  if(hovered||matchMedia("(prefers-reduced-motion: reduce)").matches)return;
+  const timer=window.setInterval(()=>setActive(index=>(index+1)%projects.length),4200);
+  return()=>window.clearInterval(timer);
+ },[hovered]);
+ const project=projects[active];
+ const board=project.boards[0];
+ return <figure className="hero-image" onMouseEnter={()=>setHovered(true)} onMouseLeave={()=>setHovered(false)}>
+  <a className="hero-slide-link" href={`#${project.id}`} aria-label={`View ${project.title} project details`}>
+   <img className="hero-slide" key={board.src} src={board.src} alt={board.alt}/>
+   <span className="hero-slide-action">View project ↘</span>
+  </a>
+  <figcaption><span>{project.number} / {project.title}</span><span>{project.discipline} · {project.year}</span></figcaption>
+ </figure>
+}
 
 function BlobIntro(){
  const canvas=useRef<HTMLCanvasElement>(null);
@@ -79,7 +98,7 @@ export default function Home(){
   <nav className="site-nav" aria-label="Primary navigation"><a className="brand" href="#top">Ma / George</a><span className="nav-role">Spatial + Industrial Designer</span><div className="nav-links"><a href="#work">Projects</a><a href="#photography">Photography</a><a href="#contact">Contact</a></div></nav>
   <header className="hero">
    <div className="hero-intro"><BlobIntro/><Label>Singapore / 01°17′N / Portfolio 2026</Label><blockquote className="hero-quote">“The idea begins as a small form in your head. It becomes real when you draw it, test it and share it.”</blockquote><h1>Spaces are<br/>never neutral.</h1></div>
-   <figure className="hero-image"><img src="/portfolio/page-16.jpg" alt="Interior installation with woven bamboo walls"/><figcaption>Selected spatial study / 2024</figcaption></figure>
+   <HeroSlideshow/>
    <div className="hero-index"><span>01—05</span><p>Interior, public space, play and inclusive design.</p><a href="#work">View projects ↓</a></div>
   </header>
   <section className="about-grid" id="about"><Label>Profile / 00</Label><h2>Designing across space, objects and human experience.</h2><p>I am Ma Shun Ngai George, an interdisciplinary spatial and industrial designer interested in how planning, material choices and human behaviour reshape everyday experience.</p><ul><li>Spatial design</li><li>Industrial design</li><li>Inclusive design</li><li>Photography</li></ul></section>

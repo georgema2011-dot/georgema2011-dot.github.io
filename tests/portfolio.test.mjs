@@ -26,13 +26,16 @@ test("server-renders the redesigned portfolio", async () => {
 });
 
 test("keeps the portfolio semantic, responsive and image-led", async () => {
-  const [page, css] = await Promise.all([
+  const [page, orbit, css] = await Promise.all([
     readFile(new URL("../app/page.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/photo-orbit.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/globals.css", import.meta.url), "utf8"),
   ]);
   assert.match(page, /<main id="top">/);
   assert.match(page, /aria-label="Primary navigation"/);
-  assert.match(page, /aria-roledescription="carousel"/);
+  assert.match(orbit, /aria-roledescription="carousel"/);
+  assert.match(orbit, /Pause orbit/);
+  assert.match(orbit, /aria-modal="true"/);
   assert.match(page, /loading=.*lazy/);
   assert.match(css, /grid-template-columns:repeat\(12/);
   assert.match(css, /@media\(max-width:620px\)/);

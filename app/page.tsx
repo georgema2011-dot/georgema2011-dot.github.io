@@ -1,6 +1,7 @@
 "use client";
 /* eslint-disable @next/next/no-img-element */
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
+import { PhotoOrbit, type OrbitPhoto } from "./photo-orbit";
 
 type Project = { id:string; number:string; title:string; discipline:string; year:string; statement:string; description:string; boards:Array<{src:string;alt:string;caption:string}> };
 
@@ -23,11 +24,11 @@ const projects:Project[]=[
   {src:"/portfolio/page-24.jpg",alt:"Bathroom details and material mood board",caption:"Details, finishes and material study"}]}
 ];
 
-const photographs=[
- ["scandinavia-van.webp","Norway","Roadside pause"],["scandinavia-pass.webp","Norway","Open distance"],["scandinavia-road.webp","Norway","Through the valley"],
- ["copenhagen-arcade.webp","Copenhagen","After hours"],["copenhagen-street.webp","Copenhagen","Corner study"],["copenhagen-shore.webp","Copenhagen","The quiet edge"],
- ["hong-kong-motion.webp","Hong Kong","Velocity"],["hong-kong-temple.webp","Hong Kong","Threshold"],["hong-kong-reflection.webp","Hong Kong","Passing image"],
- ["hong-kong-courtyard.webp","Hong Kong","Gathering"],["hong-kong-market.webp","Hong Kong","Street room"],["hong-kong-density.webp","Hong Kong","Compression"]
+const photographs:OrbitPhoto[]=[
+ {file:"scandinavia-van.webp",place:"Norway",title:"Roadside pause"},{file:"scandinavia-pass.webp",place:"Norway",title:"Open distance"},{file:"scandinavia-road.webp",place:"Norway",title:"Through the valley"},
+ {file:"copenhagen-arcade.webp",place:"Copenhagen",title:"After hours"},{file:"copenhagen-street.webp",place:"Copenhagen",title:"Corner study"},{file:"copenhagen-shore.webp",place:"Copenhagen",title:"The quiet edge"},
+ {file:"hong-kong-motion.webp",place:"Hong Kong",title:"Velocity"},{file:"hong-kong-temple.webp",place:"Hong Kong",title:"Threshold"},{file:"hong-kong-reflection.webp",place:"Hong Kong",title:"Passing image"},
+ {file:"hong-kong-courtyard.webp",place:"Hong Kong",title:"Gathering"},{file:"hong-kong-market.webp",place:"Hong Kong",title:"Street room"},{file:"hong-kong-density.webp",place:"Hong Kong",title:"Compression"}
 ];
 
 function Label({children}:{children:React.ReactNode}){return <p className="label">{children}</p>}
@@ -68,42 +69,6 @@ function ProjectDossier({project,index}:{project:Project;index:number}){
  </article>
 }
 
-function PhotoArchive(){
- const track=useRef<HTMLDivElement>(null);
- const raf=useRef(0);
- const [active,setActive]=useState(0);
- useEffect(()=>()=>{if(raf.current)cancelAnimationFrame(raf.current)},[]);
- const move=(next:number)=>{
-  const index=Math.max(0,Math.min(next,photographs.length-1));
-  const slide=track.current?.querySelectorAll<HTMLElement>(".photo-slide")[index];
-  slide?.scrollIntoView({behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth",inline:"center",block:"nearest"});
-  setActive(index);
- };
- const sync=()=>{
-  if(raf.current)return;
-  raf.current=requestAnimationFrame(()=>{
-   raf.current=0;
-   const node=track.current;if(!node)return;
-   const center=node.scrollLeft+node.clientWidth/2;
-   const slides=[...node.querySelectorAll<HTMLElement>(".photo-slide")];
-   const next=slides.reduce((best,slide,index)=>Math.abs(slide.offsetLeft+slide.offsetWidth/2-center)<Math.abs(slides[best].offsetLeft+slides[best].offsetWidth/2-center)?index:best,0);
-   setActive(next);
-  });
- };
- return <section className="photo-archive" id="photography">
-  <header className="archive-head">
-   <div><Label>Project 06 / Personal study</Label><h2>Photography<br/>Archive</h2></div>
-   <p>Fragments from Scandinavia, Copenhagen and Hong Kong. Quiet edges, crowded light and places carrying evidence of time.</p>
-   <div className="archive-controls"><span>{String(active+1).padStart(2,"0")} / {String(photographs.length).padStart(2,"0")}</span><button onClick={()=>move(active-1)} disabled={active===0} aria-label="Previous photograph">←</button><button onClick={()=>move(active+1)} disabled={active===photographs.length-1} aria-label="Next photograph">→</button></div>
-  </header>
-  {/* The region is intentionally focusable so keyboard users can operate the horizontal archive. */}
-  {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/no-noninteractive-tabindex */}
-  <div className="photo-track" ref={track} onScroll={sync} tabIndex={0} onKeyDown={event=>{if(event.key==="ArrowLeft")move(active-1);if(event.key==="ArrowRight")move(active+1)}} aria-label="Photography archive" role="region" aria-roledescription="carousel">
-   {photographs.map(([file,place,title],index)=><figure className="photo-slide" key={file} aria-label={`${index+1} of ${photographs.length}: ${title}`} role="group" aria-roledescription="slide"><img src={`/photo-dump/web/${file}`} alt={`${title}, ${place}`} loading={index<2?"eager":"lazy"}/><figcaption><span>{String(index+1).padStart(3,"0")}</span><span>{title}</span><span>{place}</span></figcaption></figure>)}
-  </div>
- </section>
-}
-
 export default function Home(){
  return <main id="top">
   <nav className="site-nav" aria-label="Primary navigation"><a className="brand" href="#top">Ma / George</a><span className="nav-role">Interior + Spatial Designer</span><div className="nav-links"><a href="#work">Projects</a><a href="#photography">Photography</a><a href="#contact">Contact</a></div></nav>
@@ -115,7 +80,7 @@ export default function Home(){
   <section className="about-grid" id="about"><Label>Profile / 00</Label><h2>Designing spaces that connect people, place and possibility.</h2><p>I am Ma Shun Ngai George, an interior and spatial designer interested in how planning, material choices and human behaviour reshape everyday experience.</p><ul><li>Interior</li><li>Spatial</li><li>Inclusive design</li><li>Photography</li></ul></section>
   <section className="project-index" id="work"><header><Label>Selected projects / 01—05</Label><h2>Work Index</h2></header><div className="index-list">{projects.map(project=><a href={`#${project.id}`} key={project.id}><span>{project.number}</span><strong>{project.title}</strong><span>{project.discipline}</span><span>{project.year}</span><b>↘</b></a>)}</div></section>
   {projects.map((project,index)=><ProjectDossier project={project} index={index} key={project.id}/>)}
-  <PhotoArchive/>
+  <PhotoOrbit photos={photographs}/>
   <section className="press-feature" aria-labelledby="press-title">
    <div className="press-meta"><Label>Press / 01</Label><span>The Straits Times</span><time dateTime="2023-09-08">08.09.2023</time></div>
    <div className="press-story"><Label>Now Is Not The Time / Mirror Maze</Label><h2 id="press-title">A young designer’s view of legacy.</h2><p>The Straits Times featured Mr George Ma as one of 10 NYP students involved in creating the exhibition’s mirror-maze installation.</p></div>

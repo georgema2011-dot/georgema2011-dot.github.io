@@ -33,7 +33,41 @@ const photographs=[
 function Label({children}:{children:React.ReactNode}){return <p className="label">{children}</p>}
 
 function BlobIntro(){
- return <div className="blob-intro" aria-hidden="true">
+ const field=useRef<HTMLDivElement>(null);
+ useEffect(()=>{
+  const root=field.current;
+  const zone=root?.parentElement;
+  const blob=root?.querySelector<HTMLElement>(".landing-blob");
+  if(!root||!zone||!blob||!window.matchMedia("(pointer:fine)").matches)return;
+  let raf=0;
+  const reset=()=>{
+   root.style.setProperty("--blob-pull-x","0px");
+   root.style.setProperty("--blob-pull-y","0px");
+   root.style.setProperty("--blob-react-x","1");
+   root.style.setProperty("--blob-react-y","1");
+  };
+  const react=(event:PointerEvent)=>{
+   if(event.pointerType!=="mouse"&&event.pointerType!=="pen")return;
+   cancelAnimationFrame(raf);
+   raf=requestAnimationFrame(()=>{
+    const rect=blob.getBoundingClientRect();
+    const dx=event.clientX-(rect.left+rect.width/2);
+    const dy=event.clientY-(rect.top+rect.height/2);
+    const distance=Math.hypot(dx,dy)||1;
+    const reach=Math.min(300,Math.max(180,zone.clientWidth*.34));
+    const influence=Math.max(0,1-distance/reach);
+    const velocity=Math.min(1,Math.hypot(event.movementX,event.movementY)/32);
+    root.style.setProperty("--blob-pull-x",`${dx/distance*18*influence}px`);
+    root.style.setProperty("--blob-pull-y",`${dy/distance*14*influence}px`);
+    root.style.setProperty("--blob-react-x",`${1+influence*.1+velocity*.035}`);
+    root.style.setProperty("--blob-react-y",`${1-influence*.055+velocity*.02}`);
+   });
+  };
+  zone.addEventListener("pointermove",react);
+  zone.addEventListener("pointerleave",reset);
+  return()=>{cancelAnimationFrame(raf);zone.removeEventListener("pointermove",react);zone.removeEventListener("pointerleave",reset)};
+ },[]);
+ return <div ref={field} className="blob-intro" aria-hidden="true">
   <i className="blob-shadow"/>
   <i className="blob-drop drop-one"/>
   <i className="blob-drop drop-two"/>

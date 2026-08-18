@@ -43,7 +43,7 @@ function HeroSlideshow(){
  const [hovered,setHovered]=useState(false);
  useEffect(()=>{
   if(hovered||matchMedia("(prefers-reduced-motion: reduce)").matches)return;
-  const timer=window.setInterval(()=>setActive(index=>(index+1)%projects.length),4200);
+  const timer=window.setInterval(()=>setActive(index=>(index+1)%projects.length),2200);
   return()=>window.clearInterval(timer);
  },[hovered]);
  const project=projects[active];

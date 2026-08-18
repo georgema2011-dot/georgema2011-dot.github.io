@@ -101,10 +101,9 @@ function PhotoArchive(){
 
 export default function Home(){
  return <main id="top">
-  <BlobIntro/>
   <nav className="site-nav" aria-label="Primary navigation"><a className="brand" href="#top">Ma / George</a><span className="nav-role">Interior + Spatial Designer</span><div className="nav-links"><a href="#work">Projects</a><a href="#photography">Photography</a><a href="#contact">Contact</a></div></nav>
   <header className="hero">
-   <div className="hero-intro"><Label>Singapore / 01°17′N / Portfolio 2026</Label><h1>Spaces are<br/>never neutral.</h1></div>
+   <div className="hero-intro"><BlobIntro/><Label>Singapore / 01°17′N / Portfolio 2026</Label><h1>Spaces are<br/>never neutral.</h1></div>
    <figure className="hero-image"><img src="/portfolio/page-16.jpg" alt="Interior installation with woven bamboo walls"/><figcaption>Selected spatial study / 2024</figcaption></figure>
    <blockquote>“The idea begins as a small form in your head. It becomes real when you draw it, test it and share it.”</blockquote>
    <div className="hero-index"><span>01—05</span><p>Interior, public space, play and inclusive design.</p><a href="#work">View projects ↓</a></div>

@@ -32,6 +32,21 @@ const photographs=[
 
 function Label({children}:{children:React.ReactNode}){return <p className="label">{children}</p>}
 
+function BlobIntro(){
+ const [visible,setVisible]=useState(true);
+ useEffect(()=>{
+  const timer=window.setTimeout(()=>setVisible(false),7600);
+  return()=>window.clearTimeout(timer);
+ },[]);
+ if(!visible)return null;
+ return <div className="blob-intro" aria-hidden="true">
+  <i className="blob-shadow"/>
+  <i className="blob-drop drop-one"/>
+  <i className="blob-drop drop-two"/>
+  <div className="landing-blob"><i/></div>
+ </div>
+}
+
 function ProjectDossier({project,index}:{project:Project;index:number}){
  return <article className="dossier" id={project.id}>
   <header className="dossier-head">
@@ -86,6 +101,7 @@ function PhotoArchive(){
 
 export default function Home(){
  return <main id="top">
+  <BlobIntro/>
   <nav className="site-nav" aria-label="Primary navigation"><a className="brand" href="#top">Ma / George</a><span className="nav-role">Interior + Spatial Designer</span><div className="nav-links"><a href="#work">Projects</a><a href="#photography">Photography</a><a href="#contact">Contact</a></div></nav>
   <header className="hero">
    <div className="hero-intro"><Label>Singapore / 01°17′N / Portfolio 2026</Label><h1>Spaces are<br/>never neutral.</h1></div>

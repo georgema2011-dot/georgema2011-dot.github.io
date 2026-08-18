@@ -139,6 +139,12 @@ export default function Home(){
   <section className="project-index" id="work"><header><Label>Selected projects / 01—05</Label><h2>Work Index</h2></header><div className="index-list">{projects.map(project=><a href={`#${project.id}`} key={project.id}><span>{project.number}</span><strong>{project.title}</strong><span>{project.discipline}</span><span>{project.year}</span><b>↘</b></a>)}</div></section>
   {projects.map((project,index)=><ProjectDossier project={project} index={index} key={project.id}/>)}
   <PhotoArchive/>
+  <section className="press-feature" aria-labelledby="press-title">
+   <div className="press-meta"><Label>Press / 01</Label><span>The Straits Times</span><time dateTime="2023-09-08">08.09.2023</time></div>
+   <div className="press-story"><Label>Now Is Not The Time / Mirror Maze</Label><h2 id="press-title">A young designer’s view of legacy.</h2><p>The Straits Times featured Mr George Ma as one of 10 NYP students involved in creating the exhibition’s mirror-maze installation.</p></div>
+   <blockquote className="press-quote">“After this project, through the research and all, it made me realise that what he did in the past influenced whatever that happens now.”<cite>— Mr George Ma</cite></blockquote>
+   <a className="press-link" href="https://www.straitstimes.com/singapore/immersive-exhibition-shares-lee-kuan-yew-s-life-and-legacy-with-the-young" target="_blank" rel="noreferrer">Read the article <span aria-hidden="true">↗</span></a>
+  </section>
   <footer className="site-footer" id="contact"><div><Label>Contact / Singapore</Label><h2>Let’s shape<br/>what’s next.</h2></div><a className="email" href="mailto:georgem2011@gmail.com">georgem2011@gmail.com ↗</a><div className="footer-line"><span>© 2026 Ma Shun Ngai George</span><a href="https://github.com/georgema2011-dot">GitHub</a><a href="#top">Back to top ↑</a></div></footer>
  </main>
 }

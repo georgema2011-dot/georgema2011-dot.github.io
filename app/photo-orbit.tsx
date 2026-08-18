@@ -9,6 +9,7 @@ export function PhotoOrbit({photos}:{photos:OrbitPhoto[]}){
  const stage=useRef<HTMLDivElement>(null);
  const items=useRef<Array<HTMLButtonElement|null>>([]);
  const phase=useRef(0);
+ const speed=useRef(1);
  const last=useRef(0);
  const frame=useRef(0);
  const opener=useRef<HTMLButtonElement|null>(null);
@@ -24,7 +25,12 @@ export function PhotoOrbit({photos}:{photos:OrbitPhoto[]}){
   const draw=(time:number)=>{
    const dt=Math.min(.04,(time-last.current)/1000||0);
    last.current=time;
-   if(!paused&&!hovered&&lightbox===null&&!reduced)phase.current+=dt*Math.PI/12;
+   if(paused||lightbox!==null||reduced)speed.current=0;
+   else{
+    const target=hovered?.12:1;
+    speed.current+=(target-speed.current)*(1-Math.exp(-dt*5));
+    phase.current+=dt*Math.PI/12*speed.current;
+   }
    const width=node.clientWidth;
    const height=node.clientHeight;
    const rx=width*(width<620?.35:.39);
@@ -81,9 +87,9 @@ export function PhotoOrbit({photos}:{photos:OrbitPhoto[]}){
    <p>Fragments from Scandinavia, Copenhagen and Hong Kong revolve as a living contact sheet. Select any snapshot to see the complete frame.</p>
    <div className="archive-controls"><button type="button" onClick={()=>setPaused(value=>!value)} aria-pressed={paused}>{paused?"Play orbit":"Pause orbit"}</button></div>
   </header>
-  <div className="orbit-stage" ref={stage} role="region" aria-roledescription="carousel" aria-label="Revolving photography archive">
+  <div className="orbit-stage" ref={stage} role="region" aria-roledescription="carousel" aria-label="Revolving photography archive" onMouseEnter={()=>setHovered(true)} onMouseLeave={()=>setHovered(false)}>
    <div className="orbit-title" aria-live="off"><span>{current.title}</span><small>{current.place}</small></div>
-   {photos.map((photo,index)=><button className="orbit-snapshot" ref={node=>{items.current[index]=node}} type="button" key={photo.file} onClick={event=>open(index,event)} onMouseEnter={()=>setHovered(true)} onMouseLeave={()=>setHovered(false)} onFocus={()=>setHovered(true)} onBlur={()=>setHovered(false)} aria-label={`Open ${photo.title}, ${photo.place} full screen`}>
+   {photos.map((photo,index)=><button className="orbit-snapshot" ref={node=>{items.current[index]=node}} type="button" key={photo.file} onClick={event=>open(index,event)} onFocus={()=>setHovered(true)} onBlur={()=>setHovered(false)} aria-label={`Open ${photo.title}, ${photo.place} full screen`}>
     <img src={`/photo-dump/web/${photo.file}`} alt="" loading={index<4?"eager":"lazy"} decoding="async"/>
    </button>)}
   </div>

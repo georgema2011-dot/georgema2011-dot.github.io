@@ -19,7 +19,7 @@ test("server-renders the redesigned portfolio", async () => {
   assert.match(response.headers.get("content-type") ?? "", /^text\/html\b/i);
   const html = await response.text();
   assert.match(html, /Ma Shun Ngai George/i);
-  assert.match(html, /Spaces are/);
+  assert.match(html, /The idea begins as a small form/);
   assert.match(html, /Work Index/);
   assert.match(html, /Photography/);
   assert.doesNotMatch(html, /Your site is taking shape|Building your site/i);

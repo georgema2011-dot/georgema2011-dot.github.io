@@ -81,7 +81,7 @@ function ProjectDossier({project,index}:{project:Project;index:number}){
  return <article className="dossier" id={project.id}>
   <header className="dossier-head">
    <div className="dossier-number"><Label>Project</Label><span>{project.number}</span></div>
-   <div className="dossier-title"><Label>{project.discipline} / {project.year}</Label><h2>{project.title}</h2></div>
+   <div className="dossier-title"><Label>{project.discipline} / {project.year}</Label><h2 className={project.title.length>22?"long-title":undefined}>{project.title}</h2></div>
    <div className="dossier-copy"><p className="statement">{project.statement}</p><p>{project.description}</p></div>
   </header>
   <div className={`board-grid board-grid-${project.boards.length}`}>
@@ -97,12 +97,12 @@ export default function Home(){
  return <main id="top">
   <nav className="site-nav" aria-label="Primary navigation"><a className="brand" href="#top">Ma / George</a><span className="nav-role">Spatial + Industrial Designer</span><div className="nav-links"><a href="#work">Projects</a><a href="#photography">Photography</a><a href="#contact">Contact</a></div></nav>
   <header className="hero">
-   <div className="hero-intro"><BlobIntro/><Label>Singapore / 01°17′N / Portfolio 2026</Label><blockquote className="hero-quote">“The idea begins as a small form in your head. It becomes real when you draw it, test it and share it.”</blockquote><h1>Spaces are<br/>never neutral.</h1></div>
+   <div className="hero-intro"><BlobIntro/><Label>Singapore / 01°17′N / Portfolio 2026</Label><blockquote className="hero-quote">“The idea begins as a small form in your head. It becomes real when you draw it, test it and share it.”</blockquote><h1>Spaces are never neutral.</h1></div>
    <HeroSlideshow/>
    <div className="hero-index"><span>01—05</span><p>Interior, public space, play and inclusive design.</p><a href="#work">View projects ↓</a></div>
   </header>
-  <section className="about-grid" id="about"><Label>Profile / 00</Label><h2>Designing across space, objects and human experience.</h2><p>I am Ma Shun Ngai George, an interdisciplinary spatial and industrial designer interested in how planning, material choices and human behaviour reshape everyday experience.</p><ul><li>Spatial design</li><li>Industrial design</li><li>Inclusive design</li><li>Photography</li></ul></section>
-  <section className="experience" aria-labelledby="experience-title"><header><Label>Experience / 02</Label><h2 id="experience-title">Industry<br/>practice.</h2></header><ol><li><span>01</span><strong>SpaceLogic</strong><span>Internship</span></li><li><span>02</span><strong>M Moser Associates</strong><span>Internship</span></li></ol></section>
+  <section className="about-grid" id="about"><Label>Profile / 00</Label><h2>Designing across scales.</h2><p>I am Ma Shun Ngai George, an interdisciplinary spatial and industrial designer interested in how planning, material choices and human behaviour reshape everyday experience.</p><ul><li>Spatial design</li><li>Industrial design</li><li>Inclusive design</li><li>Photography</li></ul></section>
+  <section className="experience" aria-labelledby="experience-title"><header><Label>Experience / 02</Label><h2 id="experience-title">Industry practice.</h2></header><ol><li><span>01</span><strong>SpaceLogic</strong><span>Internship</span></li><li><span>02</span><strong>M Moser Associates</strong><span>Internship</span></li></ol></section>
   <section className="project-index" id="work"><header><Label>Selected projects / 01—05</Label><h2>Work Index</h2></header><div className="index-list">{projects.map(project=><a href={`#${project.id}`} key={project.id}><span>{project.number}</span><strong>{project.title}</strong><span>{project.discipline}</span><span>{project.year}</span><b>↘</b></a>)}</div></section>
   {projects.map((project,index)=><ProjectDossier project={project} index={index} key={project.id}/>)}
   <PhotoOrbit photos={photographs}/>
@@ -116,6 +116,6 @@ export default function Home(){
     <figure><img src="https://cassette.sphdigital.com.sg/image/straitstimes/edac579e3c78c6b0eee02337a7cc5f1b3ad707660c7c9d2aa977a1c96bdc72d7" alt="Mirror maze installation at the Now Is Not The Time exhibition" referrerPolicy="no-referrer"/><figcaption><span>02</span>Mirror maze installation <cite>ST Photo: Ng Sor Luan</cite></figcaption></figure>
    </div>
   </section>
-  <footer className="site-footer" id="contact"><div><Label>Contact / Singapore</Label><h2>Let’s shape<br/>what’s next.</h2></div><a className="email" href="mailto:georgem2011@gmail.com">georgem2011@gmail.com ↗</a><div className="footer-line"><span>© 2026 Ma Shun Ngai George</span><a href="https://github.com/georgema2011-dot">GitHub</a><a href="#top">Back to top ↑</a></div></footer>
+  <footer className="site-footer" id="contact"><div><Label>Contact / Singapore</Label><h2>Let’s shape what’s next.</h2></div><a className="email" href="mailto:georgem2011@gmail.com">georgem2011@gmail.com ↗</a><div className="footer-line"><span>© 2026 Ma Shun Ngai George</span><a href="https://github.com/georgema2011-dot">GitHub</a><a href="#top">Back to top ↑</a></div></footer>
  </main>
 }

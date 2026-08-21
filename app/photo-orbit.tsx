@@ -83,7 +83,7 @@ export function PhotoOrbit({photos}:{photos:OrbitPhoto[]}){
 
  return <section className="photo-archive" id="photography">
   <header className="archive-head">
-   <div><p className="label">Personal study / Photography</p><h2>Photography<br/>Orbit</h2></div>
+   <div><p className="label">Personal study / Photography</p><h2>Photography Orbit</h2></div>
    <p>Fragments from Scandinavia, Copenhagen and Hong Kong revolve as a living contact sheet. Select any snapshot to see the complete frame.</p>
    <div className="archive-controls"><button type="button" onClick={()=>setPaused(value=>!value)} aria-pressed={paused}>{paused?"Play orbit":"Pause orbit"}</button></div>
   </header>

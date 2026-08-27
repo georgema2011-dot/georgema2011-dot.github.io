@@ -3,7 +3,9 @@
 import { useEffect, useRef, useState } from "react";
 import { PhotoOrbit, type OrbitPhoto } from "./photo-orbit";
 
-type Project = { id:string; number:string; title:string; discipline:string; year:string; statement:string; description:string; boards:Array<{src:string;alt:string;caption:string}> };
+type Project = { id:string; number:string; title:string; discipline:string; year:string; statement:string; description:string; document?:{href:string;label:string}; boards:Array<{src:string;alt:string;caption:string}> };
+
+const scaLabCaptions=["Cover","Project rationale","Junction 8 roof garden site","Design concept","Spatial programme","Sandbox entrance","Land and water testing terrain","Protective test bowl","Level two entrance","Awareness area","Viewing and control area","Events area","Innovation workshop","Learning area","Cloud control application"];
 
 const projects:Project[]=[
  {id:"japandi",number:"01",title:"Japandi Retreat",discipline:"Hospitality",year:"2024",statement:"Home away from home.",description:"An open resort room organised as a quiet sequence of arrival, bathing and rest. Concrete, timber and filtered light protect privacy without closing the interior down.",boards:[
@@ -21,7 +23,8 @@ const projects:Project[]=[
  {id:"asda",number:"05",title:"ASDA 2022",discipline:"Inclusive interior",year:"2022",statement:"Dignity across generations.",description:"A multi-generational bathroom coordinates reach, assistance, air and privacy. Support elements are integrated into the architecture instead of added as afterthoughts.",boards:[
   {src:"/portfolio/page-22.jpg",alt:"Accessible multi-generational bathroom with warm timber and concrete finishes",caption:"Interior proposal / accessible vanity"},
   {src:"/portfolio/page-23.jpg",alt:"Dimensioned bathroom plans and elevations",caption:"Plans and elevations"},
-  {src:"/portfolio/page-24.jpg",alt:"Bathroom details and material mood board",caption:"Details, finishes and material study"}]}
+  {src:"/portfolio/page-24.jpg",alt:"Bathroom details and material mood board",caption:"Details, finishes and material study"}]},
+ {id:"sca-lab",number:"06",title:"SCA-Lab",discipline:"Spatial + interaction design",year:"Academic study",statement:"Anywhere. Anytime. Always in control.",description:"A hybrid recreational and innovation space for remote-control vehicle enthusiasts and newcomers at Junction 8's roof garden. The proposal combines testing terrains, drone and boat zones, workshops, community viewing, retail support and a connected mobile control system.",document:{href:"/projects/sca-lab/sca-lab-presentation.pdf",label:"View original presentation deck"},boards:scaLabCaptions.map((caption,index)=>({src:`/projects/sca-lab/page-${String(index+1).padStart(2,"0")}.webp`,alt:`SCA-Lab presentation page ${index+1}: ${caption}`,caption}))}
 ];
 
 const archiveFiles=[
@@ -82,9 +85,9 @@ function ProjectDossier({project,index}:{project:Project;index:number}){
   <header className="dossier-head">
    <div className="dossier-number"><Label>Project</Label><span>{project.number}</span></div>
    <div className="dossier-title"><Label>{project.discipline} / {project.year}</Label><h2 className={project.title.length>22?"long-title":undefined}>{project.title}</h2></div>
-   <div className="dossier-copy"><p className="statement">{project.statement}</p><p>{project.description}</p></div>
+   <div className="dossier-copy"><p className="statement">{project.statement}</p><div><p>{project.description}</p>{project.document&&<a className="deck-link" href={project.document.href} target="_blank" rel="noreferrer">{project.document.label} ↗</a>}</div></div>
   </header>
-  <div className={`board-grid board-grid-${project.boards.length}`}>
+  <div className={`board-grid ${project.boards.length>3?"board-grid-many":`board-grid-${project.boards.length}`}`}>
    {project.boards.map((board,boardIndex)=><figure className={`board board-${boardIndex+1}`} key={board.src}>
     <img src={board.src} alt={board.alt} loading={index===0&&boardIndex===0?"eager":"lazy"}/>
     <figcaption><span>{project.number}.{String(boardIndex+1).padStart(2,"0")}</span><span>{board.caption}</span></figcaption>
@@ -99,11 +102,11 @@ export default function Home(){
   <header className="hero">
    <div className="hero-intro"><BlobIntro/><Label>Singapore / 01°17′N / Portfolio 2026</Label><blockquote className="hero-quote"><h1>“The idea begins as a small form in your head. It becomes real when you draw it, test it and share it.”</h1></blockquote></div>
    <HeroSlideshow/>
-   <div className="hero-index"><span>01—05</span><p>Interior, public space, play and inclusive design.</p><a href="#work">View projects ↓</a></div>
+   <div className="hero-index"><span>01—06</span><p>Spatial, industrial, interaction and inclusive design.</p><a href="#work">View projects ↓</a></div>
   </header>
   <section className="about-grid" id="about"><Label>Profile / 00</Label><h2>Designing across scales.</h2><p>I am Ma Shun Ngai George, an interdisciplinary spatial and industrial designer interested in how planning, material choices and human behaviour reshape everyday experience.</p><ul><li>Spatial design</li><li>Industrial design</li><li>Inclusive design</li><li>Photography</li></ul></section>
   <section className="experience" aria-labelledby="experience-title"><header><Label>Experience / 02</Label><h2 id="experience-title">Industry practice.</h2></header><ol><li><span>01</span><strong>SpaceLogic</strong><span>Internship</span></li><li><span>02</span><strong>M Moser Associates</strong><span>Internship</span></li></ol></section>
-  <section className="project-index" id="work"><header><Label>Selected projects / 01—05</Label><h2>Work Index</h2></header><div className="index-list">{projects.map(project=><a href={`#${project.id}`} key={project.id}><span>{project.number}</span><strong>{project.title}</strong><span>{project.discipline}</span><span>{project.year}</span><b>↘</b></a>)}</div></section>
+  <section className="project-index" id="work"><header><Label>Selected projects / 01—06</Label><h2>Work Index</h2></header><div className="index-list">{projects.map(project=><a href={`#${project.id}`} key={project.id}><span>{project.number}</span><strong>{project.title}</strong><span>{project.discipline}</span><span>{project.year}</span><b>↘</b></a>)}</div></section>
   {projects.map((project,index)=><ProjectDossier project={project} index={index} key={project.id}/>)}
   <PhotoOrbit photos={photographs}/>
   <section className="press-feature" aria-labelledby="press-title">

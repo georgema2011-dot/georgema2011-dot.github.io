@@ -5,7 +5,9 @@ import { PhotoOrbit, type OrbitPhoto } from "./photo-orbit";
 
 type Project = { id:string; number:string; title:string; discipline:string; year:string; statement:string; description:string; document?:{href:string;label:string}; boards:Array<{src:string;alt:string;caption:string}> };
 
-const scaLabCaptions=["Cover","Project rationale","Junction 8 roof garden site","Design concept","Spatial programme","Sandbox entrance","Land and water testing terrain","Protective test bowl","Level two entrance","Awareness area","Viewing and control area","Events area","Innovation workshop","Learning area","Cloud control application"];
+const scaLabPages=[
+ {page:1,caption:"Cover"},{page:4,caption:"Design concept"},{page:5,caption:"Spatial programme"},{page:7,caption:"Land and water testing terrain"},{page:11,caption:"Viewing and control area"},{page:13,caption:"Innovation workshop"},{page:15,caption:"Cloud control application"}
+];
 
 const projects:Project[]=[
  {id:"japandi",number:"01",title:"Japandi Retreat",discipline:"Hospitality",year:"2024",statement:"Home away from home.",description:"An open resort room organised as a quiet sequence of arrival, bathing and rest. Concrete, timber and filtered light protect privacy without closing the interior down.",boards:[
@@ -24,7 +26,10 @@ const projects:Project[]=[
   {src:"/portfolio/page-22.jpg",alt:"Accessible multi-generational bathroom with warm timber and concrete finishes",caption:"Interior proposal / accessible vanity"},
   {src:"/portfolio/page-23.jpg",alt:"Dimensioned bathroom plans and elevations",caption:"Plans and elevations"},
   {src:"/portfolio/page-24.jpg",alt:"Bathroom details and material mood board",caption:"Details, finishes and material study"}]},
- {id:"sca-lab",number:"06",title:"SCA-Lab",discipline:"Spatial + interaction design",year:"Academic study",statement:"Anywhere. Anytime. Always in control.",description:"A hybrid recreational and innovation space for remote-control vehicle enthusiasts and newcomers at Junction 8's roof garden. The proposal combines testing terrains, drone and boat zones, workshops, community viewing, retail support and a connected mobile control system.",document:{href:"/projects/sca-lab/sca-lab-presentation.pdf",label:"View original presentation deck"},boards:scaLabCaptions.map((caption,index)=>({src:`/projects/sca-lab/page-${String(index+1).padStart(2,"0")}.webp`,alt:`SCA-Lab presentation page ${index+1}: ${caption}`,caption}))}
+ {id:"sca-lab",number:"06",title:"SCA-Lab",discipline:"Spatial + interaction design",year:"Academic study",statement:"Anywhere. Anytime. Always in control.",description:"A hybrid recreational and innovation space for remote-control vehicle enthusiasts and newcomers at Junction 8's roof garden. The proposal combines testing terrains, drone and boat zones, workshops, community viewing, retail support and a connected mobile control system.",document:{href:"/projects/sca-lab/sca-lab-presentation.pdf",label:"View original presentation deck"},boards:scaLabPages.map(({page,caption})=>({src:`/projects/sca-lab/page-${String(page).padStart(2,"0")}.webp`,alt:`SCA-Lab presentation page ${page}: ${caption}`,caption}))},
+ {id:"eye-accessories",number:"07",title:"Eye( )accessories",discipline:"Industrial design",year:"2025",statement:"Perspective, shifted.",description:"A fully 3D-printed eyewear concept worn from the head rather than resting on the nose bridge. The face-fitting system explores modularity through swappable lens frames, replaceable lenses and an adjustable flip-up configuration.",document:{href:"/projects/eye-accessories/industrial-design-showcase.pdf",label:"View original showcase"},boards:[
+  {src:"/projects/eye-accessories/page-01.webp",alt:"Eye accessories head-mounted eyewear prototype and concept overview",caption:"Product concept / form exploration"},
+  {src:"/projects/eye-accessories/page-02.webp",alt:"Eye accessories 3D-printed modular eyewear detail",caption:"Face fitting / swappable lens system"}]}
 ];
 
 const archiveFiles=[
@@ -102,11 +107,11 @@ export default function Home(){
   <header className="hero">
    <div className="hero-intro"><BlobIntro/><Label>Singapore / 01°17′N / Portfolio 2026</Label><blockquote className="hero-quote"><h1>“The idea begins as a small form in your head. It becomes real when you draw it, test it and share it.”</h1></blockquote></div>
    <HeroSlideshow/>
-   <div className="hero-index"><span>01—06</span><p>Spatial, industrial, interaction and inclusive design.</p><a href="#work">View projects ↓</a></div>
+   <div className="hero-index"><span>01—07</span><p>Spatial, industrial, interaction and inclusive design.</p><a href="#work">View projects ↓</a></div>
   </header>
   <section className="about-grid" id="about"><Label>Profile / 00</Label><h2>Designing across scales.</h2><p>I am Ma Shun Ngai George, an interdisciplinary spatial and industrial designer interested in how planning, material choices and human behaviour reshape everyday experience.</p><ul><li>Spatial design</li><li>Industrial design</li><li>Inclusive design</li><li>Photography</li></ul></section>
   <section className="experience" aria-labelledby="experience-title"><header><Label>Experience / 02</Label><h2 id="experience-title">Industry practice.</h2></header><ol><li><span>01</span><strong>SpaceLogic</strong><span>Internship</span></li><li><span>02</span><strong>M Moser Associates</strong><span>Internship</span></li></ol></section>
-  <section className="project-index" id="work"><header><Label>Selected projects / 01—06</Label><h2>Work Index</h2></header><div className="index-list">{projects.map(project=><a href={`#${project.id}`} key={project.id}><span>{project.number}</span><strong>{project.title}</strong><span>{project.discipline}</span><span>{project.year}</span><b>↘</b></a>)}</div></section>
+  <section className="project-index" id="work"><header><Label>Selected projects / 01—07</Label><h2>Work Index</h2></header><div className="index-list">{projects.map(project=><a href={`#${project.id}`} key={project.id}><span>{project.number}</span><strong>{project.title}</strong><span>{project.discipline}</span><span>{project.year}</span><b>↘</b></a>)}</div></section>
   {projects.map((project,index)=><ProjectDossier project={project} index={index} key={project.id}/>)}
   <PhotoOrbit photos={photographs}/>
   <section className="press-feature" aria-labelledby="press-title">

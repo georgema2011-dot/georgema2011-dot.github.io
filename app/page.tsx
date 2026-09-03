@@ -20,21 +20,31 @@ function Label({children}:{children:React.ReactNode}){return <p className="label
 
 function HeroSlideshow(){
  const [active,setActive]=useState(0);
- const [hovered,setHovered]=useState(false);
+ const [paused,setPaused]=useState(false);
  useEffect(()=>{
-  if(hovered||matchMedia("(prefers-reduced-motion: reduce)").matches)return;
-  const timer=window.setInterval(()=>setActive(index=>(index+1)%projects.length),2200);
+  if(paused||matchMedia("(prefers-reduced-motion: reduce)").matches)return;
+  const timer=window.setInterval(()=>setActive(index=>(index+1)%projects.length),3200);
   return()=>window.clearInterval(timer);
- },[hovered]);
+ },[paused]);
  const project=projects[active];
- const board=project.boards[0];
- return <figure className="hero-image" onMouseEnter={()=>setHovered(true)} onMouseLeave={()=>setHovered(false)}>
-  <a className="hero-slide-link" href={`/projects/${project.id}/`} aria-label={`View ${project.title} project details`}>
-   <img className="hero-slide" key={board.src} src={board.src} alt={board.alt}/>
-   <span className="hero-slide-action">View project ↘</span>
-  </a>
-  <figcaption><span>{project.number} / {project.title}</span><span>{project.discipline} · {project.year}</span></figcaption>
- </figure>
+ const move=(direction:number)=>setActive(index=>(index+direction+projects.length)%projects.length);
+ return <section className="hero-image project-coverflow" aria-roledescription="carousel" aria-label="Selected projects"
+  onMouseEnter={()=>setPaused(true)} onMouseLeave={()=>setPaused(false)} onFocusCapture={()=>setPaused(true)} onBlurCapture={()=>setPaused(false)}>
+  <div className="coverflow-track">
+   {projects.map((item,index)=>{
+    let offset=index-active;
+    if(offset>projects.length/2)offset-=projects.length;
+    if(offset<-projects.length/2)offset+=projects.length;
+    const position=Math.max(-3,Math.min(3,offset));
+    return <a className={`coverflow-card coverflow-${position<0?`m${Math.abs(position)}`:`p${position}`}${index===active?" coverflow-active":""}`}
+     href={`/projects/${item.id}/`} aria-label={`View ${item.title} project`} aria-hidden={Math.abs(position)>2} tabIndex={Math.abs(position)>2?-1:0} key={item.id}>
+     <img src={item.boards[0].src} alt={item.boards[0].alt}/><span>{item.number} / {item.title}</span>
+    </a>
+   })}
+  </div>
+  <div className="coverflow-meta"><span>{project.number} / {project.title}</span><span>{project.discipline} · {project.year}</span></div>
+  <div className="coverflow-controls"><button type="button" onClick={()=>move(-1)} aria-label="Previous project">←</button><button type="button" onClick={()=>move(1)} aria-label="Next project">→</button></div>
+ </section>
 }
 
 function BlobIntro(){

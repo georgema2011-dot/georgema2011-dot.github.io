@@ -2,35 +2,7 @@
 /* eslint-disable @next/next/no-img-element */
 import { useEffect, useRef, useState } from "react";
 import { PhotoOrbit, type OrbitPhoto } from "./photo-orbit";
-
-type Project = { id:string; number:string; title:string; discipline:string; year:string; statement:string; description:string; document?:{href:string;label:string}; boards:Array<{src:string;alt:string;caption:string}> };
-
-const scaLabPages=[
- {page:1,caption:"Cover"},{page:4,caption:"Design concept"},{page:5,caption:"Spatial programme"},{page:7,caption:"Land and water testing terrain"},{page:11,caption:"Viewing and control area"},{page:13,caption:"Innovation workshop"},{page:15,caption:"Cloud control application"}
-];
-
-const projects:Project[]=[
- {id:"japandi",number:"01",title:"Japandi Retreat",discipline:"Hospitality",year:"2024",statement:"Home away from home.",description:"An open resort room organised as a quiet sequence of arrival, bathing and rest. Concrete, timber and filtered light protect privacy without closing the interior down.",boards:[
-  {src:"/portfolio/page-04.jpg",alt:"Japandi resort room with two beds on a raised timber platform",caption:"Spatial atmosphere / material study"},
-  {src:"/portfolio/page-05.jpg",alt:"Japandi floor plan and bathroom studies",caption:"Plan, arrival sequence and bathroom studies"}]},
- {id:"masks",number:"02",title:"Looking Through the Masks of the City",discipline:"Urban intervention",year:"2024",statement:"A city of façades.",description:"A crochet studio at Clarke Quay Central uses layered thresholds, woven bamboo and collective making to study the identities a city reveals throughout the day.",boards:[
-  {src:"/portfolio/page-06.jpg",alt:"Layered city collage with Chinese opera masks",caption:"Urban slice / mask study"},
-  {src:"/portfolio/page-08.jpg",alt:"Wearable sound experiment and audio data",caption:"Sound mapping / social intensity"},
-  {src:"/portfolio/page-16.jpg",alt:"Crochet studio with bamboo walls and suspended wave installation",caption:"Final intervention / collective display"}]},
- {id:"union",number:"03",title:"The Union",discipline:"Public space",year:"2023",statement:"Protection without separation.",description:"An undulating canopy and concentric seating gather people beneath an existing tree, turning the shaded ground into a shared room without erasing its natural centre.",boards:[
-  {src:"/portfolio/page-19.jpg",alt:"Technical presentation of a white canopy beneath a large tree",caption:"Canopy system / public seating"}]},
- {id:"watergrounds",number:"04",title:"Watergrounds",discipline:"Play",year:"2023",statement:"A familiar form, reimagined.",description:"The silhouette of a water tower becomes a climbable landmark. Mesh, structure and wet-play elements connect the playground to both park and skyline.",boards:[
-  {src:"/portfolio/page-20.jpg",alt:"Technical drawings of a water-tower playground",caption:"Top view, isometric and elevation"},
-  {src:"/portfolio/page-21.jpg",alt:"Purple climbing structure in a landscaped park",caption:"Water tower playground / final view"}]},
- {id:"asda",number:"05",title:"ASDA 2022",discipline:"Inclusive interior",year:"2022",statement:"Dignity across generations.",description:"A multi-generational bathroom coordinates reach, assistance, air and privacy. Support elements are integrated into the architecture instead of added as afterthoughts.",boards:[
-  {src:"/portfolio/page-22.jpg",alt:"Accessible multi-generational bathroom with warm timber and concrete finishes",caption:"Interior proposal / accessible vanity"},
-  {src:"/portfolio/page-23.jpg",alt:"Dimensioned bathroom plans and elevations",caption:"Plans and elevations"},
-  {src:"/portfolio/page-24.jpg",alt:"Bathroom details and material mood board",caption:"Details, finishes and material study"}]},
- {id:"sca-lab",number:"06",title:"SCA-Lab",discipline:"Spatial + interaction design",year:"Academic study",statement:"Anywhere. Anytime. Always in control.",description:"A hybrid recreational and innovation space for remote-control vehicle enthusiasts and newcomers at Junction 8's roof garden. The proposal combines testing terrains, drone and boat zones, workshops, community viewing, retail support and a connected mobile control system.",document:{href:"/projects/sca-lab/sca-lab-presentation.pdf",label:"View original presentation deck"},boards:scaLabPages.map(({page,caption})=>({src:`/projects/sca-lab/page-${String(page).padStart(2,"0")}.webp`,alt:`SCA-Lab presentation page ${page}: ${caption}`,caption}))},
- {id:"eye-accessories",number:"07",title:"Eye( )accessories",discipline:"Industrial design",year:"2025",statement:"Perspective, shifted.",description:"A fully 3D-printed eyewear concept worn from the head rather than resting on the nose bridge. The face-fitting system explores modularity through swappable lens frames, replaceable lenses and an adjustable flip-up configuration.",document:{href:"/projects/eye-accessories/industrial-design-showcase.pdf",label:"View original showcase"},boards:[
-  {src:"/projects/eye-accessories/page-01.webp",alt:"Eye accessories head-mounted eyewear prototype and concept overview",caption:"Product concept / form exploration"},
-  {src:"/projects/eye-accessories/page-02.webp",alt:"Eye accessories 3D-printed modular eyewear detail",caption:"Face fitting / swappable lens system"}]}
-];
+import { projects } from "./projects-data";
 
 const archiveFiles=[
  "archive-gm-1-2.webp","archive-gm-1-3.webp","archive-gm-1.webp","archive-gm-10-2.webp","archive-gm-10.webp","archive-gm-11-2.webp","archive-gm-11.webp","archive-gm-12-2.webp","archive-gm-12.webp","archive-gm-13-2.webp","archive-gm-13.webp","archive-gm-14-2.webp","archive-gm-14.webp","archive-gm-15-2.webp","archive-gm-15.webp","archive-gm-17.webp","archive-gm-18.webp","archive-gm-2-2.webp","archive-gm-2-3.webp","archive-gm-2.webp","archive-gm-3-2.webp","archive-gm-3-3.webp","archive-gm-3.webp","archive-gm-4-2.webp","archive-gm-4-3.webp","archive-gm-4.webp","archive-gm-5-2.webp","archive-gm-5-3.webp","archive-gm-5.webp","archive-gm-6-2.webp","archive-gm-6-3.webp","archive-gm-6.webp","archive-gm-7-2.webp","archive-gm-7-3.webp","archive-gm-7.webp","archive-gm-8-2.webp","archive-gm-8-3.webp","archive-gm-8.webp","archive-gm-9-2.webp","archive-gm-9.webp","archive-gm-chunartboard-11.webp","archive-gm-chunartboard-12.webp","archive-gm-chunartboard-3.webp","archive-gm-chunartboard-5.webp","archive-gm-chunartboard-6.webp","archive-gm-chunartboard-8.webp","archive-gm-chunartboard-9.webp"
@@ -57,7 +29,7 @@ function HeroSlideshow(){
  const project=projects[active];
  const board=project.boards[0];
  return <figure className="hero-image" onMouseEnter={()=>setHovered(true)} onMouseLeave={()=>setHovered(false)}>
-  <a className="hero-slide-link" href={`#${project.id}`} aria-label={`View ${project.title} project details`}>
+  <a className="hero-slide-link" href={`/projects/${project.id}/`} aria-label={`View ${project.title} project details`}>
    <img className="hero-slide" key={board.src} src={board.src} alt={board.alt}/>
    <span className="hero-slide-action">View project ↘</span>
   </a>
@@ -85,22 +57,6 @@ function BlobIntro(){
  </div>
 }
 
-function ProjectDossier({project,index}:{project:Project;index:number}){
- return <article className="dossier" id={project.id}>
-  <header className="dossier-head">
-   <div className="dossier-number"><Label>Project</Label><span>{project.number}</span></div>
-   <div className="dossier-title"><Label>{project.discipline} / {project.year}</Label><h2 className={project.title.length>22?"long-title":undefined}>{project.title}</h2></div>
-   <div className="dossier-copy"><p className="statement">{project.statement}</p><div><p>{project.description}</p>{project.document&&<a className="deck-link" href={project.document.href} target="_blank" rel="noreferrer">{project.document.label} ↗</a>}</div></div>
-  </header>
-  <div className={`board-grid ${project.boards.length>3?"board-grid-many":`board-grid-${project.boards.length}`}`}>
-   {project.boards.map((board,boardIndex)=><figure className={`board board-${boardIndex+1}`} key={board.src}>
-    <img src={board.src} alt={board.alt} loading={index===0&&boardIndex===0?"eager":"lazy"}/>
-    <figcaption><span>{project.number}.{String(boardIndex+1).padStart(2,"0")}</span><span>{board.caption}</span></figcaption>
-   </figure>)}
-  </div>
- </article>
-}
-
 export default function Home(){
  return <main id="top">
   <nav className="site-nav" aria-label="Primary navigation"><a className="brand" href="#top">Ma / George</a><span className="nav-role">Spatial + Industrial Designer</span><div className="nav-links"><a href="#work">Projects</a><a href="#photography">Photography</a><a href="#contact">Contact</a></div></nav>
@@ -111,8 +67,7 @@ export default function Home(){
   </header>
   <section className="about-grid" id="about"><Label>Profile / 00</Label><h2>Designing across scales.</h2><p>I am Ma Shun Ngai George, an interdisciplinary spatial and industrial designer interested in how planning, material choices and human behaviour reshape everyday experience.</p><ul><li>Spatial design</li><li>Industrial design</li><li>Inclusive design</li><li>Photography</li></ul></section>
   <section className="experience" aria-labelledby="experience-title"><header><Label>Experience / 02</Label><h2 id="experience-title">Industry practice.</h2></header><ol><li><span>01</span><strong>SpaceLogic</strong><span>Internship</span></li><li><span>02</span><strong>M Moser Associates</strong><span>Internship</span></li></ol></section>
-  <section className="project-index" id="work"><header><Label>Selected projects / 01—07</Label><h2>Work Index</h2></header><div className="index-list">{projects.map(project=><a href={`#${project.id}`} key={project.id}><span>{project.number}</span><strong>{project.title}</strong><span>{project.discipline}</span><span>{project.year}</span><b>↘</b></a>)}</div></section>
-  {projects.map((project,index)=><ProjectDossier project={project} index={index} key={project.id}/>)}
+  <section className="project-index" id="work"><header><Label>Selected projects / 01—07</Label><h2>Work Index</h2></header><div className="index-list">{projects.map(project=><a href={`/projects/${project.id}/`} key={project.id}><span>{project.number}</span><strong>{project.title}</strong><span>{project.discipline}</span><span>{project.year}</span><b>↗</b></a>)}</div></section>
   <PhotoOrbit photos={photographs}/>
   <section className="press-feature" aria-labelledby="press-title">
    <div className="press-meta"><Label>Press / 01</Label><span>The Straits Times</span><time dateTime="2023-09-08">08.09.2023</time></div>

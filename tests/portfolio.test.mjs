@@ -13,6 +13,17 @@ async function render() {
   );
 }
 
+async function renderPath(pathname) {
+  const workerUrl = new URL("../dist/server/index.js", import.meta.url);
+  workerUrl.searchParams.set("test-project", `${process.pid}-${Date.now()}`);
+  const { default: worker } = await import(workerUrl.href);
+  return worker.fetch(
+    new Request(`http://localhost${pathname}`, { headers: { accept: "text/html" } }),
+    { ASSETS: { fetch: async () => new Response("Not found", { status: 404 }) } },
+    { waitUntil() {}, passThroughOnException() {} },
+  );
+}
+
 test("server-renders the redesigned portfolio", async () => {
   const response = await render();
   assert.equal(response.status, 200);
@@ -36,7 +47,12 @@ test("keeps the portfolio semantic, responsive and image-led", async () => {
   assert.match(orbit, /aria-roledescription="carousel"/);
   assert.match(orbit, /Pause orbit/);
   assert.match(orbit, /aria-modal="true"/);
-  assert.match(page, /loading=.*lazy/);
+  const projectResponse = await renderPath("/projects/japandi");
+  assert.equal(projectResponse.status, 200);
+  const projectHtml = await projectResponse.text();
+  assert.match(projectHtml, /Japandi Retreat/);
+  assert.match(projectHtml, /All projects/);
+  assert.match(projectHtml, /loading=.*lazy/);
   assert.match(css, /grid-template-columns:repeat\(12/);
   assert.match(css, /@media\(max-width:620px\)/);
   assert.match(css, /prefers-reduced-motion:reduce/);

@@ -49,7 +49,7 @@ export const projects: Project[] = [
     {src:"/projects/nus-coop/page-18.webp",alt:"Synthesis of the core NUS Co-op service problem",caption:"Synthesis / core service problem"},
     {src:"/projects/nus-coop/page-21.webp",alt:"Unified online experience for the NUS Co-op digital touchpoint",caption:"Digital touchpoint / unified online experience"},
     {src:"/projects/nus-coop/page-23.webp",alt:"Connected omnichannel service system for NUS Co-op",caption:"Omnichannel system / connected service"},
-    {src:"/projects/nus-coop/page-28.webp",alt:"Final zoned community store proposal for NUS Co-op",caption:"Final spatial proposal / community store"}]},
+    {src:"/projects/nus-coop/page-27.webp",alt:"NUS Co-op zoning plan connecting community, merchandise, collaboration and collection areas",caption:"Spatial zoning / connected community touchpoints"}]},
   { id:"somepen", number:"08", title:"SOMEPEN", discipline:"Industrial design", year:"2026", statement:"Four colours. One movement.", description:"A compact wearable writing tool for people who work while moving. The finger-mounted form accepts common D1 refills, gives thumb access to four ink colours, and keeps the hand available for carrying, handling and rapid note-taking.", document:{href:"https://canva.link/anjyqxd33b0vm5l",label:"View original Canva presentation"}, facts:[
     {label:"Brief",value:"Mobile note-taking"},{label:"System",value:"Four D1 refills"},{label:"Users",value:"Healthcare, delivery, technical and teaching staff"}], boards:[
     {src:"/projects/somepen/page-01.webp",alt:"Transparent finger-mounted SOMEPEN with four coloured thumb controls",caption:"Product hero / four-colour mechanism"},
@@ -62,5 +62,5 @@ export const projects: Project[] = [
     {src:"/projects/nus-coop/page-18.webp",alt:"Service-design synthesis identifying information clarity, focus and system efficiency as core issues",caption:"Synthesis / core service problem"},
     {src:"/projects/nus-coop/page-21.webp",alt:"Redesigned NUS Co-op website showing a unified online brand experience",caption:"Digital touchpoint / unified online experience"},
     {src:"/projects/nus-coop/page-23.webp",alt:"Connected online ordering and store collection journey for NUS Co-op",caption:"Omnichannel system / connected service"},
-    {src:"/projects/nus-coop/page-28.webp",alt:"Final axonometric visual of the redesigned NUS Co-op community store",caption:"Final spatial proposal / community store"}]},
+    {src:"/projects/nus-coop/page-27.webp",alt:"NUS Co-op zoning plan showing connected community, merchandise, collaboration and collection areas",caption:"Spatial zoning / connected community touchpoints"}]},
 ];

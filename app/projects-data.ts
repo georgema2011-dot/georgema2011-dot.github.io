@@ -7,6 +7,7 @@ export type Project = {
   statement: string;
   description: string;
   document?: { href: string; label: string };
+  facts?: Array<{ label: string; value: string }>;
   boards: Array<{ src: string; alt: string; caption: string }>;
 };
 
@@ -38,4 +39,28 @@ export const projects: Project[] = [
   { id:"eye-accessories", number:"07", title:"Eye( )accessories", discipline:"Industrial design", year:"2025", statement:"Perspective, shifted.", description:"A fully 3D-printed eyewear concept worn from the head rather than resting on the nose bridge. The face-fitting system explores modularity through swappable lens frames, replaceable lenses and an adjustable flip-up configuration.", document:{href:"/projects/eye-accessories/industrial-design-showcase.pdf",label:"View original showcase"}, boards:[
     {src:"/projects/eye-accessories/page-01.webp",alt:"Eye accessories head-mounted eyewear prototype and concept overview",caption:"Product concept / form exploration"},
     {src:"/projects/eye-accessories/page-02.webp",alt:"Eye accessories 3D-printed modular eyewear detail",caption:"Face fitting / swappable lens system"}]},
+  { id:"somepen", number:"08", title:"SOMEPEN", discipline:"Industrial design", year:"2026", statement:"Four colours. One movement.", description:"A compact wearable writing tool for people who work while moving. The finger-mounted form accepts common D1 refills, gives thumb access to four ink colours, and keeps the hand available for carrying, handling and rapid note-taking.", document:{href:"https://canva.link/anjyqxd33b0vm5l",label:"View original Canva presentation"}, boards:[
+    {src:"/projects/somepen/page-01.webp",alt:"SOMEPEN finger-mounted pen with four-colour mechanism",caption:"Product hero / four-colour mechanism"},
+    {src:"/projects/somepen/page-02.webp",alt:"Exploded view of SOMEPEN grip and D1 refill architecture",caption:"Exploded system / grip and refill architecture"},
+    {src:"/projects/somepen/page-03.webp",alt:"SOMEPEN in use during healthcare and delivery work",caption:"Use cases / healthcare and delivery work"}]},
+  { id:"nus-coop", number:"09", title:"NUS Co-op", discipline:"Service + spatial design", year:"2026", statement:"Refocusing on the community.", description:"A team service-design proposal that reframes the campus co-op around students and staff. Journey mapping reveals friction across the online store, shop layout and service touchpoints, then connects a clearer digital experience with a zoned, community-focused physical store.", document:{href:"https://canva.link/r4joa1k4tm5g8qe",label:"View original Canva presentation"}, boards:[
+    {src:"/projects/nus-coop/page-2.webp",alt:"NUS Co-op project overview with community focus",caption:"Project overview / community focus"},
+    {src:"/projects/nus-coop/page-5.webp",alt:"Student persona from NUS Co-op research",caption:"Research / student persona"},
+    {src:"/projects/nus-coop/page-18.webp",alt:"Synthesis of the core NUS Co-op service problem",caption:"Synthesis / core service problem"},
+    {src:"/projects/nus-coop/page-21.webp",alt:"Unified online experience for the NUS Co-op digital touchpoint",caption:"Digital touchpoint / unified online experience"},
+    {src:"/projects/nus-coop/page-23.webp",alt:"Connected omnichannel service system for NUS Co-op",caption:"Omnichannel system / connected service"},
+    {src:"/projects/nus-coop/page-28.webp",alt:"Final zoned community store proposal for NUS Co-op",caption:"Final spatial proposal / community store"}]},
+  { id:"somepen", number:"08", title:"SOMEPEN", discipline:"Industrial design", year:"2026", statement:"Four colours. One movement.", description:"A compact wearable writing tool for people who work while moving. The finger-mounted form accepts common D1 refills, gives thumb access to four ink colours, and keeps the hand available for carrying, handling and rapid note-taking.", document:{href:"https://canva.link/anjyqxd33b0vm5l",label:"View original Canva presentation"}, facts:[
+    {label:"Brief",value:"Mobile note-taking"},{label:"System",value:"Four D1 refills"},{label:"Users",value:"Healthcare, delivery, technical and teaching staff"}], boards:[
+    {src:"/projects/somepen/page-01.webp",alt:"Transparent finger-mounted SOMEPEN with four coloured thumb controls",caption:"Product hero / four-colour mechanism"},
+    {src:"/projects/somepen/page-02.webp",alt:"SOMEPEN use study and exploded view showing the grip, shell, buttons and refill system",caption:"Exploded system / grip and refill architecture"},
+    {src:"/projects/somepen/page-03.webp",alt:"SOMEPEN shown in use by healthcare and delivery workers",caption:"Use cases / healthcare and delivery work"}]},
+  { id:"nus-coop", number:"09", title:"NUS Co-op", discipline:"Service + spatial design", year:"2026", statement:"Refocusing on the community.", description:"A team service-design proposal that reframes the campus co-op around students and staff. Journey mapping reveals friction across the online store, shop layout and service touchpoints, then connects a clearer digital experience with a zoned, community-focused physical store.", document:{href:"https://canva.link/r4joa1k4tm5g8qe",label:"View original Canva presentation"}, facts:[
+    {label:"Format",value:"Team project"},{label:"Scope",value:"Digital, service and spatial"},{label:"Focus",value:"Students, staff and campus community"}], boards:[
+    {src:"/projects/nus-coop/page-2.webp",alt:"NUS Co-op project overview with a collaged view of the redesigned community store",caption:"Project overview / community focus"},
+    {src:"/projects/nus-coop/page-5.webp",alt:"Student persona and research profile for the NUS Co-op service redesign",caption:"Research / student persona"},
+    {src:"/projects/nus-coop/page-18.webp",alt:"Service-design synthesis identifying information clarity, focus and system efficiency as core issues",caption:"Synthesis / core service problem"},
+    {src:"/projects/nus-coop/page-21.webp",alt:"Redesigned NUS Co-op website showing a unified online brand experience",caption:"Digital touchpoint / unified online experience"},
+    {src:"/projects/nus-coop/page-23.webp",alt:"Connected online ordering and store collection journey for NUS Co-op",caption:"Omnichannel system / connected service"},
+    {src:"/projects/nus-coop/page-28.webp",alt:"Final axonometric visual of the redesigned NUS Co-op community store",caption:"Final spatial proposal / community store"}]},
 ];

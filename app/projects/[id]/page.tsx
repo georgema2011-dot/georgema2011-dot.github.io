@@ -24,7 +24,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
       <header className="dossier-head">
         <div className="dossier-number"><p className="label">Project</p><span>{project.number}</span></div>
         <div className="dossier-title"><p className="label">{project.discipline} / {project.year}</p><h1>{project.title}</h1></div>
-        <div className="dossier-copy"><p className="statement">{project.statement}</p><div><p>{project.description}</p>{project.document&&<a className="deck-link" href={project.document.href} target="_blank" rel="noreferrer">{project.document.label} ↗</a>}</div></div>
+        <div className="dossier-copy"><p className="statement">{project.statement}</p><div><p>{project.description}</p>{project.facts&&<dl className="project-facts">{project.facts.map((fact)=><div key={fact.label}><dt>{fact.label}</dt><dd>{fact.value}</dd></div>)}</dl>}{project.document&&<a className="deck-link" href={project.document.href} target="_blank" rel="noreferrer">{project.document.label} ↗</a>}</div></div>
       </header>
       <div className={`board-grid ${project.boards.length > 3 ? "board-grid-many" : `board-grid-${project.boards.length}`}`}>
         {project.boards.map((board, boardIndex) => <figure className={`board board-${boardIndex + 1}`} key={board.src}>

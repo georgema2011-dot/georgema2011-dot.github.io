@@ -53,6 +53,12 @@ test("keeps the portfolio semantic, responsive and image-led", async () => {
   assert.match(projectHtml, /Japandi Retreat/);
   assert.match(projectHtml, /All projects/);
   assert.match(projectHtml, /loading=.*lazy/);
+  const somepenResponse = await renderPath("/projects/somepen");
+  assert.equal(somepenResponse.status, 200);
+  assert.match(await somepenResponse.text(), /Four colours\. One movement\./);
+  const coopResponse = await renderPath("/projects/nus-coop");
+  assert.equal(coopResponse.status, 200);
+  assert.match(await coopResponse.text(), /Refocusing on the community\./);
   assert.match(css, /grid-template-columns:repeat\(12/);
   assert.match(css, /@media\(max-width:620px\)/);
   assert.match(css, /prefers-reduced-motion:reduce/);

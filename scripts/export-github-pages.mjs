@@ -1,6 +1,6 @@
 import { copyFile, mkdir, rm, writeFile } from "node:fs/promises";
 
-const projectIds = ["japandi", "masks", "union", "watergrounds", "asda", "sca-lab", "eye-accessories"];
+const projectIds = ["japandi", "masks", "union", "watergrounds", "asda", "sca-lab", "eye-accessories", "somepen", "nus-coop"];
 
 const workerUrl = new URL("../dist/server/index.js", import.meta.url);
 workerUrl.searchParams.set("static-export", Date.now().toString());

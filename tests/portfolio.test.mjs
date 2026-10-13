@@ -30,7 +30,9 @@ test("server-renders the redesigned portfolio", async () => {
   assert.match(response.headers.get("content-type") ?? "", /^text\/html\b/i);
   const html = await response.text();
   assert.match(html, /Ma Shun Ngai George/i);
+  assert.match(html, /I design spaces, products and services around real behaviour/);
   assert.match(html, /The idea begins as a small form/);
+  assert.match(html, /9 selected projects/);
   assert.match(html, /Work Index/);
   assert.match(html, /Photography/);
   assert.doesNotMatch(html, /Your site is taking shape|Building your site/i);
@@ -64,4 +66,23 @@ test("keeps the portfolio semantic, responsive and image-led", async () => {
   assert.match(css, /prefers-reduced-motion:reduce/);
   assert.match(css, /border-radius:0/);
   assert.doesNotMatch(css, /box-shadow|linear-gradient|radial-gradient/i);
+});
+
+test("keeps exactly nine unique project records", async () => {
+  const projectData = await readFile(new URL("../app/projects-data.ts", import.meta.url), "utf8");
+  const ids = [...projectData.matchAll(/\{ id:"([^"]+)"/g)].map((match) => match[1]);
+  assert.equal(ids.length, 9);
+  assert.equal(new Set(ids).size, 9);
+});
+
+test("publishes recruiter and project metadata with production URLs", async () => {
+  const [layout, projectPage] = await Promise.all([
+    readFile(new URL("../app/layout.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/projects/[id]/page.tsx", import.meta.url), "utf8"),
+  ]);
+  assert.match(layout, /https:\/\/georgema2011-dot\.github\.io/);
+  assert.match(layout, /Spatial and Industrial Designer/);
+  assert.match(layout, /application\/ld\+json/);
+  assert.match(projectPage, /generateMetadata/);
+  assert.match(projectPage, /CreativeWork/);
 });

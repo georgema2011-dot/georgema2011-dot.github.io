@@ -17,10 +17,18 @@ export function PhotoOrbit({photos}:{photos:OrbitPhoto[]}){
  const [active,setActive]=useState(0);
  const [paused,setPaused]=useState(false);
  const [hovered,setHovered]=useState(false);
+ const [visible,setVisible]=useState(false);
  const [lightbox,setLightbox]=useState<number|null>(null);
  useEffect(()=>{
   const node=stage.current;
   if(!node)return;
+  const observer=new IntersectionObserver(([entry])=>setVisible(entry.isIntersecting),{rootMargin:"180px"});
+  observer.observe(node);
+  return()=>observer.disconnect();
+ },[]);
+ useEffect(()=>{
+  const node=stage.current;
+  if(!node||!visible)return;
   const reduced=matchMedia("(prefers-reduced-motion: reduce)").matches;
   const draw=(time:number)=>{
    const dt=Math.min(.04,(time-last.current)/1000||0);
@@ -54,7 +62,7 @@ export function PhotoOrbit({photos}:{photos:OrbitPhoto[]}){
   };
   frame.current=requestAnimationFrame(draw);
   return()=>cancelAnimationFrame(frame.current);
- },[hovered,lightbox,paused,photos.length]);
+ },[hovered,lightbox,paused,photos.length,visible]);
 
  useEffect(()=>{
   if(lightbox===null)return;
@@ -78,6 +86,10 @@ export function PhotoOrbit({photos}:{photos:OrbitPhoto[]}){
  },[lightbox,photos.length]);
 
  const open=(index:number,event:React.MouseEvent<HTMLButtonElement>)=>{opener.current=event.currentTarget;setLightbox(index)};
+ const moveFocus=(index:number,direction:number)=>{
+  const next=(index+direction+photos.length)%photos.length;
+  items.current[next]?.focus();
+ };
  const current=photos[active];
  const shown=lightbox===null?null:photos[lightbox];
 
@@ -89,7 +101,7 @@ export function PhotoOrbit({photos}:{photos:OrbitPhoto[]}){
   </header>
   <div className="orbit-stage" ref={stage} role="region" aria-roledescription="carousel" aria-label="Revolving photography archive" onMouseEnter={()=>setHovered(true)} onMouseLeave={()=>setHovered(false)}>
    <div className="orbit-title" aria-live="off"><span>{current.title}</span><small>{current.place}</small></div>
-   {photos.map((photo,index)=><button className="orbit-snapshot" ref={node=>{items.current[index]=node}} type="button" key={photo.file} onClick={event=>open(index,event)} onFocus={()=>setHovered(true)} onBlur={()=>setHovered(false)} aria-label={`Open ${photo.title}, ${photo.place} full screen`}>
+   {photos.map((photo,index)=><button className="orbit-snapshot" ref={node=>{items.current[index]=node}} type="button" key={photo.file} onClick={event=>open(index,event)} onKeyDown={event=>{if(event.key==="ArrowLeft"){event.preventDefault();moveFocus(index,-1)}if(event.key==="ArrowRight"){event.preventDefault();moveFocus(index,1)}}} onFocus={()=>setHovered(true)} onBlur={()=>setHovered(false)} tabIndex={index===active?0:-1} aria-label={`Open ${photo.title}, ${photo.place} full screen`}>
     <img src={`/photo-dump/web/${photo.file}`} alt="" loading={index<4?"eager":"lazy"} decoding="async"/>
    </button>)}
   </div>

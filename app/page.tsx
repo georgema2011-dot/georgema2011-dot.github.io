@@ -19,8 +19,10 @@ const photographs:OrbitPhoto[]=[
 function Label({children}:{children:React.ReactNode}){return <p className="label">{children}</p>}
 
 function HeroSlideshow(){
- const [active,setActive]=useState(0);
- const [paused,setPaused]=useState(false);
+ const [active,setActive]=useState(()=>Math.max(0,projects.findIndex(project=>project.id==="asda")));
+ const [manualPaused,setManualPaused]=useState(false);
+ const [interactionPaused,setInteractionPaused]=useState(false);
+ const paused=manualPaused||interactionPaused;
  useEffect(()=>{
   if(paused||matchMedia("(prefers-reduced-motion: reduce)").matches)return;
   const timer=window.setInterval(()=>setActive(index=>(index+1)%projects.length),3200);
@@ -29,7 +31,7 @@ function HeroSlideshow(){
  const project=projects[active];
  const move=(direction:number)=>setActive(index=>(index+direction+projects.length)%projects.length);
  return <section className="hero-image project-coverflow" aria-roledescription="carousel" aria-label="Selected projects"
-  onMouseEnter={()=>setPaused(true)} onMouseLeave={()=>setPaused(false)} onFocusCapture={()=>setPaused(true)} onBlurCapture={()=>setPaused(false)}>
+  onMouseEnter={()=>setInteractionPaused(true)} onMouseLeave={()=>setInteractionPaused(false)} onFocusCapture={()=>setInteractionPaused(true)} onBlurCapture={()=>setInteractionPaused(false)}>
   <div className="coverflow-track">
    {projects.map((item,index)=>{
     let offset=index-active;
@@ -37,13 +39,13 @@ function HeroSlideshow(){
     if(offset<-projects.length/2)offset+=projects.length;
     const position=Math.max(-3,Math.min(3,offset));
     return <a className={`coverflow-card coverflow-${position<0?`m${Math.abs(position)}`:`p${position}`}${index===active?" coverflow-active":""}`}
-     href={`/projects/${item.id}/`} aria-label={`View ${item.title} project`} aria-hidden={Math.abs(position)>2} tabIndex={Math.abs(position)>2?-1:0} key={item.id}>
-     <img src={item.boards[0].src} alt={item.boards[0].alt}/><span>{item.number} / {item.title}</span>
+     href={`/projects/${item.id}/`} aria-label={`View ${item.title} project`} aria-current={index===active?"true":undefined} aria-hidden={index!==active} tabIndex={index===active?0:-1} key={item.id}>
+     <img src={item.boards[0].src} alt={item.boards[0].alt} loading={index===active?"eager":"lazy"} decoding="async"/><span>{item.number} / {item.title}</span>
     </a>
    })}
   </div>
-  <div className="coverflow-meta"><span>{project.number} / {project.title}</span><span>{project.discipline} · {project.year}</span></div>
-  <div className="coverflow-controls"><button type="button" onClick={()=>move(-1)} aria-label="Previous project">←</button><button type="button" onClick={()=>move(1)} aria-label="Next project">→</button></div>
+  <div className="coverflow-meta" aria-live="polite"><span>{project.number} / {project.title}</span><span>{active+1} of {projects.length} / {project.discipline} / {project.year}</span></div>
+  <div className="coverflow-controls"><button type="button" onClick={()=>setManualPaused(value=>!value)} aria-pressed={manualPaused}>{manualPaused?"Play":"Pause"}</button><button type="button" onClick={()=>move(-1)} aria-label="Previous project">←</button><button type="button" onClick={()=>move(1)} aria-label="Next project">→</button></div>
  </section>
 }
 
@@ -61,34 +63,33 @@ function BlobIntro(){
   });
   return()=>{disposed=true;cleanup?.()};
  },[]);
- return <div className="blob-intro symbiote-scene" aria-hidden="true">
-  <canvas ref={canvas}/>
-  <span>Move to attract · Click to feed</span>
- </div>
+ return <div className="blob-intro symbiote-scene" aria-hidden="true"><canvas ref={canvas}/></div>
 }
 
 export default function Home(){
  return <main id="top">
+  <a className="skip-link" href="#work">Skip to selected work</a>
   <nav className="site-nav" aria-label="Primary navigation"><a className="brand" href="#top">Ma / George</a><span className="nav-role">Spatial + Industrial Designer</span><div className="nav-links"><a href="#work">Projects</a><a href="#photography">Photography</a><a href="#contact">Contact</a></div></nav>
   <header className="hero">
-   <div className="hero-intro"><BlobIntro/><Label>Singapore / 01°17′N / Portfolio 2026</Label><blockquote className="hero-quote"><h1>“The idea begins as a small form in your head. It becomes real when you draw it, test it and share it.”</h1></blockquote></div>
+   <div className="hero-intro"><BlobIntro/><Label>Ma Shun Ngai George / Singapore / Portfolio 2026</Label><div className="hero-copy"><p className="hero-kicker">Spatial + Industrial Designer</p><h1>I design spaces, products and services around real behaviour.</h1><p className="hero-summary">Research becomes planning, prototypes and visual systems for more inclusive everyday experiences.</p><div className="hero-actions"><a href="#work">View selected work</a><a href="mailto:georgem2011@gmail.com">Email George</a></div></div></div>
    <HeroSlideshow/>
-   <div className="hero-index"><span>01—09</span><p>Spatial, industrial, interaction and inclusive design.</p><a href="#work">View projects ↓</a></div>
+   <div className="hero-index"><span>9 selected projects</span><p>Spatial, industrial, interaction and inclusive design.</p><a href="#work">View projects ↓</a></div>
   </header>
-  <section className="about-grid" id="about"><Label>Profile / 00</Label><h2>Designing across scales.</h2><p>I am Ma Shun Ngai George, an interdisciplinary spatial and industrial designer interested in how planning, material choices and human behaviour reshape everyday experience.</p><ul><li>Spatial design</li><li>Industrial design</li><li>Inclusive design</li><li>Photography</li></ul></section>
-  <section className="experience" aria-labelledby="experience-title"><header><Label>Experience / 02</Label><h2 id="experience-title">Industry practice.</h2></header><ol><li><span>01</span><strong>SpaceLogic</strong><span>Internship</span></li><li><span>02</span><strong>M Moser Associates</strong><span>Internship</span></li></ol></section>
-  <section className="project-index" id="work"><header><Label>Selected projects / 01—09</Label><h2>Work Index</h2></header><div className="index-list">{projects.map(project=><a href={`/projects/${project.id}/`} key={project.id}><span>{project.number}</span><strong>{project.title}</strong><span>{project.discipline}</span><span>{project.year}</span><b>↗</b></a>)}</div></section>
-  <PhotoOrbit photos={photographs}/>
-  <section className="press-feature" aria-labelledby="press-title">
+  <section className="proof-strip" aria-label="Portfolio summary"><a href="#work"><strong>9</strong><span>Case studies across interiors, products and services</span></a><a href="#experience"><strong>2</strong><span>Design internships at SpaceLogic and M Moser Associates</span></a><a href="#press"><strong>Press</strong><span>Featured by The Straits Times</span></a></section>
+  <section className="about-grid" id="about"><Label>Profile / 00</Label><h2>Designing across scales.</h2><div><p>I am Ma Shun Ngai George, an interdisciplinary spatial and industrial designer interested in how planning, material choices and human behaviour reshape everyday experience.</p><blockquote className="profile-quote">“The idea begins as a small form in your head. It becomes real when you draw it, test it and share it.”</blockquote></div><ul><li>Spatial design</li><li>Industrial design</li><li>Inclusive design</li><li>Photography</li></ul></section>
+  <section className="experience" id="experience" aria-labelledby="experience-title"><header><Label>Experience / 02</Label><h2 id="experience-title">Industry practice.</h2></header><ol><li><span>01</span><strong>SpaceLogic</strong><span>Design internship</span></li><li><span>02</span><strong>M Moser Associates</strong><span>Design internship</span></li></ol></section>
+  <section className="project-index" id="work"><header><Label>Selected projects / 01-09</Label><h2>Work Index</h2></header><div className="index-list">{projects.map(project=><a href={`/projects/${project.id}/`} key={project.id}><span>{project.number}</span><strong>{project.title}</strong><span>{project.discipline}</span><span>{project.year}</span><b>↗</b></a>)}</div></section>
+  <section className="press-feature" id="press" aria-labelledby="press-title">
    <div className="press-meta"><Label>Press / 01</Label><span>The Straits Times</span><time dateTime="2023-09-08">08.09.2023</time></div>
    <div className="press-story"><Label>Now Is Not The Time / Mirror Maze</Label><h2 id="press-title">A young designer’s view of legacy.</h2><p>The Straits Times featured Mr George Ma as one of 10 NYP students involved in creating the exhibition’s mirror-maze installation.</p></div>
-   <blockquote className="press-quote">“After this project, through the research and all, it made me realise that what he did in the past influenced whatever that happens now.”<cite>— Mr George Ma</cite></blockquote>
+   <blockquote className="press-quote">“After this project, through the research and all, it made me realise that what he did in the past influenced whatever that happens now.”<cite>Mr George Ma</cite></blockquote>
    <a className="press-link" href="https://www.straitstimes.com/singapore/immersive-exhibition-shares-lee-kuan-yew-s-life-and-legacy-with-the-young" target="_blank" rel="noreferrer">Read the article <span aria-hidden="true">↗</span></a>
    <div className="press-visuals">
-    <figure><img src="https://cassette.sphdigital.com.sg/image/straitstimes/0ef02c706a6b15fefc55cf03585f9351cebed67ce1114edd68362e53698faf56" alt="Now Is Not The Time immersive exhibition in Singapore" referrerPolicy="no-referrer"/><figcaption><span>01</span>Exhibition overview <cite>ST Photo: Ng Sor Luan</cite></figcaption></figure>
-    <figure><img src="https://cassette.sphdigital.com.sg/image/straitstimes/edac579e3c78c6b0eee02337a7cc5f1b3ad707660c7c9d2aa977a1c96bdc72d7" alt="Mirror maze installation at the Now Is Not The Time exhibition" referrerPolicy="no-referrer"/><figcaption><span>02</span>Mirror maze installation <cite>ST Photo: Ng Sor Luan</cite></figcaption></figure>
+    <figure><img src="https://cassette.sphdigital.com.sg/image/straitstimes/0ef02c706a6b15fefc55cf03585f9351cebed67ce1114edd68362e53698faf56" alt="Now Is Not The Time immersive exhibition in Singapore" referrerPolicy="no-referrer" loading="lazy" decoding="async"/><figcaption><span>01</span>Exhibition overview <cite>ST Photo: Ng Sor Luan</cite></figcaption></figure>
+    <figure><img src="https://cassette.sphdigital.com.sg/image/straitstimes/edac579e3c78c6b0eee02337a7cc5f1b3ad707660c7c9d2aa977a1c96bdc72d7" alt="Mirror maze installation at the Now Is Not The Time exhibition" referrerPolicy="no-referrer" loading="lazy" decoding="async"/><figcaption><span>02</span>Mirror maze installation <cite>ST Photo: Ng Sor Luan</cite></figcaption></figure>
    </div>
   </section>
-  <footer className="site-footer" id="contact"><div><Label>Contact / Singapore</Label><h2>Let’s shape what’s next.</h2></div><a className="email" href="mailto:georgem2011@gmail.com">georgem2011@gmail.com ↗</a><div className="footer-line"><span>© 2026 Ma Shun Ngai George</span><a href="https://github.com/georgema2011-dot">GitHub</a><a href="#top">Back to top ↑</a></div></footer>
+  <PhotoOrbit photos={photographs}/>
+  <footer className="site-footer" id="contact"><div><Label>Contact / Singapore</Label><h2>Let’s discuss a role or project.</h2></div><a className="email" href="mailto:georgem2011@gmail.com">georgem2011@gmail.com ↗</a><div className="footer-line"><span>© 2026 Ma Shun Ngai George</span><a href="https://github.com/georgema2011-dot">GitHub</a><a href="#top">Back to top ↑</a></div></footer>
  </main>
 }

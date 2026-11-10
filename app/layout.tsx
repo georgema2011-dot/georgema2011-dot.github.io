@@ -37,5 +37,5 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     knowsAbout: ["Spatial design", "Industrial design", "Inclusive design", "Service design"],
     sameAs: ["https://github.com/georgema2011-dot"],
   };
-  return <html lang="en"><body>{children}<script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify(person)}}/></body></html>;
+  return <html lang="en"><body>{children}<a href="/george-ma-portfolio.pdf" download="George-Ma-Portfolio.pdf" style={{position:"fixed",bottom:16,right:16,zIndex:30,background:"#292929",color:"#fff",padding:"14px 18px",fontSize:14,border:"1px dotted #fff"}}>Download portfolio PDF ↓</a><script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify(person)}}/></body></html>;
 }

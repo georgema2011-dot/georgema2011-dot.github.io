@@ -31,6 +31,9 @@ async function load(path){
   await document.fonts.ready;
   document.querySelectorAll('img').forEach(i=>{i.loading='eager'});
   await Promise.all([...document.images].map(i=>i.decode().catch(()=>{})));
+  const missing=[...document.images].filter(i=>!i.complete||!i.naturalWidth).map(i=>i.src);
+  if(missing.length)throw Error(`Missing PDF assets: ${missing.join(', ')}`);
+  if(!document.fonts.check('16px Anton'))throw Error('Portfolio heading font did not load');
  });
  await page.addStyleTag({content:'a[download]{display:none!important}.site-nav{position:relative!important}*{scroll-behavior:auto!important}'});
 }
@@ -62,8 +65,8 @@ try{
  }
  projectCount=new Set(ids).size;
  }
- // Use a full-bleed page per section. Taller sections receive taller PDF pages,
- // preserving original scale and avoiding cuts through text or images.
+ // Fit each complete section on a landscape page without cropping. Combine
+ // short adjacent homepage sections so navigation and proof strips stay in context.
  const printPage=await browser.newPage();
  const groups=[];
  for(let i=0;i<sheets.length;i++){

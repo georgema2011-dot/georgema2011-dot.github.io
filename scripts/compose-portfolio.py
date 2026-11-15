@@ -83,33 +83,39 @@ for i,p in enumerate(projects):
     text(626,y,p['discipline'],11); text(892,y,f'{page:02}',11)
     rule(y-10)
     c.linkRect('',p['id'],(36,y-8,924,y+18),relative=0,thickness=0)
-    page+=len(p['boards'])
+    page+=1+len(p['boards'])
 text(36,71,'Design internships: SpaceLogic and M Moser Associates',11)
 c.showPage()
 
 for p in projects:
     c.bookmarkPage(p['id']); c.addOutlineEntry(p['title'],p['id'])
-    for i,(asset,caption) in enumerate(p['boards']):
-        frame(f"PROJECT {p['number']} / {i+1:02} OF {len(p['boards']):02}")
+    frame(f"PROJECT {p['number']}")
+    text(36,522,p['discipline'].upper()+' / '+p['year'].upper(),9)
+    block(36,438,p['title'],570,65,'Display',70)
+    y=block(650,485,p['statement'],274,19,'Helvetica-Bold',24)-20
+    y=block(650,y,p['description'],274,14,leading=20)-20
+    for k,v in p['facts']:
+        text(650,y,k.upper(),8,'Helvetica-Bold')
+        y=block(650,y-16,v,274,11,leading=14)-13
+    assert y>73, p['title']
+    text(36,106,'WORK BOARDS',9,'Helvetica-Bold')
+    for i,(_,caption) in enumerate(p['boards']):
+        text(36+(i//4)*290,87-(i%4)*12,f'{i+1:02}  {caption}',9)
+    c.linkURL(f"{site}/projects/{p['id']}/",(740,15,888,35))
+    text(740,23,'VIEW ONLINE CASE STUDY',8)
+    c.showPage()
+    for asset,caption in p['boards']:
         path=public/asset.lstrip('/')
-        if i==0:
-            text(36,522,p['discipline'].upper()+' / '+p['year'].upper(),9)
-            y=block(36,466,p['title'],310,42,'Display',45)-15
-            y=block(36,y,p['statement'],310,15,'Helvetica-Bold',19)-10
-            y=block(36,y,p['description'],292,13,leading=18)-12
-            for k,v in p['facts']:
-                text(36,y,k.upper(),8,'Helvetica-Bold')
-                y=block(36,y-16,v,292,11,leading=14)-13
-            assert y>73, p['title']
-            image(path,355,95,569,435)
-            text(355,77,caption,10)
-        else:
-            text(36,515,p['title'],25,'Display')
-            image(path,36,86,888,408)
-            text(36,63,caption,10)
-        c.linkURL(f"{site}/projects/{p['id']}/",(740,15,888,35))
-        text(740,23,'VIEW ONLINE CASE STUDY',8)
+        with Image.open(path) as original:
+            iw,ih=original.size
+            h=W*ih/iw
+            c.setPageSize((W,h))
+            if original.format=='JPEG':
+                c.drawImage(str(path),0,0,W,h)
+            else:
+                image(path,0,0,W,h)
         c.showPage()
+    c.setPageSize((W,H))
 
 frame('PHOTOGRAPHY / FIELD NOTES')
 text(36,498,'Photography',50,'Display')

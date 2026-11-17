@@ -14,6 +14,7 @@ out = root / 'output/pdf/George-Ma-Portfolio.pdf'
 out.parent.mkdir(parents=True, exist_ok=True)
 font_dir = Path.home() / '.codex/skills/canvas-design/canvas-fonts'
 pdfmetrics.registerFont(TTFont('Display', str(font_dir / 'BigShoulders-Bold.ttf')))
+pdfmetrics.registerFont(TTFont('DisplayRegular', str(font_dir / 'BigShoulders-Regular.ttf')))
 W, H = 960, 600
 c = Canvas(str(out), pagesize=(W,H), pageCompression=1)
 c.setTitle('Ma Shun Ngai George | Design Portfolio')
@@ -57,11 +58,13 @@ for record in re.split(r'\{ id:',src)[1:]:
     p['id']=record.split('"')[1]
     p['boards']=re.findall(r'src:"([^"]+)"[^}]*caption:"([^"]+)"',record)
     if p['id']=='sca-lab':
-        p['boards']=[(f'/projects/sca-lab/page-{int(n):02}.webp',cap) for n,cap in re.findall(r'page: (\d+), caption: "([^"]+)"',src)]
+        p['boards']=[(f'/projects/sca-lab/page-{int(n):02}.webp',cap) for n,cap in re.findall(r'page: (\d+), caption: "([^"]+)"',src) if n!='1']
+    if p['id']=='nus-coop':
+        p['boards']=[board for board in p['boards'] if board[0]!='/projects/nus-coop/page-2.webp']
     p['facts']=re.findall(r'label:"([^"]+)",value:"([^"]+)"',record)
     projects.append(p)
 assert len(projects)==9 and len({p['id'] for p in projects})==9 and all(p['boards'] for p in projects)
-for ident,ix in [('masks',2),('watergrounds',1),('sca-lab',1)]:
+for ident,ix in [('masks',2),('watergrounds',1)]:
     p=next(p for p in projects if p['id']==ident)
     p['boards'].insert(0,p['boards'].pop(ix))
 
@@ -92,11 +95,13 @@ for p in projects:
     frame(f"PROJECT {p['number']}")
     text(36,522,p['discipline'].upper()+' / '+p['year'].upper(),9)
     block(36,438,p['title'],570,65,'Display',70)
-    y=block(650,485,p['statement'],274,19,'Helvetica-Bold',24)-20
-    y=block(650,y,p['description'],274,14,leading=20)-20
+    y=block(650,485,p['statement'],274,24,'Display',28)-18
+    y=block(650,y,p['description'],274,17,'DisplayRegular',22)-18
     for k,v in p['facts']:
-        text(650,y,k.upper(),8,'Helvetica-Bold')
-        y=block(650,y-16,v,274,11,leading=14)-13
+        text(650,y,k.upper(),11,'Display')
+        y=block(650,y-19,v,274,15,'DisplayRegular',18)-13
+    if p['id']=='nus-coop':
+        y=block(650,y,'Team: Ma Shun Ngai George, Ong Zhi Xing and Tew Rui En',274,15,'DisplayRegular',18)
     assert y>73, p['title']
     text(36,106,'WORK BOARDS',9,'Helvetica-Bold')
     for i,(_,caption) in enumerate(p['boards']):
@@ -119,7 +124,7 @@ for p in projects:
 
 frame('PHOTOGRAPHY / FIELD NOTES')
 text(36,498,'Photography',50,'Display')
-for i,(asset,label) in enumerate([('scandinavia-road.webp','NORWAY'),('copenhagen-street.webp','COPENHAGEN'),('hong-kong-courtyard.webp','HONG KONG')]):
+for i,(asset,label) in enumerate([('scandinavia-road.webp','NORWAY'),('copenhagen-street.webp','COPENHAGEN'),('hong-kong-courtyard.webp','CHINA')]):
     x=36+i*302
     image(public/'photo-dump/web'/asset,x,125,284,330,True)
     text(x,101,label,9)

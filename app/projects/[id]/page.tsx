@@ -57,6 +57,10 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
         <div className="dossier-copy"><p className="statement">{project.statement}</p><div><p>{project.description}</p>{project.facts&&<dl className="project-facts">{project.facts.map((fact)=><div key={fact.label}><dt>{fact.label}</dt><dd>{fact.value}</dd></div>)}</dl>}{project.document&&<a className="deck-link" href={project.document.href} target="_blank" rel="noreferrer">{project.document.label} ↗</a>}</div></div>
       </header>
       <div className={`board-grid ${project.boards.length > 3 ? "board-grid-many" : `board-grid-${project.boards.length}`}`}>
+      {project.demo&&<section aria-label="Project video demonstration" style={{borderBottom:"var(--rule)"}}>
+        <div style={{padding:"20px 3vw",display:"flex",justifyContent:"space-between",alignItems:"center",gap:16}}><h2 style={{margin:0,fontSize:"clamp(1.5rem,3vw,2.5rem)"}}>Project demo</h2><a className="deck-link" style={{marginTop:0}} href={project.demo.href} target="_blank" rel="noreferrer">Watch on YouTube ↗</a></div>
+        <iframe src={`${project.demo.href.replace("https://youtu.be/","https://www.youtube-nocookie.com/embed/")}?playsinline=1`} title={`${project.title} - project demo`} width="1280" height="720" loading="lazy" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen referrerPolicy="strict-origin-when-cross-origin" style={{display:"block",width:"100%",height:"auto",aspectRatio:"16 / 9",minHeight:200,border:0}}/>
+      </section>}
       {project.demo&&<div style={{padding:"20px 3vw"}}><a className="deck-link" href={project.demo.href} target="_blank" rel="noreferrer">{project.demo.label} ↗</a></div>}
         {project.boards.map((board, boardIndex) => <figure className={`board board-${boardIndex + 1}`} key={board.src}>
           <a className="board-view" href={board.src} target="_blank" rel="noreferrer" aria-label={`Open full-size image: ${board.alt}`}><img src={board.src} alt={board.alt} loading={boardIndex === 0 ? "eager" : "lazy"} decoding="async"/></a>

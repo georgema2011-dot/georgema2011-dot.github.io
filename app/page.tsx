@@ -18,34 +18,29 @@ const photographs:OrbitPhoto[]=[
 
 function Label({children}:{children:React.ReactNode}){return <p className="label">{children}</p>}
 
+const previews = [
+ { id: "japandi", label: "Interior design", title: "Japandi Retreat", alt: "Filtered light across a timber-lined guest room" },
+ { id: "somepen", label: "Industrial design", title: "SOMEPEN", alt: "A transparent four-colour pen worn around a finger" },
+ { id: "visual-bridge", label: "Spatial computing", title: "Visual Bridge", alt: "A layered knee model with floating anatomy controls" },
+];
+const gallery = [...previews.map(preview => projects.find(item => item.id === preview.id)!),
+ ...projects.filter(item => !previews.some(preview => preview.id === item.id))];
+
 function HeroSlideshow(){
- const [active,setActive]=useState(()=>Math.max(0,projects.findIndex(project=>project.id==="asda")));
- const [manualPaused,setManualPaused]=useState(false);
- const [interactionPaused,setInteractionPaused]=useState(false);
- const paused=manualPaused||interactionPaused;
- useEffect(()=>{
-  if(paused||matchMedia("(prefers-reduced-motion: reduce)").matches)return;
-  const timer=window.setInterval(()=>setActive(index=>(index+1)%projects.length),3200);
-  return()=>window.clearInterval(timer);
- },[paused]);
- const project=projects[active];
- const move=(direction:number)=>setActive(index=>(index+direction+projects.length)%projects.length);
- return <section className="hero-image project-coverflow" aria-roledescription="carousel" aria-label="Selected projects"
-  onMouseEnter={()=>setInteractionPaused(true)} onMouseLeave={()=>setInteractionPaused(false)} onFocusCapture={()=>setInteractionPaused(true)} onBlurCapture={()=>setInteractionPaused(false)}>
-  <div className="coverflow-track">
-   {projects.map((item,index)=>{
-    let offset=index-active;
-    if(offset>projects.length/2)offset-=projects.length;
-    if(offset<-projects.length/2)offset+=projects.length;
-    const position=Math.max(-3,Math.min(3,offset));
-    return <a className={`coverflow-card coverflow-${position<0?`m${Math.abs(position)}`:`p${position}`}${index===active?" coverflow-active":""}`}
-     href={`/projects/${item.id}/`} aria-label={`View ${item.title} project`} aria-current={index===active?"true":undefined} aria-hidden={index!==active} tabIndex={index===active?0:-1} key={item.id}>
-     <img src={item.boards[0].src} alt={item.boards[0].alt} loading={index===active?"eager":"lazy"} decoding="async"/><span>{item.number} / {item.title}</span>
-    </a>
+ const [start,setStart] = useState(0);
+ const move = (step:number) => setStart(index => (index + step + gallery.length) % gallery.length);
+ return <section className="project-trio" aria-label="Selected projects" aria-roledescription="carousel">
+  <div className="trio-grid" aria-live="polite">
+   {[0,1,2].map(offset => {
+    const item = gallery[(start + offset) % gallery.length];
+    const preview = previews.find(entry => entry.id === item.id);
+    return <a href={`/projects/${item.id}/`} key={item.id}>
+     <img src={preview ? `/projects/${item.id}/preview.webp` : item.boards[0].src} alt={preview?.alt ?? item.boards[0].alt}/>
+     <small>{preview?.label ?? item.discipline}</small><strong>{preview?.title ?? item.title}</strong>
+    </a>;
    })}
   </div>
-  <div className="coverflow-meta" aria-live="polite"><span>{project.number} / {project.title}</span><span>{active+1} of {projects.length} / {project.discipline} / {project.year}</span></div>
-  <div className="coverflow-controls"><button type="button" onClick={()=>setManualPaused(value=>!value)} aria-pressed={manualPaused}>{manualPaused?"Play":"Pause"}</button><button type="button" onClick={()=>move(-1)} aria-label="Previous project">←</button><button type="button" onClick={()=>move(1)} aria-label="Next project">→</button></div>
+  <div className="trio-nav"><a href="#work">All {projects.length} projects ↓</a><button onClick={()=>move(-1)} aria-label="Previous projects">←</button><button onClick={()=>move(1)} aria-label="Next projects">→</button></div>
  </section>
 }
 
@@ -71,12 +66,11 @@ export default function Home(){
   <a className="skip-link" href="#work">Skip to selected work</a>
   <nav className="site-nav" aria-label="Primary navigation"><a className="brand" href="#top">Ma / George</a><span className="nav-role">Spatial + Industrial Designer</span><div className="nav-links"><a href="#work">Projects</a><a href="#photography">Photography</a><a href="#contact">Contact</a></div></nav>
   <header className="hero">
-   <div className="hero-intro"><BlobIntro/><Label>Ma Shun Ngai George / Singapore / Portfolio 2026</Label><div className="hero-copy"><p className="hero-kicker">Spatial + Industrial Designer</p><h1>I design spaces, products and services around real behaviour.</h1><p className="hero-summary">Research becomes planning, prototypes and visual systems for more inclusive everyday experiences.</p><div className="hero-actions"><a href="#work">View selected work</a><a href="mailto:georgem2011@gmail.com">Email George</a></div></div></div>
+   <div className="hero-intro"><BlobIntro/><Label>Ma Shun Ngai George / Singapore / Portfolio 2026</Label><div className="hero-copy"><h1>Spatial + Industrial Designer</h1></div></div>
    <HeroSlideshow/>
-   <div className="hero-index"><span>{projects.length} selected projects</span><p>Spatial, industrial, interaction and inclusive design.</p><a href="#work">View projects ↓</a></div>
   </header>
   <section className="proof-strip" aria-label="Portfolio summary"><a href="#work"><strong>{projects.length}</strong><span>Case studies across interiors, products and services</span></a><a href="#experience"><strong>2</strong><span>Design internships at SpaceLogic and M Moser Associates</span></a><a href="#press"><strong>Press</strong><span>Featured by The Straits Times</span></a></section>
-  <section className="about-grid" id="about"><Label>Profile / 00</Label><h2>Designing across scales.</h2><div><p>I am Ma Shun Ngai George, an interdisciplinary spatial and industrial designer interested in how planning, material choices and human behaviour reshape everyday experience.</p><blockquote className="profile-quote">“The idea begins as a small form in your head. It becomes real when you draw it, test it and share it.”</blockquote></div><ul><li>Spatial design</li><li>Industrial design</li><li>Inclusive design</li><li>Photography</li></ul></section>
+  <section className="about-grid" id="about"><Label>Profile / 00</Label><h2>Designing across scales.</h2><div><p>I design spaces, products and services around real behaviour. I am Ma Shun Ngai George, an interdisciplinary spatial and industrial designer interested in how planning, material choices and human behaviour reshape everyday experience.</p><blockquote className="profile-quote">“The idea begins as a small form in your head. It becomes real when you draw it, test it and share it.”</blockquote></div><ul><li>Spatial design</li><li>Industrial design</li><li>Inclusive design</li><li>Photography</li></ul></section>
   <section className="experience" id="experience" aria-labelledby="experience-title"><header><Label>Experience / 02</Label><h2 id="experience-title">Industry practice.</h2></header><ol><li><span>01</span><strong>SpaceLogic</strong><span>Design internship</span></li><li><span>02</span><strong>M Moser Associates</strong><span>Design internship</span></li></ol></section>
   <section className="project-index" id="work"><header><Label>Selected projects / 01-{String(projects.length).padStart(2,"0")}</Label><h2>Work Index</h2></header><div className="index-list">{projects.map(project=><a href={`/projects/${project.id}/`} key={project.id}><span>{project.number}</span><strong>{project.title}</strong><span>{project.discipline}</span><span>{project.year}</span><b>↗</b></a>)}</div></section>
   <section className="press-feature" id="press" aria-labelledby="press-title">

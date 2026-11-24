@@ -32,7 +32,8 @@ test("server-renders the redesigned portfolio", async () => {
   assert.match(html, /Ma Shun Ngai George/i);
   assert.match(html, /I design spaces, products and services around real behaviour/);
   assert.match(html, /The idea begins as a small form/);
-  assert.match(html, /10.*selected projects/);
+  assert.match(html, /class="trio-grid"/);
+  assert.match(html, /All .*10.* projects/);
   assert.match(html, /Work Index/);
   assert.match(html, /Photography/);
   assert.doesNotMatch(html, /Your site is taking shape|Building your site/i);

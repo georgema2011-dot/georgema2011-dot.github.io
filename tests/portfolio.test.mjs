@@ -32,7 +32,7 @@ test("server-renders the redesigned portfolio", async () => {
   assert.match(html, /Ma Shun Ngai George/i);
   assert.match(html, /I design spaces, products and services around real behaviour/);
   assert.match(html, /The idea begins as a small form/);
-  assert.match(html, /9 selected projects/);
+  assert.match(html, /10.*selected projects/);
   assert.match(html, /Work Index/);
   assert.match(html, /Photography/);
   assert.doesNotMatch(html, /Your site is taking shape|Building your site/i);
@@ -61,6 +61,13 @@ test("keeps the portfolio semantic, responsive and image-led", async () => {
   const coopResponse = await renderPath("/projects/nus-coop");
   assert.equal(coopResponse.status, 200);
   assert.match(await coopResponse.text(), /Refocusing on the community\./);
+  const bridgeResponse = await renderPath("/projects/visual-bridge");
+  assert.equal(bridgeResponse.status, 200);
+  const bridgeHtml = await bridgeResponse.text();
+  assert.match(bridgeHtml, /ACL Visualisation through the Visio Pro/);
+  assert.match(bridgeHtml, /https:\/\/youtu.be\/hFE74-Hjoec/);
+  assert.match(bridgeHtml, /Academic prototype/);
+  assert.equal((bridgeHtml.match(/class="board-view"/g) ?? []).length, 6);
   assert.match(css, /grid-template-columns:repeat\(12/);
   assert.match(css, /@media\(max-width:620px\)/);
   assert.match(css, /prefers-reduced-motion:reduce/);
@@ -68,11 +75,11 @@ test("keeps the portfolio semantic, responsive and image-led", async () => {
   assert.doesNotMatch(css, /box-shadow|linear-gradient|radial-gradient/i);
 });
 
-test("keeps exactly nine unique project records", async () => {
+test("keeps exactly ten unique project records", async () => {
   const projectData = await readFile(new URL("../app/projects-data.ts", import.meta.url), "utf8");
   const ids = [...projectData.matchAll(/\{ id:"([^"]+)"/g)].map((match) => match[1]);
-  assert.equal(ids.length, 9);
-  assert.equal(new Set(ids).size, 9);
+  assert.equal(ids.length, 10);
+  assert.equal(new Set(ids).size, 10);
 });
 
 test("publishes recruiter and project metadata with production URLs", async () => {

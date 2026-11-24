@@ -63,7 +63,7 @@ for record in re.split(r'\{ id:',src)[1:]:
         p['boards']=[board for board in p['boards'] if board[0]!='/projects/nus-coop/page-2.webp']
     p['facts']=re.findall(r'label:"([^"]+)",value:"([^"]+)"',record)
     projects.append(p)
-assert len(projects)==9 and len({p['id'] for p in projects})==9 and all(p['boards'] for p in projects)
+assert len(projects)==10 and len({p['id'] for p in projects})==10 and all(p['boards'] for p in projects)
 for ident,ix in [('masks',2),('watergrounds',1)]:
     p=next(p for p in projects if p['id']==ident)
     p['boards'].insert(0,p['boards'].pop(ix))
@@ -81,9 +81,9 @@ frame('CONTENTS')
 text(36,482,'Selected work',55,'Display')
 page=3
 for i,p in enumerate(projects):
-    y=428-i*35
-    text(36,y,p['number'],10); text(79,y,p['title'],15,'Helvetica-Bold')
-    text(626,y,p['discipline'],11); text(892,y,f'{page:02}',11)
+    y=428-i*33
+    text(36,y,p['number'],10); text(79,y,'Visual Bridge' if p['id']=='visual-bridge' else p['title'],15,'Helvetica-Bold')
+    text(626,y,p['discipline'],10); text(892,y,f'{page:02}',11)
     rule(y-10)
     c.linkRect('',p['id'],(36,y-8,924,y+18),relative=0,thickness=0)
     page+=1+len(p['boards'])
@@ -94,7 +94,7 @@ for p in projects:
     c.bookmarkPage(p['id']); c.addOutlineEntry(p['title'],p['id'])
     frame(f"PROJECT {p['number']}")
     text(36,522,p['discipline'].upper()+' / '+p['year'].upper(),9)
-    block(36,438,p['title'],570,65,'Display',70)
+    block(36,438,p['title'],570,46 if p['id']=='visual-bridge' else 65,'Display',54 if p['id']=='visual-bridge' else 70)
     y=block(650,485,p['statement'],274,24,'Display',28)-18
     y=block(650,y,p['description'],274,17,'DisplayRegular',22)-18
     for k,v in p['facts']:

@@ -8,6 +8,7 @@ export type Project = {
   description: string;
   document?: { href: string; label: string };
   facts?: Array<{ label: string; value: string }>;
+  demo?: { href: string; label: string };
   boards: Array<{ src: string; alt: string; caption: string }>;
 };
 
@@ -19,6 +20,14 @@ const scaLabPages = [
 ];
 
 export const projects: Project[] = [
+  { id:"visual-bridge", number:"10", title:"Visual Bridge: ACL Visualisation through the Visio Pro", discipline:"Spatial computing + interaction", year:"2026", statement:"Making knee anatomy easier to understand.", description:"A spatial-computing education prototype for newly diagnosed ACL patients. The project explores layered knee anatomy and a spatial app flow to explain the injury and what comes next. Patient-specific damage and leg-linked movement are proposed next steps.", document:{href:"/projects/visual-bridge/visual-bridge-presentation.pdf",label:"View original presentation"}, demo:{href:"https://youtu.be/hFE74-Hjoec",label:"Watch the project demo"}, facts:[
+    {label:"Brief",value:"ACL patient education"},{label:"Platform",value:"Apple Vision Pro"},{label:"Status",value:"Academic prototype, Semester 1 AY 2026/2027"}], boards:[
+    {src:"/projects/visual-bridge/page-07.webp",alt:"Visual Bridge app flow showing sequential spatial knee anatomy views",caption:"App flow / spatial anatomy exploration"},
+    {src:"/projects/visual-bridge/page-03.webp",alt:"Visual Bridge brief asking how newly diagnosed ACL patients can understand their knee injury and next steps",caption:"Design brief / understanding the diagnosis"},
+    {src:"/projects/visual-bridge/page-04.webp",alt:"Target audience for Visual Bridge ACL patient education",caption:"Audience / patients seeking diagnosis awareness"},
+    {src:"/projects/visual-bridge/page-06.webp",alt:"Rationale for isolating overlapping anatomical layers in spatial computing",caption:"Spatial rationale / anatomy in layers"},
+    {src:"/projects/visual-bridge/page-10.webp",alt:"Proposed future directions for patient-specific anatomy and leg-linked movement",caption:"Future concepts / patient-specific and movement-linked models"},
+    {src:"/projects/visual-bridge/page-11.webp",alt:"Project reflections on device testing, information delivery and user interviews",caption:"Reflection / platform, delivery and user feedback"}]},
   { id:"japandi", number:"01", title:"Japandi Retreat", discipline:"Hospitality interior", year:"2024", statement:"Home away from home.", description:"An L-shaped resort room separates arrival, bathing and sleep. A bathroom wall screens the entrance, while concrete, timber and filtered openings create privacy without closing the room.", facts:[
     {label:"Focus",value:"Privacy, arrival and rest"},{label:"Method",value:"Plan sequencing and material study"},{label:"Output",value:"Hospitality interior proposal"}], boards:[
     {src:"/portfolio/page-04.jpg",alt:"Japandi resort room with two beds on a raised timber platform",caption:"Spatial atmosphere / material study"},

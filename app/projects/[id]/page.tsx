@@ -53,10 +53,11 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
     <article className="dossier project-case" id="case-study">
       <header className="dossier-head">
         <div className="dossier-number"><p className="label">Project</p><span>{project.number}</span></div>
-        <div className="dossier-title"><p className="label">{project.discipline} / {project.year}</p><h1>{project.title}</h1></div>
+        <div className="dossier-title"><p className="label">{project.discipline} / {project.year}</p><h1 style={project.id==="visual-bridge"?{lineHeight:1.08}:undefined}>{project.title}</h1></div>
         <div className="dossier-copy"><p className="statement">{project.statement}</p><div><p>{project.description}</p>{project.facts&&<dl className="project-facts">{project.facts.map((fact)=><div key={fact.label}><dt>{fact.label}</dt><dd>{fact.value}</dd></div>)}</dl>}{project.document&&<a className="deck-link" href={project.document.href} target="_blank" rel="noreferrer">{project.document.label} ↗</a>}</div></div>
       </header>
       <div className={`board-grid ${project.boards.length > 3 ? "board-grid-many" : `board-grid-${project.boards.length}`}`}>
+      {project.demo&&<div style={{padding:"20px 3vw"}}><a className="deck-link" href={project.demo.href} target="_blank" rel="noreferrer">{project.demo.label} ↗</a></div>}
         {project.boards.map((board, boardIndex) => <figure className={`board board-${boardIndex + 1}`} key={board.src}>
           <a className="board-view" href={board.src} target="_blank" rel="noreferrer" aria-label={`Open full-size image: ${board.alt}`}><img src={board.src} alt={board.alt} loading={boardIndex === 0 ? "eager" : "lazy"} decoding="async"/></a>
           <figcaption><span>{project.number}.{String(boardIndex + 1).padStart(2, "0")}</span><span>{board.caption}</span></figcaption>

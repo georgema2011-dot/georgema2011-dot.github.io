@@ -85,6 +85,6 @@ export default function Home(){
    </div>
   </section>
   <PhotoOrbit photos={photographs}/>
-  <footer className="site-footer" id="contact"><div><Label>Contact / Singapore</Label><h2>Let’s discuss a role or project.</h2></div><a className="email" href="mailto:georgem2011@gmail.com">georgem2011@gmail.com ↗</a><div className="footer-line"><span>© 2026 Ma Shun Ngai George</span><a href="https://github.com/georgema2011-dot">GitHub</a><a href="#top">Back to top ↑</a></div></footer>
+  <footer className="site-footer" id="contact"><div><Label>Contact / Singapore</Label><h2>Let’s discuss a role or project.</h2></div><a className="email" href="mailto:georgema2011@gmail.com">georgema2011@gmail.com ↗</a><div className="footer-line"><span>© 2026 Ma Shun Ngai George</span><a href="https://github.com/georgema2011-dot">GitHub</a><a href="#top">Back to top ↑</a></div></footer>
  </main>
 }

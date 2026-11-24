@@ -31,7 +31,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     "@type": "Person",
     name: "Ma Shun Ngai George",
     url: origin,
-    email: "mailto:georgem2011@gmail.com",
+    email: "mailto:georgema2011@gmail.com",
     jobTitle: "Spatial and Industrial Designer",
     homeLocation: { "@type": "Place", name: "Singapore" },
     knowsAbout: ["Spatial design", "Industrial design", "Inclusive design", "Service design"],

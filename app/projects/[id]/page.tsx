@@ -72,7 +72,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
       <a href="/#work"><span>Index</span><strong>All projects</strong></a>
       <a href={`/projects/${next.id}/`}><span>Next</span><strong>{next.title} →</strong></a>
     </nav>
-    <section className="project-contact"><p className="label">Interested in this work?</p><h2>Let’s discuss a role or project.</h2><a href="mailto:georgem2011@gmail.com">Email George ↗</a></section>
+    <section className="project-contact"><p className="label">Interested in this work?</p><h2>Let’s discuss a role or project.</h2><a href="mailto:georgema2011@gmail.com">Email George ↗</a></section>
     <script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify(creativeWork)}}/>
   </main>;
 }

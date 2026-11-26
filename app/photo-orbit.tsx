@@ -19,6 +19,7 @@ export function PhotoOrbit({photos}:{photos:OrbitPhoto[]}){
  const [hovered,setHovered]=useState(false);
  const [visible,setVisible]=useState(false);
  const [lightbox,setLightbox]=useState<number|null>(null);
+ const lightboxOpen=lightbox!==null;
  useEffect(()=>{
   const node=stage.current;
   if(!node)return;
@@ -58,14 +59,16 @@ export function PhotoOrbit({photos}:{photos:OrbitPhoto[]}){
     item.style.zIndex=String(10+Math.round(depth*90));
    });
    setActive(current=>current===foremost?current:foremost);
-   frame.current=requestAnimationFrame(draw);
+   if(!paused&&!lightboxOpen&&!reduced)frame.current=requestAnimationFrame(draw);
   };
   frame.current=requestAnimationFrame(draw);
-  return()=>cancelAnimationFrame(frame.current);
+  const resize=new ResizeObserver(()=>{cancelAnimationFrame(frame.current);frame.current=requestAnimationFrame(draw)});
+  resize.observe(node);
+  return()=>{cancelAnimationFrame(frame.current);resize.disconnect()};
  },[hovered,lightbox,paused,photos.length,visible]);
 
  useEffect(()=>{
-  if(lightbox===null)return;
+  if(!lightboxOpen)return;
   const previous=document.body.style.overflow;
   document.body.style.overflow="hidden";
   const key=(event:KeyboardEvent)=>{
@@ -81,9 +84,9 @@ export function PhotoOrbit({photos}:{photos:OrbitPhoto[]}){
    }
   };
   document.addEventListener("keydown",key);
-  requestAnimationFrame(()=>dialog.current?.querySelector<HTMLButtonElement>(".lightbox-close")?.focus());
-  return()=>{document.body.style.overflow=previous;document.removeEventListener("keydown",key);opener.current?.focus()};
- },[lightbox,photos.length]);
+  const focusFrame=requestAnimationFrame(()=>dialog.current?.querySelector<HTMLButtonElement>(".lightbox-close")?.focus());
+  return()=>{cancelAnimationFrame(focusFrame);document.body.style.overflow=previous;document.removeEventListener("keydown",key);opener.current?.focus()};
+ },[lightboxOpen,photos.length]);
 
  const open=(index:number,event:React.MouseEvent<HTMLButtonElement>)=>{opener.current=event.currentTarget;setLightbox(index)};
  const moveFocus=(index:number,direction:number)=>{

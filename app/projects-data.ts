@@ -9,7 +9,7 @@ export type Project = {
   document?: { href: string; label: string };
   facts?: Array<{ label: string; value: string }>;
   demo?: { href: string; label: string };
-  boards: Array<{ src: string; alt: string; caption: string }>;
+  boards: Array<{ src: string; alt: string; caption: string; note?: string }>;
 };
 
 const scaLabPages = [
@@ -28,10 +28,10 @@ export const projects: Project[] = [
     {src:"/projects/visual-bridge/page-06.webp",alt:"Rationale for isolating overlapping anatomical layers in spatial computing",caption:"Spatial rationale / anatomy in layers"},
     {src:"/projects/visual-bridge/page-10.webp",alt:"Proposed future directions for patient-specific anatomy and leg-linked movement",caption:"Future concepts / patient-specific and movement-linked models"},
     {src:"/projects/visual-bridge/page-11.webp",alt:"Project reflections on device testing, information delivery and user interviews",caption:"Reflection / platform, delivery and user feedback"}]},
-  { id:"japandi", number:"01", title:"Japandi Retreat", discipline:"Hospitality interior", year:"2024", statement:"Home away from home.", description:"An L-shaped resort room separates arrival, bathing and sleep. A bathroom wall screens the entrance, while concrete, timber and filtered openings create privacy without closing the room.", facts:[
-    {label:"Focus",value:"Privacy, arrival and rest"},{label:"Method",value:"Plan sequencing and material study"},{label:"Output",value:"Hospitality interior proposal"}], boards:[
-    {src:"/portfolio/page-04.jpg",alt:"Japandi resort room with two beds on a raised timber platform",caption:"Spatial atmosphere / material study"},
-    {src:"/portfolio/page-05.jpg",alt:"Japandi floor plan and bathroom studies",caption:"Plan, arrival sequence and bathroom studies"}]},
+  { id:"japandi", number:"01", title:"Japandi Retreat", discipline:"Compact residential interior", year:"2024", statement:"A smaller home, with room for everyday life.", description:"A one-room apartment study exploring how a compact home can feel open and homely while supporting different activities. The L-shaped layout organises circulation, while partitions create privacy without fully enclosing each area. A raised tatami platform accommodates the fixed beds and an adjacent space for reading and studying, reducing the need for a separate desk.", facts:[
+    {label:"Brief",value:"Multifunctional living in a compact home"},{label:"Approach",value:"Circulation, partial separation and a tatami platform"},{label:"Output",value:"Residential layout proposal"}], boards:[
+    {src:"/portfolio/page-04.jpg",alt:"Compact residential bedroom with two fixed beds and an adjacent activity area on a raised tatami platform",caption:"Spatial atmosphere / material study"},
+    {src:"/portfolio/page-05.jpg",alt:"L-shaped apartment plan with bathroom near the entrance and beds and adjacent activity area on the right",caption:"Plan, arrival sequence and bathroom studies",note:"The raised tatami platform accommodates the fixed beds and an adjacent area for reading and studying. The L-shaped layout and partitions create privacy between activities while aiming to keep the compact home open and connected."}]},
   { id:"masks", number:"02", title:"Looking Through the Masks of the City", discipline:"Urban intervention", year:"2024", statement:"A city of façades.", description:"Sound recordings map Clarke Quay Central across the day. The study becomes a crochet studio built around layered thresholds, woven bamboo and collective making.", facts:[
     {label:"Focus",value:"Urban identity and collective making"},{label:"Method",value:"Sound mapping and layered thresholds"},{label:"Output",value:"Crochet studio intervention"}], boards:[
     {src:"/portfolio/page-06.jpg",alt:"Layered city collage with Chinese opera masks",caption:"Urban slice / mask study"},

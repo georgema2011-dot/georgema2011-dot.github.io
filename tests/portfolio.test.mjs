@@ -94,3 +94,24 @@ test("publishes recruiter and project metadata with production URLs", async () =
   assert.match(projectPage, /generateMetadata/);
   assert.match(projectPage, /CreativeWork/);
 });
+
+test("reserves image space across every case study and publishes the clarified Japandi brief", async () => {
+  const data = await readFile(new URL("../app/projects-data.ts", import.meta.url), "utf8");
+  const ids = [...data.matchAll(/\{ id:"([^"]+)"/g)].map(match => match[1]);
+  for (const id of ids) {
+    const response = await renderPath(`/projects/${id}`);
+    assert.equal(response.status, 200, id);
+    const html = await response.text();
+    const images = html.match(/<img\b[^>]*>/g) ?? [];
+    assert.ok(images.length > 0, `${id} must show project boards`);
+    for (const image of images) {
+      assert.match(image, /\bwidth="[1-9]\d*"/, `${id} image width`);
+      assert.match(image, /\bheight="[1-9]\d*"/, `${id} image height`);
+    }
+    if (id === "japandi") {
+      assert.match(html, /one-room apartment study/);
+      assert.match(html, /adjacent area for reading and studying/);
+      assert.doesNotMatch(html, /resort room|Hospitality interior/);
+    }
+  }
+});

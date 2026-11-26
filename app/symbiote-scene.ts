@@ -39,7 +39,7 @@ function material(){
  });
 }
 
-export function createSymbioteScene(canvas:HTMLCanvasElement,host:HTMLElement){
+export function createSymbioteScene(canvas:HTMLCanvasElement,host:HTMLElement,onFeed:(count:number)=>void=()=>{}){
  const reduced=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
  const renderer=new THREE.WebGLRenderer({canvas,alpha:true,antialias:true,powerPreference:"high-performance"});
  renderer.setPixelRatio(Math.min(window.devicePixelRatio,1.75));
@@ -118,6 +118,10 @@ export function createSymbioteScene(canvas:HTMLCanvasElement,host:HTMLElement){
  let raf=0;
  let last=performance.now();
  let hidden=document.hidden;
+ let inView=false;
+ let paused=reduced;
+ let feedCount=0;
+ const maxFeeds=10;
  const introDuration=4.2;
  let introTime=reduced?introDuration:0;
 
@@ -131,12 +135,15 @@ export function createSymbioteScene(canvas:HTMLCanvasElement,host:HTMLElement){
 
  const spawn=(event?:PointerEvent)=>{
   if(event&&event.button!==0)return;
+  if(feedCount>=maxFeeds)return;
+  feedCount+=1;
+  onFeed(feedCount);
   if(introTime<introDuration){organism.position.set(0,groundY+.67,0);organism.scale.setScalar(1)}
   introTime=introDuration;
   if(event)setPointer(event);
   else{target.set(0,0,0);pointer.set(0,.3)}
-  if(reduced){
-   growthTarget=Math.min(1.68,growthTarget+.075);
+  if(paused||reduced){
+   growthTarget=Math.min(1.68,growthTarget+.068);
    growth=growthTarget;
    organism.scale.setScalar(growth);
    organism.position.y=groundY+.67*growth;
@@ -167,8 +174,8 @@ export function createSymbioteScene(canvas:HTMLCanvasElement,host:HTMLElement){
  };
 
  const update=(time:number)=>{
-  raf=requestAnimationFrame(update);
-  if(hidden)return;
+  raf=0;
+  if(hidden||!inView||paused||reduced)return;
   const dt=Math.min(.033,(time-last)/1000||.016);
   last=time;
   const elapsed=time/1000;
@@ -250,7 +257,7 @@ export function createSymbioteScene(canvas:HTMLCanvasElement,host:HTMLElement){
     if(distance<radius*.88+.2){
      scene.remove(drop.mesh);
      droplets.splice(i,1);
-     growthTarget=Math.min(1.68,growthTarget+.075);
+     growthTarget=Math.min(1.68,growthTarget+.068);
      squash=-.12;
      continue;
     }
@@ -260,19 +267,39 @@ export function createSymbioteScene(canvas:HTMLCanvasElement,host:HTMLElement){
    drop.mesh.rotation.y+=dt*1.4;
   }
   renderer.render(scene,camera);
+  raf=requestAnimationFrame(update);
  };
 
- const visibility=()=>{hidden=document.hidden;last=performance.now()};
+ const syncAnimation=()=>{
+  cancelAnimationFrame(raf);raf=0;last=performance.now();
+  if(!hidden&&inView&&!paused&&!reduced)raf=requestAnimationFrame(update);
+ };
+ const visibility=()=>{hidden=document.hidden;syncAnimation()};
+ const intersection=new IntersectionObserver(([entry])=>{inView=entry.isIntersecting;syncAnimation()});
+ intersection.observe(host);
  const observer=new ResizeObserver(resize);
  observer.observe(host);
  host.addEventListener("pointermove",setPointer);
  host.addEventListener("pointerdown",spawn);
  document.addEventListener("visibilitychange",visibility);
  resize();
- if(reduced){renderer.render(scene,camera)}else{raf=requestAnimationFrame(update)}
+ renderer.render(scene,camera);
 
- return {feed:()=>spawn(),dispose:()=>{
+ return {feed:()=>spawn(),reducedMotion:reduced,setPaused:(value:boolean)=>{
+  paused=value;
+  if(paused){
+   // Settle pending food so pausing never loses an accepted feed.
+   growthTarget=Math.min(1.68,growthTarget+droplets.length*.068);
+   droplets.forEach(drop=>scene.remove(drop.mesh));droplets.length=0;
+   growth=growthTarget;organism.scale.setScalar(growth);
+   organism.position.set(0,groundY+.67*growth,0);velocity.set(0,0,0);
+   shadow.position.x=0;shadow.scale.set(growth,growth*.48,1);
+   renderer.render(scene,camera);
+  }
+  syncAnimation();
+ },dispose:()=>{
   cancelAnimationFrame(raf);
+  intersection.disconnect();
   observer.disconnect();
   host.removeEventListener("pointermove",setPointer);
   host.removeEventListener("pointerdown",spawn);

@@ -19,7 +19,7 @@ const photographs:OrbitPhoto[]=[
 function Label({children}:{children:React.ReactNode}){return <p className="label">{children}</p>}
 
 const previews = [
- { id: "japandi", label: "Interior design", title: "Japandi Retreat", alt: "Filtered light across a timber-lined guest room" },
+ { id: "japandi", label: "Interior design", title: "Japandi Retreat", alt: "Filtered light across a timber-lined compact bedroom" },
  { id: "somepen", label: "Industrial design", title: "SOMEPEN", alt: "A transparent four-colour pen worn around a finger" },
  { id: "visual-bridge", label: "Spatial computing", title: "Visual Bridge", alt: "A layered knee model with floating anatomy controls" },
  { id: "sca-lab", label: "Spatial + interaction design", title: "SCA-Lab", alt: "Interior rendering of the SCA-Lab viewing and control area overlooking the track" },
@@ -49,8 +49,11 @@ function BlobIntro(){
  const canvas=useRef<HTMLCanvasElement>(null);
  const stage=useRef<HTMLDivElement>(null);
  const feed=useRef<(()=>void)|null>(null);
+ const pauseScene=useRef<((paused:boolean)=>void)|null>(null);
  const [ready,setReady]=useState(false);
  const [fed,setFed]=useState(0);
+ const [paused,setPaused]=useState(false);
+ const [reducedMotion,setReducedMotion]=useState(false);
  const [unavailable,setUnavailable]=useState(false);
  useEffect(()=>{
   const element=canvas.current;
@@ -60,15 +63,18 @@ function BlobIntro(){
   let cleanup:(()=>void)|undefined;
   import("./symbiote-scene").then(({createSymbioteScene})=>{
    if(disposed)return;
-   const scene=createSymbioteScene(element,host);
+   const scene=createSymbioteScene(element,host,count=>setFed(count));
    cleanup=scene.dispose;
    feed.current=scene.feed;
+   pauseScene.current=scene.setPaused;
+   setPaused(scene.reducedMotion);
+   setReducedMotion(scene.reducedMotion);
    setReady(true);
   }).catch(()=>{if(!disposed)setUnavailable(true)});
-  return()=>{disposed=true;feed.current=null;cleanup?.()};
+  return()=>{disposed=true;feed.current=null;pauseScene.current=null;cleanup?.()};
  },[]);
  return <section className="idea-playground" aria-labelledby="idea-title">
-  <div className="idea-copy"><p className="label">A little idea, made tangible</p><h2 id="idea-title">Every design starts with an idea. Feed it.</h2><p>An idea grows when you give it attention. Feed this one and watch it take shape.</p><button type="button" className="idea-feed" disabled={!ready} onClick={()=>{feed.current?.();setFed(value=>value+1)}}>Feed the idea</button><p className="idea-status" role="status">{unavailable?"The interactive preview is unavailable on this device.":!ready?"Preparing your idea…":fed?"Keep feeding your curiosity.":"Ready when you are."}</p></div>
+  <div className="idea-copy"><p className="label">A little idea, made tangible</p><h2 id="idea-title">Every design starts with an idea. Feed it.</h2><p>An idea grows when you give it attention. Feed this one and watch it take shape.</p><div className="idea-actions"><button type="button" className="idea-feed" disabled={!ready||fed>=10} onClick={()=>feed.current?.()}>{fed>=10?"Idea fully grown":"Feed the idea"}</button><button type="button" className="idea-pause" disabled={!ready||reducedMotion} aria-pressed={paused} onClick={()=>{const next=!paused;pauseScene.current?.(next);setPaused(next)}}>{reducedMotion?"Reduced motion enabled":paused?"Resume animation":"Pause animation"}</button></div><p className="idea-status" role="status">{unavailable?"The interactive preview is unavailable on this device.":!ready?"Preparing your idea…":fed>=10?"Fully grown. Take that curiosity into the projects below.":fed?`Idea fed ${fed} of 10 times. Keep feeding your curiosity.`:"Ready when you are."}</p></div>
   <div className="idea-stage" ref={stage}><canvas ref={canvas} aria-hidden="true"/><span className="idea-hint">Move to explore · Tap to feed</span></div>
  </section>
 }

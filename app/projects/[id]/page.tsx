@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { projects } from "../../projects-data";
 import { boardDimensions } from "../../board-dimensions";
 import { BoardImage } from "../../board-image";
+import { SomepenModelViewer } from "../../somepen-model-viewer";
 
 export function generateStaticParams() {
   return projects.map(({ id }) => ({ id }));
@@ -62,6 +63,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
         <div style={{padding:"20px 3vw",display:"flex",justifyContent:"space-between",alignItems:"center",gap:16}}><h2 style={{margin:0,fontSize:"clamp(1.5rem,3vw,2.5rem)"}}>Project demo</h2><a className="deck-link" style={{marginTop:0}} href={project.demo.href} target="_blank" rel="noreferrer">Watch on YouTube ↗</a></div>
         <iframe src={`${project.demo.href.replace("https://youtu.be/","https://www.youtube-nocookie.com/embed/")}?playsinline=1`} title={`${project.title} - project demo`} width="1280" height="720" loading="lazy" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen referrerPolicy="strict-origin-when-cross-origin" style={{display:"block",width:"100%",height:"auto",aspectRatio:"16 / 9",minHeight:200,border:0}}/>
       </section>}
+      {project.id === "somepen" && <SomepenModelViewer/>}
       <div className={`board-grid ${project.boards.length > 3 ? "board-grid-many" : `board-grid-${project.boards.length}`}`}>
         {project.boards.map((board, boardIndex) => <figure className={`board board-${boardIndex + 1}`} key={board.src}>
           <BoardImage src={board.src} alt={board.alt} caption={board.caption} width={boardDimensions[board.src].width} height={boardDimensions[board.src].height} eager={boardIndex===0}/>

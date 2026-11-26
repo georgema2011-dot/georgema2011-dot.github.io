@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { readFile } from "node:fs/promises";
+import { readFile, stat } from "node:fs/promises";
 import test from "node:test";
 
 async function render() {
@@ -60,7 +60,9 @@ test("keeps the portfolio semantic, responsive and image-led", async () => {
   assert.match(projectHtml, /loading=.*lazy/);
   const somepenResponse = await renderPath("/projects/somepen");
   assert.equal(somepenResponse.status, 200);
-  assert.match(await somepenResponse.text(), /Four colours\. One movement\./);
+  const somepenHtml = await somepenResponse.text();
+  assert.match(somepenHtml, /Four colours\. One movement\./);
+  assert.match(somepenHtml, /Interactive model/);
   const hipResponse = await renderPath("/projects/hip-reduction-simulator");
   assert.equal(hipResponse.status, 200);
   const hipHtml = await hipResponse.text();
@@ -85,6 +87,15 @@ test("keeps the portfolio semantic, responsive and image-led", async () => {
   assert.match(css, /prefers-reduced-motion:reduce/);
   assert.match(css, /border-radius:0/);
   assert.doesNotMatch(css, /box-shadow|linear-gradient|radial-gradient/i);
+});
+
+test("ships the SOMPEN model as a lazy, locally decoded interactive asset", async () => {
+  const viewer = await readFile(new URL("../app/somepen-model-viewer.tsx", import.meta.url), "utf8");
+  const model = await stat(new URL("../public/projects/somepen/somepen-web.glb", import.meta.url));
+  assert.match(viewer, /IntersectionObserver/);
+  assert.match(viewer, /DRACOLoader/);
+  assert.match(viewer, /somepen-web\.glb/);
+  assert.ok(model.size > 1_000_000);
 });
 
 test("keeps exactly eleven unique project records", async () => {

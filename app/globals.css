@@ -116,3 +116,6 @@
  .trio-grid a:first-child img { aspect-ratio:2.35 }
  .trio-grid small { font-size:.67rem }
 }
+
+/* Give display headings a little more breathing room. */
+body h1, body h2, body .hero-copy h1 { letter-spacing: 0 !important; }

@@ -117,8 +117,16 @@
  .trio-grid small { font-size:.67rem }
 }
 
-/* Give display headings a little more breathing room. */
-body h1, body h2, body .hero-copy h1 { letter-spacing: 0 !important; }
+/* Shared title treatment, including titles outside semantic headings. */
+:root { --title-tracking: .035em; }
+body h1, body h2, body h3, body .hero-copy h1,
+.trio-grid strong, .index-list strong, .project-pagination strong,
+.experience strong, .orbit-title>span, .proof-strip strong {
+ font-family: var(--heading);
+ font-weight: 400 !important;
+ font-synthesis: none;
+ letter-spacing: var(--title-tracking) !important;
+}
 
 /* The idea interaction has its own space, separate from the title. */
 .idea-playground{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;border-right:0;border-bottom:var(--rule)}

@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { projects } from "../../projects-data";
 import { boardDimensions } from "../../board-dimensions";
+import { BoardImage } from "../../board-image";
 
 export function generateStaticParams() {
   return projects.map(({ id }) => ({ id }));
@@ -63,7 +64,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
       </section>}
       <div className={`board-grid ${project.boards.length > 3 ? "board-grid-many" : `board-grid-${project.boards.length}`}`}>
         {project.boards.map((board, boardIndex) => <figure className={`board board-${boardIndex + 1}`} key={board.src}>
-          <a className="board-view" href={board.src} target="_blank" rel="noreferrer" aria-label={`Open full-size image: ${board.alt}`}><img src={board.src} alt={board.alt} width={boardDimensions[board.src].width} height={boardDimensions[board.src].height} loading={boardIndex === 0 ? "eager" : "lazy"} decoding="async"/></a>
+          <BoardImage src={board.src} alt={board.alt} caption={board.caption} width={boardDimensions[board.src].width} height={boardDimensions[board.src].height} eager={boardIndex===0}/>
           <figcaption><span>{project.number}.{String(boardIndex + 1).padStart(2, "0")}</span><span>{board.caption}</span></figcaption>
           {board.note&&<p className="board-note">{board.note}</p>}
         </figure>)}

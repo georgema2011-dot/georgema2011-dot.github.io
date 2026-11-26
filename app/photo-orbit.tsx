@@ -18,6 +18,7 @@ export function PhotoOrbit({photos}:{photos:OrbitPhoto[]}){
  const [paused,setPaused]=useState(false);
  const [hovered,setHovered]=useState(false);
  const [visible,setVisible]=useState(false);
+ const [view,setView]=useState<"orbit"|"grid">("orbit");
  const [lightbox,setLightbox]=useState<number|null>(null);
  const lightboxOpen=lightbox!==null;
  useEffect(()=>{
@@ -29,7 +30,7 @@ export function PhotoOrbit({photos}:{photos:OrbitPhoto[]}){
  },[]);
  useEffect(()=>{
   const node=stage.current;
-  if(!node||!visible)return;
+  if(!node||!visible||view!=="orbit")return;
   const reduced=matchMedia("(prefers-reduced-motion: reduce)").matches;
   const draw=(time:number)=>{
    const dt=Math.min(.04,(time-last.current)/1000||0);
@@ -65,7 +66,7 @@ export function PhotoOrbit({photos}:{photos:OrbitPhoto[]}){
   const resize=new ResizeObserver(()=>{cancelAnimationFrame(frame.current);frame.current=requestAnimationFrame(draw)});
   resize.observe(node);
   return()=>{cancelAnimationFrame(frame.current);resize.disconnect()};
- },[hovered,lightbox,paused,photos.length,visible]);
+ },[hovered,lightbox,paused,photos.length,visible,view]);
 
  useEffect(()=>{
   if(!lightboxOpen)return;
@@ -99,12 +100,12 @@ export function PhotoOrbit({photos}:{photos:OrbitPhoto[]}){
  return <section className="photo-archive" id="photography">
   <header className="archive-head">
    <div><p className="label">Personal study / Photography</p><h2>Photography Orbit</h2></div>
-   <p>Fragments from Scandinavia, Copenhagen and Hong Kong revolve as a living contact sheet. Select any snapshot to see the complete frame.</p>
-   <div className="archive-controls"><button type="button" onClick={()=>setPaused(value=>!value)} aria-pressed={paused}>{paused?"Play orbit":"Pause orbit"}</button></div>
+   <p>Explore {photos.length} photographs from Scandinavia, Copenhagen, Hong Kong and a personal archive. Choose the orbit or browse a still grid. Select any photograph to see the complete frame.</p>
+   <div className="archive-controls"><div className="photo-view-switch" role="group" aria-label="Photography view"><button type="button" aria-pressed={view==="orbit"} onClick={()=>setView("orbit")}>Orbit</button><button type="button" aria-pressed={view==="grid"} onClick={()=>setView("grid")}>Grid</button></div>{view==="orbit"&&<button type="button" onClick={()=>setPaused(value=>!value)} aria-pressed={paused}>{paused?"Play orbit":"Pause orbit"}</button>}</div>
   </header>
-  <div className="orbit-stage" ref={stage} role="region" aria-roledescription="carousel" aria-label="Revolving photography archive" onMouseEnter={()=>setHovered(true)} onMouseLeave={()=>setHovered(false)}>
+  <div className={`orbit-stage ${view==="grid"?"photo-grid":""}`} ref={stage} role="region" aria-roledescription={view==="orbit"?"carousel":undefined} aria-label={view==="orbit"?"Revolving photography archive":"Photography grid"} onMouseEnter={()=>setHovered(true)} onMouseLeave={()=>setHovered(false)}>
    <div className="orbit-title" aria-live="off"><span>{current.title}</span><small>{current.place}</small></div>
-   {photos.map((photo,index)=><button className="orbit-snapshot" ref={node=>{items.current[index]=node}} type="button" key={photo.file} onClick={event=>open(index,event)} onKeyDown={event=>{if(event.key==="ArrowLeft"){event.preventDefault();moveFocus(index,-1)}if(event.key==="ArrowRight"){event.preventDefault();moveFocus(index,1)}}} onFocus={()=>setHovered(true)} onBlur={()=>setHovered(false)} tabIndex={index===active?0:-1} aria-label={`Open ${photo.title}, ${photo.place} full screen`}>
+   {photos.map((photo,index)=><button className="orbit-snapshot" ref={node=>{items.current[index]=node}} type="button" key={photo.file} onClick={event=>open(index,event)} onKeyDown={event=>{if(event.key==="ArrowLeft"){event.preventDefault();moveFocus(index,-1)}if(event.key==="ArrowRight"){event.preventDefault();moveFocus(index,1)}}} onFocus={()=>setHovered(true)} onBlur={()=>setHovered(false)} tabIndex={view==="grid"||index===active?0:-1} aria-label={`Open ${photo.title}, ${photo.place} full screen`}>
     <img src={`/photo-dump/web/${photo.file}`} alt="" loading={index<4?"eager":"lazy"} decoding="async"/>
    </button>)}
   </div>

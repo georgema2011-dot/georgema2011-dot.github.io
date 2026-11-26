@@ -99,12 +99,12 @@ export function createSymbioteScene(canvas:HTMLCanvasElement,host:HTMLElement){
   new THREE.Mesh(new THREE.SphereGeometry(.2,24,18),mainMaterial)
  ];
  lobes.forEach(lobe=>organism.add(lobe));
- organism.position.set(reduced?-2:-5.35,groundY+(reduced?.67:.24),0);
+ organism.position.set(reduced?0:-5.35,groundY+(reduced?.67:.24),0);
  organism.scale.setScalar(reduced?1:.35);
  scene.add(organism);
 
  const pointer=new THREE.Vector2(-.4,0);
- const target=new THREE.Vector3(-2,0,0);
+ const target=new THREE.Vector3(0,0,0);
  const velocity=new THREE.Vector3();
  const pull=new THREE.Vector3();
  const droplets:Droplet[]=[];
@@ -129,9 +129,20 @@ export function createSymbioteScene(canvas:HTMLCanvasElement,host:HTMLElement){
   target.z=THREE.MathUtils.clamp(-pointer.y*.7,-.8,.8);
  };
 
- const spawn=(event:PointerEvent)=>{
-  if(event.button!==0||reduced||introTime<introDuration)return;
-  setPointer(event);
+ const spawn=(event?:PointerEvent)=>{
+  if(event&&event.button!==0)return;
+  if(introTime<introDuration){organism.position.set(0,groundY+.67,0);organism.scale.setScalar(1)}
+  introTime=introDuration;
+  if(event)setPointer(event);
+  else{target.set(0,0,0);pointer.set(0,.3)}
+  if(reduced){
+   growthTarget=Math.min(1.68,growthTarget+.075);
+   growth=growthTarget;
+   organism.scale.setScalar(growth);
+   organism.position.y=groundY+.67*growth;
+   renderer.render(scene,camera);
+   return;
+  }
   if(droplets.length>=18){
    const old=droplets.shift();
    if(old)scene.remove(old.mesh);
@@ -150,6 +161,7 @@ export function createSymbioteScene(canvas:HTMLCanvasElement,host:HTMLElement){
   height=Math.max(1,Math.round(rect.height));
   renderer.setSize(width,height,false);
   camera.aspect=width/height;
+  camera.position.z=Math.max(8,6.8/camera.aspect);
   camera.updateProjectionMatrix();
   renderer.render(scene,camera);
  };
@@ -172,7 +184,7 @@ export function createSymbioteScene(canvas:HTMLCanvasElement,host:HTMLElement){
   const contraction=Math.max(0,crawl);
   const dx=target.x-organism.position.x;
   if(entering){
-   organism.position.x=THREE.MathUtils.lerp(-5.35,-2.05,introEase)+Math.sin(introProgress*Math.PI*6)*.07;
+   organism.position.x=THREE.MathUtils.lerp(-5.35,0,introEase)+Math.sin(introProgress*Math.PI*6)*.07;
    organism.position.z=Math.sin(introProgress*Math.PI*4)*.08;
    organism.position.y=groundY+.67*introScale*(1-contraction*.18);
    velocity.set(0,0,0);
@@ -259,7 +271,7 @@ export function createSymbioteScene(canvas:HTMLCanvasElement,host:HTMLElement){
  resize();
  if(reduced){renderer.render(scene,camera)}else{raf=requestAnimationFrame(update)}
 
- return()=>{
+ return {feed:()=>spawn(),dispose:()=>{
   cancelAnimationFrame(raf);
   observer.disconnect();
   host.removeEventListener("pointermove",setPointer);
@@ -273,5 +285,5 @@ export function createSymbioteScene(canvas:HTMLCanvasElement,host:HTMLElement){
    }
   });
   renderer.dispose();
- };
+ }};
 }

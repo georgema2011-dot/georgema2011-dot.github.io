@@ -47,19 +47,30 @@ function HeroSlideshow(){
 
 function BlobIntro(){
  const canvas=useRef<HTMLCanvasElement>(null);
+ const stage=useRef<HTMLDivElement>(null);
+ const feed=useRef<(()=>void)|null>(null);
+ const [ready,setReady]=useState(false);
+ const [fed,setFed]=useState(0);
+ const [unavailable,setUnavailable]=useState(false);
  useEffect(()=>{
   const element=canvas.current;
-  const host=element?.parentElement?.parentElement;
+  const host=stage.current;
   if(!element||!host)return;
   let disposed=false;
   let cleanup:(()=>void)|undefined;
   import("./symbiote-scene").then(({createSymbioteScene})=>{
    if(disposed)return;
-   cleanup=createSymbioteScene(element,host);
-  });
-  return()=>{disposed=true;cleanup?.()};
+   const scene=createSymbioteScene(element,host);
+   cleanup=scene.dispose;
+   feed.current=scene.feed;
+   setReady(true);
+  }).catch(()=>{if(!disposed)setUnavailable(true)});
+  return()=>{disposed=true;feed.current=null;cleanup?.()};
  },[]);
- return <div className="blob-intro symbiote-scene" aria-hidden="true"><canvas ref={canvas}/></div>
+ return <section className="idea-playground" aria-labelledby="idea-title">
+  <div className="idea-copy"><p className="label">A little idea, made tangible</p><h2 id="idea-title">Every design starts with an idea. Feed it.</h2><p>An idea grows when you give it attention. Feed this one and watch it take shape.</p><button type="button" className="idea-feed" disabled={!ready} onClick={()=>{feed.current?.();setFed(value=>value+1)}}>Feed the idea</button><p className="idea-status" role="status">{unavailable?"The interactive preview is unavailable on this device.":!ready?"Preparing your idea…":fed?"Keep feeding your curiosity.":"Ready when you are."}</p></div>
+  <div className="idea-stage" ref={stage}><canvas ref={canvas} aria-hidden="true"/><span className="idea-hint">Move to explore · Tap to feed</span></div>
+ </section>
 }
 
 export default function Home(){
@@ -67,7 +78,8 @@ export default function Home(){
   <a className="skip-link" href="#work">Skip to selected work</a>
   <nav className="site-nav" aria-label="Primary navigation"><a className="brand" href="#top">Ma / George</a><span className="nav-role">Spatial + Industrial Designer</span><div className="nav-links"><a href="#work">Projects</a><a href="#photography">Photography</a><a href="#contact">Contact</a></div></nav>
   <header className="hero">
-   <div className="hero-intro"><BlobIntro/><Label>Ma Shun Ngai George / Singapore / Portfolio 2026</Label><div className="hero-copy"><h1>Spatial + Industrial Designer</h1></div></div>
+   <div className="hero-intro"><Label>Ma Shun Ngai George / Singapore / Portfolio 2026</Label><div className="hero-copy"><h1>Spatial + Industrial Designer</h1></div></div>
+   <BlobIntro/>
    <HeroSlideshow/>
   </header>
   <section className="proof-strip" aria-label="Portfolio summary"><a href="#work"><strong>{projects.length}</strong><span>Case studies across interiors, products and services</span></a><a href="#experience"><strong>2</strong><span>Design internships at SpaceLogic and M Moser Associates</span></a><a href="#press"><strong>Press</strong><span>Featured by The Straits Times</span></a></section>

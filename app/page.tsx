@@ -51,7 +51,8 @@ function BlobIntro(){
  const feed=useRef<(()=>void)|null>(null);
  const pauseScene=useRef<((paused:boolean)=>void)|null>(null);
  const [ready,setReady]=useState(false);
- const [fed,setFed]=useState(0);
+ const [reaction,setReaction]=useState("");
+ const [spark,setSpark]=useState<{x:number;y:number;id:number}|null>(null);
  const [paused,setPaused]=useState(false);
  const [reducedMotion,setReducedMotion]=useState(false);
  const [unavailable,setUnavailable]=useState(false);
@@ -63,7 +64,7 @@ function BlobIntro(){
   let cleanup:(()=>void)|undefined;
   import("./symbiote-scene").then(({createSymbioteScene})=>{
    if(disposed)return;
-   const scene=createSymbioteScene(element,host,count=>setFed(count));
+   const scene=createSymbioteScene(element,host,count=>setReaction(["a little spark.","ooh. an idea.","that's the spirit.","keep it curious."][count%4]));
    cleanup=scene.dispose;
    feed.current=scene.feed;
    pauseScene.current=scene.setPaused;
@@ -73,9 +74,14 @@ function BlobIntro(){
   }).catch(()=>{if(!disposed)setUnavailable(true)});
   return()=>{disposed=true;feed.current=null;pauseScene.current=null;cleanup?.()};
  },[]);
+ useEffect(()=>{
+  if(!reaction&&!spark)return;
+  const timeout=setTimeout(()=>{setReaction("");setSpark(null)},1600);
+  return()=>clearTimeout(timeout);
+ },[reaction,spark]);
  return <section className="idea-playground" aria-labelledby="idea-title">
-  <div className="idea-copy"><p className="label">A little idea, made tangible</p><h2 id="idea-title">Every design starts with an idea. Feed it.</h2><p>An idea grows when you give it attention. Feed this one and watch it take shape.</p><div className="idea-actions"><button type="button" className="idea-feed" disabled={!ready||fed>=10} onClick={()=>feed.current?.()}>{fed>=10?"Idea fully grown":"Feed the idea"}</button><button type="button" className="idea-pause" disabled={!ready||reducedMotion} aria-pressed={paused} onClick={()=>{const next=!paused;pauseScene.current?.(next);setPaused(next)}}>{reducedMotion?"Reduced motion enabled":paused?"Resume animation":"Pause animation"}</button></div><p className="idea-status" role="status">{unavailable?"The interactive preview is unavailable on this device.":!ready?"Preparing your idea…":fed>=10?"Fully grown. Take that curiosity into the projects below.":fed?`Idea fed ${fed} of 10 times. Keep feeding your curiosity.`:"Ready when you are."}</p></div>
-  <div className="idea-stage" ref={stage}><canvas ref={canvas} aria-hidden="true"/><span className="idea-hint">Move to explore · Tap to feed</span></div>
+  <div className="idea-copy"><p className="label">A thought in progress</p><h2 id="idea-title">Every design starts with an idea.</h2><p>Give it a little curiosity. Let it take shape.</p></div>
+  <div className="idea-play"><div className="idea-stage" ref={stage} role="button" tabIndex={ready?0:-1} aria-label="Play with the idea. Tap or press Enter or Space to give it a little spark." aria-disabled={!ready} onPointerDown={event=>{if(!ready||event.button!==0)return;const rect=event.currentTarget.getBoundingClientRect();setSpark({x:event.clientX-rect.left,y:event.clientY-rect.top,id:performance.now()})}} onKeyDown={event=>{if(ready&&(event.key==="Enter"||event.key===" ")){event.preventDefault();if(!event.repeat){feed.current?.();setSpark({x:event.currentTarget.clientWidth/2,y:event.currentTarget.clientHeight*.45,id:performance.now()})}}}}><canvas ref={canvas} aria-hidden="true"/>{spark&&<span key={spark.id} className="idea-spark" aria-hidden="true" style={{left:spark.x,top:spark.y}}>✳</span>}<span className="idea-hint">{unavailable?"This little idea is taking a break.":!ready?"a thought is forming…":reaction||"psst. try a little tap."}</span></div><span className="idea-live" role="status">{reaction}</span><button type="button" className="idea-pause" disabled={!ready||reducedMotion} aria-label={reducedMotion?"Reduced motion enabled":paused?"Resume animation":"Pause animation"} aria-pressed={paused} onClick={()=>{const next=!paused;pauseScene.current?.(next);setPaused(next)}}>{reducedMotion?"still":paused?"play":"pause"}</button></div>
  </section>
 }
 

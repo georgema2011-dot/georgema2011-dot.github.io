@@ -135,7 +135,7 @@ export function createSymbioteScene(canvas:HTMLCanvasElement,host:HTMLElement,on
 
  const spawn=(event?:PointerEvent)=>{
   if(event&&event.button!==0)return;
-  if(feedCount>=maxFeeds)return;
+  if(feedCount>=maxFeeds){feedCount=0;growthTarget=1;growth=1}
   feedCount+=1;
   onFeed(feedCount);
   if(introTime<introDuration){organism.position.set(0,groundY+.67,0);organism.scale.setScalar(1)}

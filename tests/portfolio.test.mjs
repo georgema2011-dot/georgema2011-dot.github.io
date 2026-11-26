@@ -69,7 +69,10 @@ test("keeps the portfolio semantic, responsive and image-led", async () => {
   assert.equal((hipHtml.match(/class="board-view"/g) ?? []).length, 6);
   const coopResponse = await renderPath("/projects/nus-coop");
   assert.equal(coopResponse.status, 200);
-  assert.match(await coopResponse.text(), /Refocusing on the community\./);
+  const coopHtml = await coopResponse.text();
+  assert.match(coopHtml, /Turning retail touchpoints into a campus service\./);
+  assert.match(coopHtml, /Unimplemented concept proposal/);
+  assert.match(coopHtml, /View full proposal/);
   const bridgeResponse = await renderPath("/projects/visual-bridge");
   assert.equal(bridgeResponse.status, 200);
   const bridgeHtml = await bridgeResponse.text();

@@ -1,4 +1,15 @@
 {
+  "../../../Users/gma/Documents/ChatGPT/Portfolio/node_modules/.pnpm/vinext@1.0.0-beta.2_@vitejs+plugin-react@6.0.2_vite@8.0.13_@types+node@22.19.19_esbuild_7226e7a02af70088ff6dcd3c3cbc63e0/node_modules/vinext/dist/shims/layout-segment-context.js": {
+    "file": "_next/static/chunks/layout-segment-context-BWQwhkMM.js",
+    "name": "layout-segment-context",
+    "src": "../../../Users/gma/Documents/ChatGPT/Portfolio/node_modules/.pnpm/vinext@1.0.0-beta.2_@vitejs+plugin-react@6.0.2_vite@8.0.13_@types+node@22.19.19_esbuild_7226e7a02af70088ff6dcd3c3cbc63e0/node_modules/vinext/dist/shims/layout-segment-context.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime-C60lm6uB.js",
+      "virtual:vinext-app-browser-entry",
+      "_framework-BgSIrAUN.js"
+    ]
+  },
   "_framework-BgSIrAUN.js": {
     "file": "_next/static/chunks/framework-BgSIrAUN.js",
     "name": "framework",
@@ -11,7 +22,7 @@
     "name": "rolldown-runtime"
   },
   "app/board-image.tsx": {
-    "file": "_next/static/chunks/board-image-mM7VMqa2.js",
+    "file": "_next/static/chunks/board-image-DucO1-jO.js",
     "name": "board-image",
     "src": "app/board-image.tsx",
     "isDynamicEntry": true,
@@ -21,7 +32,7 @@
     ]
   },
   "app/page.tsx": {
-    "file": "_next/static/chunks/page-ByOpB-yR.js",
+    "file": "_next/static/chunks/page-DsBemKjj.js",
     "name": "page",
     "src": "app/page.tsx",
     "isDynamicEntry": true,
@@ -35,24 +46,13 @@
     ]
   },
   "app/symbiote-scene.ts": {
-    "file": "_next/static/chunks/symbiote-scene-BPFen3Uz.js",
+    "file": "_next/static/chunks/symbiote-scene-CA9ag3d-.js",
     "name": "symbiote-scene",
     "src": "app/symbiote-scene.ts",
     "isDynamicEntry": true
   },
-  "node_modules/.pnpm/vinext@1.0.0-beta.2_@vitejs_7226e7a02af70088ff6dcd3c3cbc63e0/node_modules/vinext/dist/shims/layout-segment-context.js": {
-    "file": "_next/static/chunks/layout-segment-context-Dhi_-ak4.js",
-    "name": "layout-segment-context",
-    "src": "node_modules/.pnpm/vinext@1.0.0-beta.2_@vitejs_7226e7a02af70088ff6dcd3c3cbc63e0/node_modules/vinext/dist/shims/layout-segment-context.js",
-    "isDynamicEntry": true,
-    "imports": [
-      "_rolldown-runtime-C60lm6uB.js",
-      "virtual:vinext-app-browser-entry",
-      "_framework-BgSIrAUN.js"
-    ]
-  },
   "virtual:vinext-app-browser-entry": {
-    "file": "_next/static/chunks/index-DJn9kReU.js",
+    "file": "_next/static/chunks/index-w5tMLbuG.js",
     "name": "index",
     "src": "virtual:vinext-app-browser-entry",
     "isEntry": true,
@@ -62,8 +62,8 @@
     ],
     "dynamicImports": [
       "virtual:vinext-app-browser-entry",
+      "../../../Users/gma/Documents/ChatGPT/Portfolio/node_modules/.pnpm/vinext@1.0.0-beta.2_@vitejs+plugin-react@6.0.2_vite@8.0.13_@types+node@22.19.19_esbuild_7226e7a02af70088ff6dcd3c3cbc63e0/node_modules/vinext/dist/shims/layout-segment-context.js",
       "app/page.tsx",
-      "node_modules/.pnpm/vinext@1.0.0-beta.2_@vitejs_7226e7a02af70088ff6dcd3c3cbc63e0/node_modules/vinext/dist/shims/layout-segment-context.js",
       "app/board-image.tsx"
     ]
   }

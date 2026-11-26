@@ -33,7 +33,7 @@ test("server-renders the redesigned portfolio", async () => {
   assert.match(html, /I design spaces, products and services around real behaviour/);
   assert.match(html, /The idea begins as a small form/);
   assert.match(html, /class="trio-grid"/);
-  assert.match(html, /All .*10.* projects/);
+  assert.match(html, /All .*11.* projects/);
   assert.match(html, /Work Index/);
   assert.match(html, /Photography/);
   assert.doesNotMatch(html, /Your site is taking shape|Building your site/i);
@@ -61,6 +61,12 @@ test("keeps the portfolio semantic, responsive and image-led", async () => {
   const somepenResponse = await renderPath("/projects/somepen");
   assert.equal(somepenResponse.status, 200);
   assert.match(await somepenResponse.text(), /Four colours\. One movement\./);
+  const hipResponse = await renderPath("/projects/hip-reduction-simulator");
+  assert.equal(hipResponse.status, 200);
+  const hipHtml = await hipResponse.text();
+  assert.match(hipHtml, /Hip Reduction Simulator/);
+  assert.match(hipHtml, /hip-reduction-simulator-presentation\.pdf/);
+  assert.equal((hipHtml.match(/class="board-view"/g) ?? []).length, 6);
   const coopResponse = await renderPath("/projects/nus-coop");
   assert.equal(coopResponse.status, 200);
   assert.match(await coopResponse.text(), /Refocusing on the community\./);
@@ -78,11 +84,11 @@ test("keeps the portfolio semantic, responsive and image-led", async () => {
   assert.doesNotMatch(css, /box-shadow|linear-gradient|radial-gradient/i);
 });
 
-test("keeps exactly ten unique project records", async () => {
+test("keeps exactly eleven unique project records", async () => {
   const projectData = await readFile(new URL("../app/projects-data.ts", import.meta.url), "utf8");
   const ids = [...projectData.matchAll(/\{ id:"([^"]+)"/g)].map((match) => match[1]);
-  assert.equal(ids.length, 10);
-  assert.equal(new Set(ids).size, 10);
+  assert.equal(ids.length, 11);
+  assert.equal(new Set(ids).size, 11);
 });
 
 test("publishes recruiter and project metadata with production URLs", async () => {

@@ -63,7 +63,7 @@ for record in re.split(r'\{ id:',src)[1:]:
         p['boards']=[board for board in p['boards'] if board[0]!='/projects/nus-coop/page-2.webp']
     p['facts']=re.findall(r'label:"([^"]+)",value:"([^"]+)"',record)
     projects.append(p)
-assert len(projects)==10 and len({p['id'] for p in projects})==10 and all(p['boards'] for p in projects)
+assert len(projects)==11 and len({p['id'] for p in projects})==11 and all(p['boards'] for p in projects)
 for ident,ix in [('masks',2),('watergrounds',1)]:
     p=next(p for p in projects if p['id']==ident)
     p['boards'].insert(0,p['boards'].pop(ix))
@@ -95,11 +95,14 @@ for p in projects:
     frame(f"PROJECT {p['number']}")
     text(36,522,p['discipline'].upper()+' / '+p['year'].upper(),9)
     block(36,438,p['title'],570,46 if p['id']=='visual-bridge' else 65,'Display',54 if p['id']=='visual-bridge' else 70)
+    compact_copy=len(p['description'])+sum(len(value) for _,value in p['facts'])>400
+    description_size,description_leading=(14,17) if compact_copy else (17,22)
+    fact_size,fact_leading,fact_gap=(13,16,9) if compact_copy else (15,18,13)
     y=block(650,485,p['statement'],274,24,'Display',28)-18
-    y=block(650,y,p['description'],274,17,'DisplayRegular',22)-18
+    y=block(650,y,p['description'],274,description_size,'DisplayRegular',description_leading)-18
     for k,v in p['facts']:
         text(650,y,k.upper(),11,'Display')
-        y=block(650,y-19,v,274,15,'DisplayRegular',18)-13
+        y=block(650,y-19,v,274,fact_size,'DisplayRegular',fact_leading)-fact_gap
     if p['id']=='nus-coop':
         y=block(650,y,'Team: Ma Shun Ngai George, Ong Zhi Xing and Tew Rui En',274,15,'DisplayRegular',18)
     assert y>73, p['title']

@@ -55,6 +55,34 @@ export const boardDimensions: Record<string, { width: number; height: number }> 
     "width": 984,
     "height": 879
   },
+  "/projects/hip-reduction-simulator/page-07.webp": {
+    "width": 3600,
+    "height": 2025
+  },
+  "/projects/hip-reduction-simulator/page-08.webp": {
+    "width": 3600,
+    "height": 2025
+  },
+  "/projects/hip-reduction-simulator/page-09.webp": {
+    "width": 3600,
+    "height": 2025
+  },
+  "/projects/hip-reduction-simulator/page-11.webp": {
+    "width": 3600,
+    "height": 2025
+  },
+  "/projects/hip-reduction-simulator/page-14.webp": {
+    "width": 3600,
+    "height": 2025
+  },
+  "/projects/hip-reduction-simulator/page-16.webp": {
+    "width": 3600,
+    "height": 2025
+  },
+  "/projects/hip-reduction-simulator/preview.webp": {
+    "width": 3600,
+    "height": 2025
+  },
   "/projects/nus-coop/page-18.webp": {
     "width": 1920,
     "height": 1080

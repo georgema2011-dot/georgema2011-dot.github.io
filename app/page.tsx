@@ -23,6 +23,7 @@ const previews = [
  { id: "somepen", label: "Industrial design", title: "SOMEPEN", alt: "A transparent four-colour pen worn around a finger" },
  { id: "visual-bridge", label: "Spatial computing", title: "Visual Bridge", alt: "A layered knee model with floating anatomy controls" },
  { id: "sca-lab", label: "Spatial + interaction design", title: "SCA-Lab", alt: "Interior rendering of the SCA-Lab viewing and control area overlooking the track" },
+ { id: "hip-reduction-simulator", label: "Healthcare product", title: "Hip Reduction Simulator", alt: "Physical hip-reduction training simulator with lower limb model and resistance mechanism" },
 ];
 const gallery = [...previews.slice(0,3).map(preview => projects.find(item => item.id === preview.id)!),
  ...projects.filter(item => !previews.slice(0,3).some(preview => preview.id === item.id))];

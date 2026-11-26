@@ -16,6 +16,7 @@ export function BoardImage({src,alt,caption,width,height,eager}:Props){
   const previous=document.body.style.overflow;
   const main=document.querySelector("main");
   const wasInert=main?.inert??false;
+ const activeOpener=opener.current;
   if(main)main.inert=true;
   document.body.style.overflow="hidden";
   const key=(event:KeyboardEvent)=>{
@@ -34,7 +35,7 @@ export function BoardImage({src,alt,caption,width,height,eager}:Props){
    document.removeEventListener("keydown",key);
    document.body.style.overflow=previous;
    if(main)main.inert=wasInert;
-   opener.current?.focus();
+   activeOpener?.focus();
   };
  },[open]);
  return <>
@@ -44,7 +45,7 @@ export function BoardImage({src,alt,caption,width,height,eager}:Props){
   </a>
   {open&&createPortal(<div className={`board-zoom ${zoomed?"is-zoomed":""}`} role="dialog" aria-modal="true" aria-labelledby={titleId} ref={dialog}>
    <div className="board-zoom-toolbar"><button type="button" onClick={()=>setOpen(false)}>Close image</button><button type="button" aria-pressed={zoomed} onClick={()=>setZoomed(value=>!value)}>{zoomed?"Fit to screen":"Actual size"}</button><a href={src} target="_blank" rel="noreferrer">Open original</a></div>
-   <div className="board-zoom-stage" tabIndex={0} role="region" aria-label="Image viewing area. At actual size, scroll to explore the drawing."><img src={src} alt={alt} width={width} height={height} style={zoomed?{width}:undefined}/></div>
+   <div className="board-zoom-stage" role="region" aria-label="Image viewing area. At actual size, scroll to explore the drawing."><img src={src} alt={alt} width={width} height={height} style={zoomed?{width}:undefined}/></div>
    <div className="board-zoom-caption"><p id={titleId}>{caption}</p><p>{zoomed?"Scroll to explore the drawing. Choose Fit to screen to see the whole board.":"Choose Actual size to inspect details. Press Escape to close."}</p></div>
   </div>,document.body)}
  </>;

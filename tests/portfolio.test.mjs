@@ -48,6 +48,8 @@ test("keeps the portfolio semantic, responsive and image-led", async () => {
   assert.match(page, /<main id="top">/);
   assert.match(page, /aria-label="Primary navigation"/);
   assert.match(await (await render()).text(), /aria-roledescription="carousel"/);
+  assert.match(page, /Pause project carousel/);
+  assert.match(page, /\),8000\)/);
   assert.match(orbit, /Pause orbit/);
   assert.match(orbit, /aria-modal="true"/);
   const projectResponse = await renderPath("/projects/japandi");

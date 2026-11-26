@@ -29,9 +29,28 @@ const gallery = [...previews.slice(0,3).map(preview => projects.find(item => ite
 
 function HeroSlideshow(){
  const [start,setStart] = useState(0);
+ const [paused,setPaused] = useState(false);
+ const [hoveredOrFocused,setHoveredOrFocused] = useState(false);
+ const [pageVisible,setPageVisible] = useState(true);
+ const [reducedMotion,setReducedMotion] = useState(false);
  const move = (step:number) => setStart(index => (index + step + gallery.length) % gallery.length);
- return <section className="project-trio" aria-label="Selected projects" aria-roledescription="carousel">
-  <div className="trio-grid" aria-live="polite">
+ useEffect(()=>{
+  const query=window.matchMedia("(prefers-reduced-motion: reduce)");
+  const update=()=>setReducedMotion(query.matches);
+  update();
+  query.addEventListener("change",update);
+  const updateVisibility=()=>setPageVisible(!document.hidden);
+  updateVisibility();
+  document.addEventListener("visibilitychange",updateVisibility);
+  return()=>{query.removeEventListener("change",update);document.removeEventListener("visibilitychange",updateVisibility)};
+ },[]);
+ useEffect(()=>{
+  if(paused||hoveredOrFocused||reducedMotion||!pageVisible)return;
+  const interval=window.setInterval(()=>move(1),8000);
+  return()=>window.clearInterval(interval);
+ },[paused,hoveredOrFocused,reducedMotion,pageVisible]);
+ return <section className="project-trio" aria-label="Selected projects" aria-roledescription="carousel" onMouseEnter={()=>setHoveredOrFocused(true)} onMouseLeave={()=>setHoveredOrFocused(false)} onFocusCapture={()=>setHoveredOrFocused(true)} onBlurCapture={event=>{if(!event.currentTarget.contains(event.relatedTarget as Node|null))setHoveredOrFocused(false)}}>
+  <div className="trio-grid" aria-live="off">
    {[0,1,2].map(offset => {
     const item = gallery[(start + offset) % gallery.length];
     const preview = previews.find(entry => entry.id === item.id);
@@ -41,7 +60,7 @@ function HeroSlideshow(){
     </a>;
    })}
   </div>
-  <div className="trio-nav"><a href="#work">All {projects.length} projects ↓</a><button onClick={()=>move(-1)} aria-label="Previous projects">←</button><button onClick={()=>move(1)} aria-label="Next projects">→</button></div>
+  <div className="trio-nav"><a href="#work">All {projects.length} projects ↓</a><button type="button" className="trio-pause" onClick={()=>setPaused(value=>!value)} aria-pressed={paused} aria-label={reducedMotion?"Reduced motion is enabled":paused?"Play project carousel":"Pause project carousel"} disabled={reducedMotion}>{reducedMotion?"still":paused?"play":"pause"}</button><button type="button" onClick={()=>move(-1)} aria-label="Previous projects">←</button><button type="button" onClick={()=>move(1)} aria-label="Next projects">→</button></div>
  </section>
 }
 

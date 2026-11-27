@@ -97,7 +97,9 @@ test("ships the SOMPEN model as a lazy, locally decoded interactive asset", asyn
   assert.match(viewer, /somepen-v2\.glb/);
   assert.match(viewer, /autoRotate/);
   assert.match(viewer, /prefers-reduced-motion/);
-  assert.match(viewer, /Pause motion/);
+  assert.match(viewer, /enableZoom = false/);
+  assert.match(viewer, /resumeAfterInput/);
+  assert.doesNotMatch(viewer, /Pause motion/);
   assert.match(viewer, /embeddedLights/);
   assert.match(viewer, /turntable\.rotation\.y/);
   assert.match(viewer, /AgXToneMapping/);

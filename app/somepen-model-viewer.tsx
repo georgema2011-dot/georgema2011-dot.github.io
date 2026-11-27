@@ -4,11 +4,7 @@ import { useEffect, useRef, useState } from "react";
 
 export function SomepenModelViewer() {
   const stage = useRef<HTMLDivElement>(null);
-  const resetView = useRef<(() => void) | null>(null);
-  const toggleMotion = useRef<(() => void) | null>(null);
-  const [status, setStatus] = useState("Model loads when this section enters view.");
-  const [ready, setReady] = useState(false);
-  const [motionEnabled, setMotionEnabled] = useState(false);
+  const [status, setStatus] = useState("");
 
   useEffect(() => {
     const host = stage.current;
@@ -21,7 +17,6 @@ export function SomepenModelViewer() {
     const loadModel = async () => {
       if (started) return;
       started = true;
-      setStatus("Loading interactive model…");
 
       try {
         const [THREE, { GLTFLoader }, { DRACOLoader }, { OrbitControls }, { RoomEnvironment }] = await Promise.all([
@@ -50,6 +45,7 @@ export function SomepenModelViewer() {
         const camera = new THREE.PerspectiveCamera(35, 1, 0.01, 100);
         const controls = new OrbitControls(camera, canvas);
         controls.enablePan = false;
+        controls.enableZoom = false;
         controls.enableDamping = true;
         controls.dampingFactor = 0.06;
         controls.autoRotate = false;
@@ -114,6 +110,7 @@ export function SomepenModelViewer() {
         const initialPosition = new THREE.Vector3(distance * 0.78, distance * 0.4, distance);
         const render = () => renderer.render(scene, camera);
         let animationFrame = 0;
+        let resumeTimer = 0;
         let sectionInView = true;
         const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
         let turntableRotates = !reducedMotion.matches;
@@ -135,19 +132,15 @@ export function SomepenModelViewer() {
             animationFrame = requestAnimationFrame(animate);
           }
         };
-        const pauseMotion = (message?: string) => {
+        const pauseMotion = () => {
           turntableRotates = false;
-          setMotionEnabled(false);
           if (animationFrame) cancelAnimationFrame(animationFrame);
           animationFrame = 0;
-          if (message) setStatus(message);
           render();
         };
         const resumeMotion = () => {
           if (reducedMotion.matches) return;
           turntableRotates = true;
-          setMotionEnabled(true);
-          setStatus("Model ready. Turntable rotating — drag to inspect.");
           startAnimation();
           render();
         };
@@ -172,11 +165,18 @@ export function SomepenModelViewer() {
         const resizeObserver = new ResizeObserver(resize);
         resizeObserver.observe(host);
         const pauseForInput = () => {
-          if (turntableRotates) pauseMotion("Model ready. Manual view active.");
+          window.clearTimeout(resumeTimer);
+          if (turntableRotates) pauseMotion();
+        };
+        const resumeAfterInput = () => {
+          if (reducedMotion.matches) return;
+          window.clearTimeout(resumeTimer);
+          resumeTimer = window.setTimeout(resumeMotion, 1100);
         };
         const onVisibilityChange = () => startAnimation();
         const onMotionPreferenceChange = () => {
-          if (reducedMotion.matches) pauseMotion("Model ready. Rotation paused to respect your motion preference.");
+          if (reducedMotion.matches) pauseMotion();
+          else resumeMotion();
         };
         const modelVisibilityObserver = new IntersectionObserver(([entry]) => {
           sectionInView = entry.isIntersecting;
@@ -185,31 +185,22 @@ export function SomepenModelViewer() {
         modelVisibilityObserver.observe(host);
         controls.addEventListener("change", render);
         controls.addEventListener("start", pauseForInput);
+        controls.addEventListener("end", resumeAfterInput);
         document.addEventListener("visibilitychange", onVisibilityChange);
         reducedMotion.addEventListener("change", onMotionPreferenceChange);
         fitView();
         resize();
 
-        resetView.current = fitView;
-        toggleMotion.current = () => {
-          if (turntableRotates) pauseMotion("Model ready. Rotation paused.");
-          else resumeMotion();
-        };
-        setReady(true);
-        setMotionEnabled(turntableRotates);
-        setStatus(turntableRotates
-          ? "Model ready. Turntable rotating — drag to inspect."
-          : "Model ready. Drag to rotate and scroll to zoom.");
         startAnimation();
 
         disposeScene = () => {
-          resetView.current = null;
-          toggleMotion.current = null;
+          window.clearTimeout(resumeTimer);
           if (animationFrame) cancelAnimationFrame(animationFrame);
           resizeObserver.disconnect();
           modelVisibilityObserver.disconnect();
           controls.removeEventListener("change", render);
           controls.removeEventListener("start", pauseForInput);
+          controls.removeEventListener("end", resumeAfterInput);
           document.removeEventListener("visibilitychange", onVisibilityChange);
           reducedMotion.removeEventListener("change", onMotionPreferenceChange);
           controls.dispose();
@@ -255,14 +246,10 @@ export function SomepenModelViewer() {
       <p className="label">Interactive model</p>
       <h2 id="somepen-model-title">Turn the idea over.</h2>
       <p>A web-optimised 3D model of the finger-mounted, four-colour writing-tool concept.</p>
-      <p className="somepen-model-instructions">It turns slowly until you take control. Drag to rotate. Scroll or pinch to zoom.</p>
+      <p className="somepen-model-instructions">A quiet 360° view. Drag to inspect.</p>
     </div>
     <div className="somepen-model-stage" ref={stage} role="group" aria-label="Interactive SOMPEN model viewer">
-      <p className="somepen-model-status" role="status">{status}</p>
-      <div className="somepen-model-controls">
-        <button type="button" onClick={() => toggleMotion.current?.()} disabled={!ready} aria-pressed={motionEnabled}>{motionEnabled ? "Pause motion" : "Play motion"}</button>
-        <button type="button" onClick={() => resetView.current?.()} disabled={!ready}>Reset view</button>
-      </div>
+      {status && <p className="somepen-model-status" role="status">{status}</p>}
     </div>
   </section>;
 }

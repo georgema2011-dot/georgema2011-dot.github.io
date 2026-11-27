@@ -40,35 +40,28 @@ export function SomepenModelViewer() {
         const renderer = new THREE.WebGLRenderer({ canvas, alpha: false, antialias: true, powerPreference: "high-performance" });
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
         renderer.outputColorSpace = THREE.SRGBColorSpace;
-        renderer.toneMapping = THREE.ACESFilmicToneMapping;
-        renderer.toneMappingExposure = 0.62;
+        renderer.toneMapping = THREE.AgXToneMapping;
+        renderer.toneMappingExposure = 0.86;
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
         const scene = new THREE.Scene();
         scene.background = new THREE.Color(0x20211f);
         const camera = new THREE.PerspectiveCamera(35, 1, 0.01, 100);
         const controls = new OrbitControls(camera, canvas);
         controls.enablePan = false;
-        controls.enableDamping = false;
-        controls.autoRotate = !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-        controls.autoRotateSpeed = 0.35;
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.06;
+        controls.autoRotate = false;
         controls.minPolarAngle = Math.PI * 0.16;
         controls.maxPolarAngle = Math.PI * 0.84;
 
         const pmrem = new THREE.PMREMGenerator(renderer);
         const room = new RoomEnvironment();
         scene.environment = pmrem.fromScene(room).texture;
-        scene.environmentIntensity = 0.18;
+        scene.environmentIntensity = 0.12;
         room.dispose();
         pmrem.dispose();
-
-        const studioAmbient = new THREE.HemisphereLight(0xdde7ff, 0x0b0c0c, 0.16);
-        const studioKey = new THREE.DirectionalLight(0xfff1dc, 0.85);
-        studioKey.position.set(-4, -5, 6);
-        const studioFill = new THREE.DirectionalLight(0xc8dcff, 0.18);
-        studioFill.position.set(5, -1, 3);
-        const studioRim = new THREE.DirectionalLight(0xffffff, 0.65);
-        studioRim.position.set(1, 5, 5);
-        scene.add(studioAmbient, studioKey, studioFill, studioRim);
 
         const draco = new DRACOLoader();
         draco.setDecoderPath("/draco/");
@@ -87,29 +80,64 @@ export function SomepenModelViewer() {
         }
 
         const model = gltf.scene;
-        scene.add(model);
         const bounds = new THREE.Box3().setFromObject(model);
         const centre = bounds.getCenter(new THREE.Vector3());
         const size = bounds.getSize(new THREE.Vector3());
+        model.position.sub(centre);
+        model.updateMatrixWorld(true);
+
+        const embeddedLights: THREE.Light[] = [];
+        model.traverse((item) => {
+          if (item instanceof THREE.Light) embeddedLights.push(item);
+          if (item instanceof THREE.Mesh) {
+            item.castShadow = true;
+            item.receiveShadow = true;
+          }
+        });
+        embeddedLights.forEach((light) => {
+          const worldPosition = light.getWorldPosition(new THREE.Vector3());
+          const worldQuaternion = light.getWorldQuaternion(new THREE.Quaternion());
+          light.parent?.remove(light);
+          scene.add(light);
+          light.position.copy(worldPosition);
+          light.quaternion.copy(worldQuaternion);
+          if (light instanceof THREE.SpotLight) {
+            light.castShadow = true;
+            light.shadow.mapSize.set(1024, 1024);
+            light.shadow.bias = -0.0001;
+          }
+        });
+
+        const turntable = new THREE.Group();
+        turntable.add(model);
+        scene.add(turntable);
         const distance = Math.max(size.x, size.y, size.z) * 1.5;
-        const initialPosition = centre.clone().add(new THREE.Vector3(distance * 0.78, distance * 0.4, distance));
+        const initialPosition = new THREE.Vector3(distance * 0.78, distance * 0.4, distance);
         const render = () => renderer.render(scene, camera);
         let animationFrame = 0;
         let sectionInView = true;
         const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-        const shouldAnimate = () => controls.autoRotate && sectionInView && document.visibilityState === "visible";
-        const animate = () => {
+        let turntableRotates = !reducedMotion.matches;
+        let previousFrameTime = 0;
+        const shouldAnimate = () => turntableRotates && sectionInView && document.visibilityState === "visible";
+        const animate = (frameTime: number) => {
           animationFrame = 0;
           if (!shouldAnimate()) return;
+          const frameDelta = previousFrameTime ? Math.min((frameTime - previousFrameTime) / 1000, 0.05) : 0;
+          previousFrameTime = frameTime;
+          turntable.rotation.y = (turntable.rotation.y + frameDelta * 0.16) % (Math.PI * 2);
           controls.update();
           render();
           animationFrame = requestAnimationFrame(animate);
         };
         const startAnimation = () => {
-          if (shouldAnimate() && !animationFrame) animationFrame = requestAnimationFrame(animate);
+          if (shouldAnimate() && !animationFrame) {
+            previousFrameTime = 0;
+            animationFrame = requestAnimationFrame(animate);
+          }
         };
         const pauseMotion = (message?: string) => {
-          controls.autoRotate = false;
+          turntableRotates = false;
           setMotionEnabled(false);
           if (animationFrame) cancelAnimationFrame(animationFrame);
           animationFrame = 0;
@@ -117,16 +145,18 @@ export function SomepenModelViewer() {
           render();
         };
         const resumeMotion = () => {
-          controls.autoRotate = true;
+          if (reducedMotion.matches) return;
+          turntableRotates = true;
           setMotionEnabled(true);
-          setStatus("Model ready. Rotating slowly — drag to take control.");
+          setStatus("Model ready. Turntable rotating — drag to inspect.");
           startAnimation();
           render();
         };
         const fitView = () => {
+          turntable.rotation.y = 0;
           camera.position.copy(initialPosition);
-          camera.lookAt(centre);
-          controls.target.copy(centre);
+          camera.lookAt(0, 0, 0);
+          controls.target.set(0, 0, 0);
           controls.minDistance = distance * 0.5;
           controls.maxDistance = distance * 2.25;
           controls.update();
@@ -143,7 +173,7 @@ export function SomepenModelViewer() {
         const resizeObserver = new ResizeObserver(resize);
         resizeObserver.observe(host);
         const pauseForInput = () => {
-          if (controls.autoRotate) pauseMotion("Model ready. Manual view active.");
+          if (turntableRotates) pauseMotion("Model ready. Manual view active.");
         };
         const onVisibilityChange = () => startAnimation();
         const onMotionPreferenceChange = () => {
@@ -163,13 +193,13 @@ export function SomepenModelViewer() {
 
         resetView.current = fitView;
         toggleMotion.current = () => {
-          if (controls.autoRotate) pauseMotion("Model ready. Rotation paused.");
+          if (turntableRotates) pauseMotion("Model ready. Rotation paused.");
           else resumeMotion();
         };
         setReady(true);
-        setMotionEnabled(controls.autoRotate);
-        setStatus(controls.autoRotate
-          ? "Model ready. Rotating slowly — drag to take control."
+        setMotionEnabled(turntableRotates);
+        setStatus(turntableRotates
+          ? "Model ready. Turntable rotating — drag to inspect."
           : "Model ready. Drag to rotate and scroll to zoom.");
         startAnimation();
 

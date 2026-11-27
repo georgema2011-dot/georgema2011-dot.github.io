@@ -196,7 +196,7 @@ body h1, body h2, body h3, body .hero-copy h1,
 .somepen-model-stage{position:relative;min-height:540px;overflow:hidden;background:#20211f}
 .somepen-model-stage canvas{display:block;width:100%;height:100%;cursor:grab;touch-action:none}
 .somepen-model-stage canvas:active{cursor:grabbing}
-.somepen-model-status{position:absolute;z-index:1;inset:auto 18px 18px 18px;max-width:34ch;margin:0;padding:10px 12px;background:var(--paper);border:1px dotted var(--ink);font-family:var(--body);font-size:.875rem;line-height:1.4}
+.somepen-model-status{position:absolute;z-index:1;inset:auto 18px 18px 18px;max-width:34ch;margin:0;padding:10px 12px;background:rgb(32 33 31 / .86);border:1px solid rgb(255 255 255 / .32);color:#f5f5f0;font-family:var(--body);font-size:.875rem;line-height:1.4;backdrop-filter:blur(10px)}
 .somepen-model-controls{position:absolute;z-index:1;top:18px;right:18px;display:flex;gap:8px}
 .somepen-model-controls button{min-height:44px;padding:10px 12px;border:var(--hairline);background:var(--paper);color:var(--ink);font-family:var(--body);font-size:.75rem;letter-spacing:.04em;cursor:pointer}
 .somepen-model-controls button:hover:not(:disabled),.somepen-model-controls button:focus-visible{background:var(--ink);color:var(--paper);outline:0}

@@ -95,6 +95,9 @@ test("ships the SOMPEN model as a lazy, locally decoded interactive asset", asyn
   assert.match(viewer, /IntersectionObserver/);
   assert.match(viewer, /DRACOLoader/);
   assert.match(viewer, /somepen-web\.glb/);
+  assert.match(viewer, /autoRotate/);
+  assert.match(viewer, /prefers-reduced-motion/);
+  assert.match(viewer, /Pause motion/);
   assert.ok(model.size > 1_000_000);
 });
 

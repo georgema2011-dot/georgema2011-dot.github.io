@@ -5,8 +5,10 @@ import { useEffect, useRef, useState } from "react";
 export function SomepenModelViewer() {
   const stage = useRef<HTMLDivElement>(null);
   const resetView = useRef<(() => void) | null>(null);
+  const toggleMotion = useRef<(() => void) | null>(null);
   const [status, setStatus] = useState("Model loads when this section enters view.");
   const [ready, setReady] = useState(false);
+  const [motionEnabled, setMotionEnabled] = useState(false);
 
   useEffect(() => {
     const host = stage.current;
@@ -46,6 +48,8 @@ export function SomepenModelViewer() {
         const controls = new OrbitControls(camera, canvas);
         controls.enablePan = false;
         controls.enableDamping = false;
+        controls.autoRotate = !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        controls.autoRotateSpeed = 0.35;
         controls.minPolarAngle = Math.PI * 0.16;
         controls.maxPolarAngle = Math.PI * 0.84;
 
@@ -84,6 +88,35 @@ export function SomepenModelViewer() {
         const distance = Math.max(size.x, size.y, size.z) * 1.18;
         const initialPosition = centre.clone().add(new THREE.Vector3(distance * 0.78, distance * 0.4, distance));
         const render = () => renderer.render(scene, camera);
+        let animationFrame = 0;
+        let sectionInView = true;
+        const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+        const shouldAnimate = () => controls.autoRotate && sectionInView && document.visibilityState === "visible";
+        const animate = () => {
+          animationFrame = 0;
+          if (!shouldAnimate()) return;
+          controls.update();
+          render();
+          animationFrame = requestAnimationFrame(animate);
+        };
+        const startAnimation = () => {
+          if (shouldAnimate() && !animationFrame) animationFrame = requestAnimationFrame(animate);
+        };
+        const pauseMotion = (message?: string) => {
+          controls.autoRotate = false;
+          setMotionEnabled(false);
+          if (animationFrame) cancelAnimationFrame(animationFrame);
+          animationFrame = 0;
+          if (message) setStatus(message);
+          render();
+        };
+        const resumeMotion = () => {
+          controls.autoRotate = true;
+          setMotionEnabled(true);
+          setStatus("Model ready. Rotating slowly — drag to take control.");
+          startAnimation();
+          render();
+        };
         const fitView = () => {
           camera.position.copy(initialPosition);
           camera.lookAt(centre);
@@ -103,18 +136,47 @@ export function SomepenModelViewer() {
         };
         const resizeObserver = new ResizeObserver(resize);
         resizeObserver.observe(host);
+        const pauseForInput = () => {
+          if (controls.autoRotate) pauseMotion("Model ready. Manual view active.");
+        };
+        const onVisibilityChange = () => startAnimation();
+        const onMotionPreferenceChange = () => {
+          if (reducedMotion.matches) pauseMotion("Model ready. Rotation paused to respect your motion preference.");
+        };
+        const modelVisibilityObserver = new IntersectionObserver(([entry]) => {
+          sectionInView = entry.isIntersecting;
+          startAnimation();
+        }, { threshold: 0.1 });
+        modelVisibilityObserver.observe(host);
         controls.addEventListener("change", render);
+        controls.addEventListener("start", pauseForInput);
+        document.addEventListener("visibilitychange", onVisibilityChange);
+        reducedMotion.addEventListener("change", onMotionPreferenceChange);
         fitView();
         resize();
 
         resetView.current = fitView;
+        toggleMotion.current = () => {
+          if (controls.autoRotate) pauseMotion("Model ready. Rotation paused.");
+          else resumeMotion();
+        };
         setReady(true);
-        setStatus("Model ready. Drag to rotate and scroll to zoom.");
+        setMotionEnabled(controls.autoRotate);
+        setStatus(controls.autoRotate
+          ? "Model ready. Rotating slowly — drag to take control."
+          : "Model ready. Drag to rotate and scroll to zoom.");
+        startAnimation();
 
         disposeScene = () => {
           resetView.current = null;
+          toggleMotion.current = null;
+          if (animationFrame) cancelAnimationFrame(animationFrame);
           resizeObserver.disconnect();
+          modelVisibilityObserver.disconnect();
           controls.removeEventListener("change", render);
+          controls.removeEventListener("start", pauseForInput);
+          document.removeEventListener("visibilitychange", onVisibilityChange);
+          reducedMotion.removeEventListener("change", onMotionPreferenceChange);
           controls.dispose();
           scene.traverse((item) => {
             if (item instanceof THREE.Mesh) {
@@ -157,11 +219,14 @@ export function SomepenModelViewer() {
       <p className="label">Interactive model</p>
       <h2 id="somepen-model-title">Turn the idea over.</h2>
       <p>A web-optimised 3D model of the finger-mounted, four-colour writing-tool concept.</p>
-      <p className="somepen-model-instructions">Drag to rotate. Scroll or pinch to zoom. The project boards below remain the full visual record.</p>
+      <p className="somepen-model-instructions">It turns slowly until you take control. Drag to rotate. Scroll or pinch to zoom.</p>
     </div>
     <div className="somepen-model-stage" ref={stage} role="group" aria-label="Interactive SOMPEN model viewer">
       <p className="somepen-model-status" role="status">{status}</p>
-      <button type="button" onClick={() => resetView.current?.()} disabled={!ready}>Reset view</button>
+      <div className="somepen-model-controls">
+        <button type="button" onClick={() => toggleMotion.current?.()} disabled={!ready} aria-pressed={motionEnabled}>{motionEnabled ? "Pause motion" : "Play motion"}</button>
+        <button type="button" onClick={() => resetView.current?.()} disabled={!ready}>Reset view</button>
+      </div>
     </div>
   </section>;
 }

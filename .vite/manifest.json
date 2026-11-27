@@ -1,4 +1,84 @@
 {
+  "../../../Users/gma/Documents/ChatGPT/Portfolio/node_modules/.pnpm/three@0.185.1/node_modules/three/build/three.module.js": {
+    "file": "_next/static/chunks/three.module-BaoEZdhJ.js",
+    "name": "three.module",
+    "src": "../../../Users/gma/Documents/ChatGPT/Portfolio/node_modules/.pnpm/three@0.185.1/node_modules/three/build/three.module.js",
+    "isDynamicEntry": true
+  },
+  "../../../Users/gma/Documents/ChatGPT/Portfolio/node_modules/.pnpm/three@0.185.1/node_modules/three/examples/jsm/controls/OrbitControls.js": {
+    "file": "_next/static/chunks/OrbitControls-D1Y4fgPe.js",
+    "name": "OrbitControls",
+    "src": "../../../Users/gma/Documents/ChatGPT/Portfolio/node_modules/.pnpm/three@0.185.1/node_modules/three/examples/jsm/controls/OrbitControls.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "../../../Users/gma/Documents/ChatGPT/Portfolio/node_modules/.pnpm/three@0.185.1/node_modules/three/build/three.module.js"
+    ]
+  },
+  "../../../Users/gma/Documents/ChatGPT/Portfolio/node_modules/.pnpm/three@0.185.1/node_modules/three/examples/jsm/environments/RoomEnvironment.js": {
+    "file": "_next/static/chunks/RoomEnvironment-BI3MvaZw.js",
+    "name": "RoomEnvironment",
+    "src": "../../../Users/gma/Documents/ChatGPT/Portfolio/node_modules/.pnpm/three@0.185.1/node_modules/three/examples/jsm/environments/RoomEnvironment.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "../../../Users/gma/Documents/ChatGPT/Portfolio/node_modules/.pnpm/three@0.185.1/node_modules/three/build/three.module.js"
+    ]
+  },
+  "../../../Users/gma/Documents/ChatGPT/Portfolio/node_modules/.pnpm/three@0.185.1/node_modules/three/examples/jsm/libs/draco/draco_decoder.js": {
+    "file": "_next/static/media/draco_decoder.fzg4nYZr.js",
+    "src": "../../../Users/gma/Documents/ChatGPT/Portfolio/node_modules/.pnpm/three@0.185.1/node_modules/three/examples/jsm/libs/draco/draco_decoder.js"
+  },
+  "../../../Users/gma/Documents/ChatGPT/Portfolio/node_modules/.pnpm/three@0.185.1/node_modules/three/examples/jsm/libs/draco/draco_decoder.wasm": {
+    "file": "_next/static/media/draco_decoder.C32yEggz.wasm",
+    "src": "../../../Users/gma/Documents/ChatGPT/Portfolio/node_modules/.pnpm/three@0.185.1/node_modules/three/examples/jsm/libs/draco/draco_decoder.wasm"
+  },
+  "../../../Users/gma/Documents/ChatGPT/Portfolio/node_modules/.pnpm/three@0.185.1/node_modules/three/examples/jsm/libs/draco/draco_wasm_wrapper.js": {
+    "file": "_next/static/media/draco_wasm_wrapper.DxJM36Ib.js",
+    "src": "../../../Users/gma/Documents/ChatGPT/Portfolio/node_modules/.pnpm/three@0.185.1/node_modules/three/examples/jsm/libs/draco/draco_wasm_wrapper.js"
+  },
+  "../../../Users/gma/Documents/ChatGPT/Portfolio/node_modules/.pnpm/three@0.185.1/node_modules/three/examples/jsm/libs/draco/gltf/draco_decoder.wasm": {
+    "file": "_next/static/media/draco_decoder.Z1_iN-Ht.wasm",
+    "src": "../../../Users/gma/Documents/ChatGPT/Portfolio/node_modules/.pnpm/three@0.185.1/node_modules/three/examples/jsm/libs/draco/gltf/draco_decoder.wasm"
+  },
+  "../../../Users/gma/Documents/ChatGPT/Portfolio/node_modules/.pnpm/three@0.185.1/node_modules/three/examples/jsm/libs/draco/gltf/draco_wasm_wrapper.js": {
+    "file": "_next/static/media/draco_wasm_wrapper.fZCQGLGb.js",
+    "src": "../../../Users/gma/Documents/ChatGPT/Portfolio/node_modules/.pnpm/three@0.185.1/node_modules/three/examples/jsm/libs/draco/gltf/draco_wasm_wrapper.js"
+  },
+  "../../../Users/gma/Documents/ChatGPT/Portfolio/node_modules/.pnpm/three@0.185.1/node_modules/three/examples/jsm/loaders/DRACOLoader.js": {
+    "file": "_next/static/chunks/DRACOLoader-CZDZvlZA.js",
+    "name": "DRACOLoader",
+    "src": "../../../Users/gma/Documents/ChatGPT/Portfolio/node_modules/.pnpm/three@0.185.1/node_modules/three/examples/jsm/loaders/DRACOLoader.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "../../../Users/gma/Documents/ChatGPT/Portfolio/node_modules/.pnpm/three@0.185.1/node_modules/three/build/three.module.js"
+    ],
+    "assets": [
+      "_next/static/media/draco_decoder.C32yEggz.wasm",
+      "_next/static/media/draco_wasm_wrapper.DxJM36Ib.js",
+      "_next/static/media/draco_decoder.fzg4nYZr.js",
+      "_next/static/media/draco_wasm_wrapper.fZCQGLGb.js",
+      "_next/static/media/draco_decoder.Z1_iN-Ht.wasm"
+    ]
+  },
+  "../../../Users/gma/Documents/ChatGPT/Portfolio/node_modules/.pnpm/three@0.185.1/node_modules/three/examples/jsm/loaders/GLTFLoader.js": {
+    "file": "_next/static/chunks/GLTFLoader-CZOQSiRE.js",
+    "name": "GLTFLoader",
+    "src": "../../../Users/gma/Documents/ChatGPT/Portfolio/node_modules/.pnpm/three@0.185.1/node_modules/three/examples/jsm/loaders/GLTFLoader.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "../../../Users/gma/Documents/ChatGPT/Portfolio/node_modules/.pnpm/three@0.185.1/node_modules/three/build/three.module.js"
+    ]
+  },
+  "../../../Users/gma/Documents/ChatGPT/Portfolio/node_modules/.pnpm/vinext@1.0.0-beta.2_@vitejs+plugin-react@6.0.2_vite@8.0.13_@types+node@22.19.19_esbuild_7226e7a02af70088ff6dcd3c3cbc63e0/node_modules/vinext/dist/shims/layout-segment-context.js": {
+    "file": "_next/static/chunks/layout-segment-context-BBEs4-YR.js",
+    "name": "layout-segment-context",
+    "src": "../../../Users/gma/Documents/ChatGPT/Portfolio/node_modules/.pnpm/vinext@1.0.0-beta.2_@vitejs+plugin-react@6.0.2_vite@8.0.13_@types+node@22.19.19_esbuild_7226e7a02af70088ff6dcd3c3cbc63e0/node_modules/vinext/dist/shims/layout-segment-context.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime-C60lm6uB.js",
+      "virtual:vinext-app-browser-entry",
+      "_framework-BgSIrAUN.js"
+    ]
+  },
   "_framework-BgSIrAUN.js": {
     "file": "_next/static/chunks/framework-BgSIrAUN.js",
     "name": "framework",
@@ -11,7 +91,7 @@
     "name": "rolldown-runtime"
   },
   "app/board-image.tsx": {
-    "file": "_next/static/chunks/board-image-BozPjcnC.js",
+    "file": "_next/static/chunks/board-image-CuHbgcP_.js",
     "name": "board-image",
     "src": "app/board-image.tsx",
     "isDynamicEntry": true,
@@ -20,8 +100,26 @@
       "_framework-BgSIrAUN.js"
     ]
   },
+  "app/hip-reduction-model-viewer.tsx": {
+    "file": "_next/static/chunks/hip-reduction-model-viewer-DWvIebpW.js",
+    "name": "hip-reduction-model-viewer",
+    "src": "app/hip-reduction-model-viewer.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime-C60lm6uB.js",
+      "virtual:vinext-app-browser-entry",
+      "_framework-BgSIrAUN.js"
+    ],
+    "dynamicImports": [
+      "../../../Users/gma/Documents/ChatGPT/Portfolio/node_modules/.pnpm/three@0.185.1/node_modules/three/build/three.module.js",
+      "../../../Users/gma/Documents/ChatGPT/Portfolio/node_modules/.pnpm/three@0.185.1/node_modules/three/examples/jsm/loaders/GLTFLoader.js",
+      "../../../Users/gma/Documents/ChatGPT/Portfolio/node_modules/.pnpm/three@0.185.1/node_modules/three/examples/jsm/loaders/DRACOLoader.js",
+      "../../../Users/gma/Documents/ChatGPT/Portfolio/node_modules/.pnpm/three@0.185.1/node_modules/three/examples/jsm/controls/OrbitControls.js",
+      "../../../Users/gma/Documents/ChatGPT/Portfolio/node_modules/.pnpm/three@0.185.1/node_modules/three/examples/jsm/environments/RoomEnvironment.js"
+    ]
+  },
   "app/page.tsx": {
-    "file": "_next/static/chunks/page-pJGF-x2a.js",
+    "file": "_next/static/chunks/page-BxLUJh8g.js",
     "name": "page",
     "src": "app/page.tsx",
     "isDynamicEntry": true,
@@ -35,7 +133,7 @@
     ]
   },
   "app/somepen-model-viewer.tsx": {
-    "file": "_next/static/chunks/somepen-model-viewer-DpJBMJj0.js",
+    "file": "_next/static/chunks/somepen-model-viewer-B1hm5VYv.js",
     "name": "somepen-model-viewer",
     "src": "app/somepen-model-viewer.tsx",
     "isDynamicEntry": true,
@@ -45,104 +143,24 @@
       "_framework-BgSIrAUN.js"
     ],
     "dynamicImports": [
-      "node_modules/.pnpm/three@0.185.1/node_modules/three/build/three.module.js",
-      "node_modules/.pnpm/three@0.185.1/node_modules/three/examples/jsm/loaders/GLTFLoader.js",
-      "node_modules/.pnpm/three@0.185.1/node_modules/three/examples/jsm/loaders/DRACOLoader.js",
-      "node_modules/.pnpm/three@0.185.1/node_modules/three/examples/jsm/controls/OrbitControls.js",
-      "node_modules/.pnpm/three@0.185.1/node_modules/three/examples/jsm/environments/RoomEnvironment.js"
+      "../../../Users/gma/Documents/ChatGPT/Portfolio/node_modules/.pnpm/three@0.185.1/node_modules/three/build/three.module.js",
+      "../../../Users/gma/Documents/ChatGPT/Portfolio/node_modules/.pnpm/three@0.185.1/node_modules/three/examples/jsm/loaders/GLTFLoader.js",
+      "../../../Users/gma/Documents/ChatGPT/Portfolio/node_modules/.pnpm/three@0.185.1/node_modules/three/examples/jsm/loaders/DRACOLoader.js",
+      "../../../Users/gma/Documents/ChatGPT/Portfolio/node_modules/.pnpm/three@0.185.1/node_modules/three/examples/jsm/controls/OrbitControls.js",
+      "../../../Users/gma/Documents/ChatGPT/Portfolio/node_modules/.pnpm/three@0.185.1/node_modules/three/examples/jsm/environments/RoomEnvironment.js"
     ]
   },
   "app/symbiote-scene.ts": {
-    "file": "_next/static/chunks/symbiote-scene-21Me0-Ax.js",
+    "file": "_next/static/chunks/symbiote-scene-CT1-cmGr.js",
     "name": "symbiote-scene",
     "src": "app/symbiote-scene.ts",
     "isDynamicEntry": true,
     "imports": [
-      "node_modules/.pnpm/three@0.185.1/node_modules/three/build/three.module.js"
-    ]
-  },
-  "node_modules/.pnpm/three@0.185.1/node_modules/three/build/three.module.js": {
-    "file": "_next/static/chunks/three.module-BAkIz62x.js",
-    "name": "three.module",
-    "src": "node_modules/.pnpm/three@0.185.1/node_modules/three/build/three.module.js",
-    "isDynamicEntry": true
-  },
-  "node_modules/.pnpm/three@0.185.1/node_modules/three/examples/jsm/controls/OrbitControls.js": {
-    "file": "_next/static/chunks/OrbitControls-BLMddyb9.js",
-    "name": "OrbitControls",
-    "src": "node_modules/.pnpm/three@0.185.1/node_modules/three/examples/jsm/controls/OrbitControls.js",
-    "isDynamicEntry": true,
-    "imports": [
-      "node_modules/.pnpm/three@0.185.1/node_modules/three/build/three.module.js"
-    ]
-  },
-  "node_modules/.pnpm/three@0.185.1/node_modules/three/examples/jsm/environments/RoomEnvironment.js": {
-    "file": "_next/static/chunks/RoomEnvironment-djKTJgbG.js",
-    "name": "RoomEnvironment",
-    "src": "node_modules/.pnpm/three@0.185.1/node_modules/three/examples/jsm/environments/RoomEnvironment.js",
-    "isDynamicEntry": true,
-    "imports": [
-      "node_modules/.pnpm/three@0.185.1/node_modules/three/build/three.module.js"
-    ]
-  },
-  "node_modules/.pnpm/three@0.185.1/node_modules/three/examples/jsm/libs/draco/draco_decoder.js": {
-    "file": "_next/static/media/draco_decoder.fzg4nYZr.js",
-    "src": "node_modules/.pnpm/three@0.185.1/node_modules/three/examples/jsm/libs/draco/draco_decoder.js"
-  },
-  "node_modules/.pnpm/three@0.185.1/node_modules/three/examples/jsm/libs/draco/draco_decoder.wasm": {
-    "file": "_next/static/media/draco_decoder.C32yEggz.wasm",
-    "src": "node_modules/.pnpm/three@0.185.1/node_modules/three/examples/jsm/libs/draco/draco_decoder.wasm"
-  },
-  "node_modules/.pnpm/three@0.185.1/node_modules/three/examples/jsm/libs/draco/draco_wasm_wrapper.js": {
-    "file": "_next/static/media/draco_wasm_wrapper.DxJM36Ib.js",
-    "src": "node_modules/.pnpm/three@0.185.1/node_modules/three/examples/jsm/libs/draco/draco_wasm_wrapper.js"
-  },
-  "node_modules/.pnpm/three@0.185.1/node_modules/three/examples/jsm/libs/draco/gltf/draco_decoder.wasm": {
-    "file": "_next/static/media/draco_decoder.Z1_iN-Ht.wasm",
-    "src": "node_modules/.pnpm/three@0.185.1/node_modules/three/examples/jsm/libs/draco/gltf/draco_decoder.wasm"
-  },
-  "node_modules/.pnpm/three@0.185.1/node_modules/three/examples/jsm/libs/draco/gltf/draco_wasm_wrapper.js": {
-    "file": "_next/static/media/draco_wasm_wrapper.fZCQGLGb.js",
-    "src": "node_modules/.pnpm/three@0.185.1/node_modules/three/examples/jsm/libs/draco/gltf/draco_wasm_wrapper.js"
-  },
-  "node_modules/.pnpm/three@0.185.1/node_modules/three/examples/jsm/loaders/DRACOLoader.js": {
-    "file": "_next/static/chunks/DRACOLoader-BX0dDZ14.js",
-    "name": "DRACOLoader",
-    "src": "node_modules/.pnpm/three@0.185.1/node_modules/three/examples/jsm/loaders/DRACOLoader.js",
-    "isDynamicEntry": true,
-    "imports": [
-      "node_modules/.pnpm/three@0.185.1/node_modules/three/build/three.module.js"
-    ],
-    "assets": [
-      "_next/static/media/draco_decoder.C32yEggz.wasm",
-      "_next/static/media/draco_wasm_wrapper.DxJM36Ib.js",
-      "_next/static/media/draco_decoder.fzg4nYZr.js",
-      "_next/static/media/draco_wasm_wrapper.fZCQGLGb.js",
-      "_next/static/media/draco_decoder.Z1_iN-Ht.wasm"
-    ]
-  },
-  "node_modules/.pnpm/three@0.185.1/node_modules/three/examples/jsm/loaders/GLTFLoader.js": {
-    "file": "_next/static/chunks/GLTFLoader-BnXVBgKa.js",
-    "name": "GLTFLoader",
-    "src": "node_modules/.pnpm/three@0.185.1/node_modules/three/examples/jsm/loaders/GLTFLoader.js",
-    "isDynamicEntry": true,
-    "imports": [
-      "node_modules/.pnpm/three@0.185.1/node_modules/three/build/three.module.js"
-    ]
-  },
-  "node_modules/.pnpm/vinext@1.0.0-beta.2_@vitejs_7226e7a02af70088ff6dcd3c3cbc63e0/node_modules/vinext/dist/shims/layout-segment-context.js": {
-    "file": "_next/static/chunks/layout-segment-context-DcTkUZS9.js",
-    "name": "layout-segment-context",
-    "src": "node_modules/.pnpm/vinext@1.0.0-beta.2_@vitejs_7226e7a02af70088ff6dcd3c3cbc63e0/node_modules/vinext/dist/shims/layout-segment-context.js",
-    "isDynamicEntry": true,
-    "imports": [
-      "_rolldown-runtime-C60lm6uB.js",
-      "virtual:vinext-app-browser-entry",
-      "_framework-BgSIrAUN.js"
+      "../../../Users/gma/Documents/ChatGPT/Portfolio/node_modules/.pnpm/three@0.185.1/node_modules/three/build/three.module.js"
     ]
   },
   "virtual:vinext-app-browser-entry": {
-    "file": "_next/static/chunks/index-CmtncJYK.js",
+    "file": "_next/static/chunks/index-D15UwTGP.js",
     "name": "index",
     "src": "virtual:vinext-app-browser-entry",
     "isEntry": true,
@@ -152,9 +170,10 @@
     ],
     "dynamicImports": [
       "virtual:vinext-app-browser-entry",
+      "../../../Users/gma/Documents/ChatGPT/Portfolio/node_modules/.pnpm/vinext@1.0.0-beta.2_@vitejs+plugin-react@6.0.2_vite@8.0.13_@types+node@22.19.19_esbuild_7226e7a02af70088ff6dcd3c3cbc63e0/node_modules/vinext/dist/shims/layout-segment-context.js",
       "app/page.tsx",
+      "app/hip-reduction-model-viewer.tsx",
       "app/somepen-model-viewer.tsx",
-      "node_modules/.pnpm/vinext@1.0.0-beta.2_@vitejs_7226e7a02af70088ff6dcd3c3cbc63e0/node_modules/vinext/dist/shims/layout-segment-context.js",
       "app/board-image.tsx"
     ]
   }

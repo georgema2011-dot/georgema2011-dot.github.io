@@ -199,3 +199,16 @@ body h1, body h2, body h3, body .hero-copy h1,
 .somepen-model-status{position:absolute;z-index:1;inset:auto 18px 18px 18px;max-width:34ch;margin:0;padding:10px 12px;background:rgb(32 33 31 / .86);border:1px solid rgb(255 255 255 / .32);color:#f5f5f0;font-family:var(--body);font-size:.875rem;line-height:1.4;backdrop-filter:blur(10px)}
 @media(max-width:900px){.somepen-model{grid-template-columns:1fr}.somepen-model-copy{min-height:0;border-right:0;border-bottom:var(--rule)}.somepen-model-stage{height:500px;min-height:500px}}
 @media(max-width:620px){.somepen-model-copy{padding:20px}.somepen-model-copy h2{margin:28px 0 20px}.somepen-model-copy .somepen-model-instructions{margin-top:28px}.somepen-model-stage{height:420px;min-height:420px}.somepen-model-status{inset:auto 14px 14px 14px;font-size:.82rem}}
+
+/* Interactive exploration of the Hip Reduction Simulator. */
+.hip-model{display:grid;grid-template-columns:4fr 8fr;border-bottom:var(--rule)}
+.hip-model-copy{display:flex;min-height:600px;flex-direction:column;align-items:flex-start;padding:var(--cell);border-right:var(--rule)}
+.hip-model-copy h2{max-width:8ch;margin:40px 0 28px;font-size:clamp(2.8rem,5vw,5.6rem);line-height:.9}
+.hip-model-copy>p:not(.label){max-width:34ch;margin:0;font-size:1rem;font-weight:300;line-height:1.55}
+.hip-model-copy .hip-model-instructions{margin-top:auto;padding-top:28px;border-top:var(--hairline);font-family:var(--condensed);font-size:.76rem;letter-spacing:.08em;text-transform:uppercase}
+.hip-model-stage{position:relative;height:600px;min-height:600px;overflow:hidden;background:#181b1f}
+.hip-model-stage canvas{position:absolute;inset:0;display:block;width:100%;height:100%;cursor:grab;touch-action:none}
+.hip-model-stage canvas:active{cursor:grabbing}
+.hip-model-status{position:absolute;z-index:1;inset:auto 18px 18px 18px;max-width:34ch;margin:0;padding:10px 12px;background:rgb(24 27 31 / .88);border:1px solid rgb(255 255 255 / .32);color:#f5f5f0;font-family:var(--body);font-size:.875rem;line-height:1.4;backdrop-filter:blur(10px)}
+@media(max-width:900px){.hip-model{grid-template-columns:1fr}.hip-model-copy{min-height:0;border-right:0;border-bottom:var(--rule)}.hip-model-stage{height:520px;min-height:520px}}
+@media(max-width:620px){.hip-model-copy{padding:20px}.hip-model-copy h2{margin:28px 0 20px}.hip-model-copy .hip-model-instructions{margin-top:28px}.hip-model-stage{height:430px;min-height:430px}.hip-model-status{inset:auto 14px 14px 14px;font-size:.82rem}}

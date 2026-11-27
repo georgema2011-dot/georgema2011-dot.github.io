@@ -67,6 +67,7 @@ test("keeps the portfolio semantic, responsive and image-led", async () => {
   assert.equal(hipResponse.status, 200);
   const hipHtml = await hipResponse.text();
   assert.match(hipHtml, /Hip Reduction Simulator/);
+  assert.match(hipHtml, /Interactive model/);
   assert.match(hipHtml, /hip-reduction-simulator-presentation\.pdf/);
   assert.equal((hipHtml.match(/class="board-view"/g) ?? []).length, 6);
   const coopResponse = await renderPath("/projects/nus-coop");
@@ -105,6 +106,20 @@ test("ships the SOMPEN model as a lazy, locally decoded interactive asset", asyn
   assert.match(viewer, /AgXToneMapping/);
   assert.match(viewer, /environmentIntensity = 0\.12/);
   assert.match(viewer, /toneMappingExposure = 0\.86/);
+  assert.ok(model.size > 1_000_000);
+});
+
+test("ships the Hip Reduction Simulator model as a lazy, touch-friendly interactive asset", async () => {
+  const viewer = await readFile(new URL("../app/hip-reduction-model-viewer.tsx", import.meta.url), "utf8");
+  const model = await stat(new URL("../public/projects/hip-reduction-simulator/hip-dislocation-simulator-dark-canopy-studio.glb", import.meta.url));
+  assert.match(viewer, /IntersectionObserver/);
+  assert.match(viewer, /DRACOLoader/);
+  assert.match(viewer, /hip-dislocation-simulator-dark-canopy-studio\.glb/);
+  assert.match(viewer, /enableZoom = true/);
+  assert.match(viewer, /gltf\.animations\[0\]/);
+  assert.match(viewer, /prefers-reduced-motion/);
+  assert.match(viewer, /embeddedLights/);
+  assert.match(viewer, /dblclick/);
   assert.ok(model.size > 1_000_000);
 });
 

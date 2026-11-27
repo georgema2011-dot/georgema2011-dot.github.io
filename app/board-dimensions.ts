@@ -87,10 +87,6 @@ export const boardDimensions: Record<string, { width: number; height: number }> 
     "width": 1920,
     "height": 1080
   },
-  "/projects/nus-coop/page-2.webp": {
-    "width": 1920,
-    "height": 1080
-  },
   "/projects/nus-coop/page-21.webp": {
     "width": 1920,
     "height": 1080

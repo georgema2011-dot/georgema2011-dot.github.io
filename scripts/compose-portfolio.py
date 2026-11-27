@@ -59,8 +59,6 @@ for record in re.split(r'\{ id:',src)[1:]:
     p['boards']=re.findall(r'src:"([^"]+)"[^}]*caption:"([^"]+)"',record)
     if p['id']=='sca-lab':
         p['boards']=[(f'/projects/sca-lab/page-{int(n):02}.webp',cap) for n,cap in re.findall(r'page: (\d+), caption: "([^"]+)"',src) if n!='1']
-    if p['id']=='nus-coop':
-        p['boards']=[board for board in p['boards'] if board[0]!='/projects/nus-coop/page-2.webp']
     p['facts']=re.findall(r'label:"([^"]+)",value:"([^"]+)"',record)
     projects.append(p)
 assert len(projects)==11 and len({p['id'] for p in projects})==11 and all(p['boards'] for p in projects)

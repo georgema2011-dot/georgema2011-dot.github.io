@@ -41,7 +41,7 @@ export function SomepenModelViewer() {
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
         renderer.outputColorSpace = THREE.SRGBColorSpace;
         renderer.toneMapping = THREE.ACESFilmicToneMapping;
-        renderer.toneMappingExposure = 0.78;
+        renderer.toneMappingExposure = 0.62;
 
         const scene = new THREE.Scene();
         scene.background = new THREE.Color(0x20211f);
@@ -57,16 +57,16 @@ export function SomepenModelViewer() {
         const pmrem = new THREE.PMREMGenerator(renderer);
         const room = new RoomEnvironment();
         scene.environment = pmrem.fromScene(room).texture;
-        scene.environmentIntensity = 0.38;
+        scene.environmentIntensity = 0.18;
         room.dispose();
         pmrem.dispose();
 
-        const studioAmbient = new THREE.HemisphereLight(0xdde7ff, 0x0b0c0c, 0.32);
-        const studioKey = new THREE.DirectionalLight(0xfff1dc, 1.35);
+        const studioAmbient = new THREE.HemisphereLight(0xdde7ff, 0x0b0c0c, 0.16);
+        const studioKey = new THREE.DirectionalLight(0xfff1dc, 0.85);
         studioKey.position.set(-4, -5, 6);
-        const studioFill = new THREE.DirectionalLight(0xc8dcff, 0.42);
+        const studioFill = new THREE.DirectionalLight(0xc8dcff, 0.18);
         studioFill.position.set(5, -1, 3);
-        const studioRim = new THREE.DirectionalLight(0xffffff, 1.1);
+        const studioRim = new THREE.DirectionalLight(0xffffff, 0.65);
         studioRim.position.set(1, 5, 5);
         scene.add(studioAmbient, studioKey, studioFill, studioRim);
 
@@ -91,7 +91,7 @@ export function SomepenModelViewer() {
         const bounds = new THREE.Box3().setFromObject(model);
         const centre = bounds.getCenter(new THREE.Vector3());
         const size = bounds.getSize(new THREE.Vector3());
-        const distance = Math.max(size.x, size.y, size.z) * 1.18;
+        const distance = Math.max(size.x, size.y, size.z) * 1.5;
         const initialPosition = centre.clone().add(new THREE.Vector3(distance * 0.78, distance * 0.4, distance));
         const render = () => renderer.render(scene, camera);
         let animationFrame = 0;

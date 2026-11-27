@@ -193,7 +193,7 @@ body h1, body h2, body h3, body .hero-copy h1,
 .somepen-model-copy h2{max-width:8ch;margin:40px 0 28px;font-size:clamp(2.8rem,5vw,5.6rem);line-height:.9}
 .somepen-model-copy>p:not(.label){max-width:34ch;margin:0;font-size:1rem;font-weight:300;line-height:1.55}
 .somepen-model-copy .somepen-model-instructions{margin-top:auto;padding-top:28px;border-top:var(--hairline);font-family:var(--condensed);font-size:.76rem;letter-spacing:.08em;text-transform:uppercase}
-.somepen-model-stage{position:relative;min-height:540px;overflow:hidden;background:#f2f2f0}
+.somepen-model-stage{position:relative;min-height:540px;overflow:hidden;background:#20211f}
 .somepen-model-stage canvas{display:block;width:100%;height:100%;cursor:grab;touch-action:none}
 .somepen-model-stage canvas:active{cursor:grabbing}
 .somepen-model-status{position:absolute;z-index:1;inset:auto 18px 18px 18px;max-width:34ch;margin:0;padding:10px 12px;background:var(--paper);border:1px dotted var(--ink);font-family:var(--body);font-size:.875rem;line-height:1.4}

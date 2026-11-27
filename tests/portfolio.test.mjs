@@ -98,6 +98,9 @@ test("ships the SOMPEN model as a lazy, locally decoded interactive asset", asyn
   assert.match(viewer, /autoRotate/);
   assert.match(viewer, /prefers-reduced-motion/);
   assert.match(viewer, /Pause motion/);
+  assert.match(viewer, /studioKey/);
+  assert.match(viewer, /environmentIntensity = 0\.38/);
+  assert.match(viewer, /toneMappingExposure = 0\.78/);
   assert.ok(model.size > 1_000_000);
 });
 

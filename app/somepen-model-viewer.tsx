@@ -37,13 +37,14 @@ export function SomepenModelViewer() {
         canvas.setAttribute("aria-label", "Interactive three-dimensional SOMPEN concept model");
         host.append(canvas);
 
-        const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true, powerPreference: "high-performance" });
+        const renderer = new THREE.WebGLRenderer({ canvas, alpha: false, antialias: true, powerPreference: "high-performance" });
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
         renderer.outputColorSpace = THREE.SRGBColorSpace;
         renderer.toneMapping = THREE.ACESFilmicToneMapping;
-        renderer.toneMappingExposure = 1.05;
+        renderer.toneMappingExposure = 0.78;
 
         const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x20211f);
         const camera = new THREE.PerspectiveCamera(35, 1, 0.01, 100);
         const controls = new OrbitControls(camera, canvas);
         controls.enablePan = false;
@@ -56,13 +57,18 @@ export function SomepenModelViewer() {
         const pmrem = new THREE.PMREMGenerator(renderer);
         const room = new RoomEnvironment();
         scene.environment = pmrem.fromScene(room).texture;
+        scene.environmentIntensity = 0.38;
         room.dispose();
         pmrem.dispose();
 
-        scene.add(new THREE.HemisphereLight(0xffffff, 0x292929, 2.5));
-        const keyLight = new THREE.DirectionalLight(0xffffff, 3);
-        keyLight.position.set(3, 5, 6);
-        scene.add(keyLight);
+        const studioAmbient = new THREE.HemisphereLight(0xdde7ff, 0x0b0c0c, 0.32);
+        const studioKey = new THREE.DirectionalLight(0xfff1dc, 1.35);
+        studioKey.position.set(-4, -5, 6);
+        const studioFill = new THREE.DirectionalLight(0xc8dcff, 0.42);
+        studioFill.position.set(5, -1, 3);
+        const studioRim = new THREE.DirectionalLight(0xffffff, 1.1);
+        studioRim.position.set(1, 5, 5);
+        scene.add(studioAmbient, studioKey, studioFill, studioRim);
 
         const draco = new DRACOLoader();
         draco.setDecoderPath("/draco/");
@@ -190,6 +196,7 @@ export function SomepenModelViewer() {
               });
             }
           });
+          scene.environment?.dispose();
           renderer.dispose();
           canvas.remove();
           draco.dispose();

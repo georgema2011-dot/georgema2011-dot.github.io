@@ -43,7 +43,7 @@ export function SomepenModelViewer() {
         renderer.toneMapping = THREE.AgXToneMapping;
         renderer.toneMappingExposure = 0.86;
         renderer.shadowMap.enabled = true;
-        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        renderer.shadowMap.type = THREE.PCFShadowMap;
 
         const scene = new THREE.Scene();
         scene.background = new THREE.Color(0x20211f);
@@ -65,7 +65,6 @@ export function SomepenModelViewer() {
 
         const draco = new DRACOLoader();
         draco.setDecoderPath("/draco/");
-        draco.setDecoderConfig({ type: "wasm" });
         const loader = new GLTFLoader();
         loader.setDRACOLoader(draco);
         const gltf = await loader.loadAsync("/projects/somepen/somepen-v2.glb");

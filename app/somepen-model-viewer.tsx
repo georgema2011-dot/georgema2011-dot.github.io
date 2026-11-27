@@ -69,7 +69,7 @@ export function SomepenModelViewer() {
         draco.setDecoderConfig({ type: "wasm" });
         const loader = new GLTFLoader();
         loader.setDRACOLoader(draco);
-        const gltf = await loader.loadAsync("/projects/somepen/somepen-web.glb");
+        const gltf = await loader.loadAsync("/projects/somepen/somepen-v2.glb");
         if (!active) {
           gltf.scene.traverse((item) => {
             if (item instanceof THREE.Mesh) item.geometry.dispose();

@@ -91,10 +91,10 @@ test("keeps the portfolio semantic, responsive and image-led", async () => {
 
 test("ships the SOMPEN model as a lazy, locally decoded interactive asset", async () => {
   const viewer = await readFile(new URL("../app/somepen-model-viewer.tsx", import.meta.url), "utf8");
-  const model = await stat(new URL("../public/projects/somepen/somepen-web.glb", import.meta.url));
+  const model = await stat(new URL("../public/projects/somepen/somepen-v2.glb", import.meta.url));
   assert.match(viewer, /IntersectionObserver/);
   assert.match(viewer, /DRACOLoader/);
-  assert.match(viewer, /somepen-web\.glb/);
+  assert.match(viewer, /somepen-v2\.glb/);
   assert.match(viewer, /autoRotate/);
   assert.match(viewer, /prefers-reduced-motion/);
   assert.match(viewer, /Pause motion/);
